@@ -1,0 +1,81 @@
+﻿<div *ngIf="editValue; else elseBlock">
+    <mat-tab-group>
+        <mat-tab>
+            <ng-template mat-tab-label>
+                <b>Employee SubContractor</b>
+            </ng-template>
+            <div class="edit-container">
+                <form [formGroup]="editValueForm">
+                    <div class="my-form">
+                        <label for="EmpCode" class="my-label">Employee Code:</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="my-input" placeholder="Insert employee code here"
+                                   id="EmpCode" formControlName="EmpCode" required>
+                            <validation-messages [control]="editValueForm.controls.EmpCode"></validation-messages>
+                        </div>
+
+                        <label for="Title" class="my-label">Title:</label>
+                        <div class="col-sm-4">
+                            <p-dropdown class="my-input-combobox" [options]="employeeTitle" filter="filter" [style]="{'width':'100%'}"
+                                        appendTo="body"
+                                        id="Title" formControlName="Title" required>
+                            </p-dropdown>
+                            <validation-messages [control]="editValueForm.controls.Title"></validation-messages>
+                        </div>
+                    </div>
+
+                    <div class="my-form">
+                        <label for="NameThai" class="my-label">Name Thai:</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="my-input" placeholder="Insert name thai here"
+                                   id="NameThai" formControlName="NameThai" required>
+                            <validation-messages [control]="editValueForm.controls.NameThai"></validation-messages>
+                        </div>
+
+                        <label for="NameEng" class="my-label">Name English:</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="my-input" placeholder="Insert name english here"
+                                   id="NameEng" formControlName="NameEng">
+                            <validation-messages [control]="editValueForm.controls.NameEng"></validation-messages>
+                        </div>
+                    </div>
+
+                    <div class="my-form">
+                        <label for="TypeEmployeeString" class="my-label">TypeEmployee:</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="my-input"
+                                   id="TypeEmployeeString" formControlName="TypeEmployeeString" readonly>
+                            <validation-messages [control]="editValueForm.controls.TypeEmployeeString"></validation-messages>
+                        </div>
+
+                        <label for="GroupCode" class="my-label">Group:</label>
+                        <div class="col-sm-4">
+                            <p-dropdown class="my-input-combobox" [options]="employeeGroup" filter="filter" [style]="{'width':'100%'}"
+                                        appendTo="body"
+                                        id="GroupCode" formControlName="GroupCode" required>
+                            </p-dropdown>
+                            <validation-messages [control]="editValueForm.controls.GroupCode"></validation-messages>
+                        </div>
+                    </div>
+
+                    <div class="my-form">
+
+                        <label for="GroupMIS" class="my-label">GroupMIS:</label>
+                        <div class="col-sm-4">
+                            <p-dropdown class="my-input-combobox" [options]="employeeGroupMis" filter="filter" [style]="{'width':'100%'}"
+                                        appendTo="body"
+                                        id="GroupMIS" formControlName="GroupMIS" required>
+                            </p-dropdown>
+                            <validation-messages [control]="editValueForm.controls.GroupMIS"></validation-messages>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </mat-tab>
+    </mat-tab-group>
+</div>
+
+<ng-template #elseBlock>
+    <mat-progress-bar mode="indeterminate" style="margin-top:50px;"></mat-progress-bar>
+    Waiting... for loading
+</ng-template>

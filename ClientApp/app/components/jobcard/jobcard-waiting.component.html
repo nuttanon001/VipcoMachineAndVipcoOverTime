@@ -1,0 +1,38 @@
+﻿<div class="master-container">
+    <div *ngIf="!newJobDetail;else newJobDetailBlock" >
+        <div class="child-col-container">
+            <h4>Required Machine Work Wating...</h4><hr />
+            Reload data in {{message}} sec.
+            <div style="width:100%;">
+                <mat-progress-bar color="primary" [value]="count" mode="determinate">
+                </mat-progress-bar>
+            </div>
+        </div>
+        <div class="center-content my-2">
+            <p-dataTable [value]="jobCardMasters" sortField="GroupMachine" rowGroupMode="rowspan"
+                         [scrollHeight]="scrollHeight" [scrollWidth]="'98.5vw'" [scrollable]="true">
+                <p-column *ngFor="let column of columns" [field]="column.field" [styleClass]="column.styleclass"
+                          [header]="column.header" [style]="column.style" [sortable]="true">
+                    <ng-template *ngIf="column.isButton" let-col let-data1="rowData" pTemplate="body">
+                        <div *ngIf="data1[col.field]">
+                            <i class="fa fa-search" (click)="onSelectData(data1[col.field])"
+                               style="cursor:pointer;">
+                                <span class="text-primary">{{data1[col.field] | slice:0:28}}</span>
+                            </i>
+                        </div>
+                        <div *ngIf="!data1[col.field]">
+                            -
+                        </div>
+                    </ng-template>
+                </p-column>
+            </p-dataTable>
+        </div>
+    </div>
+    <ng-template #newJobDetailBlock>
+        <div class="mx-3" [@flyInOut]="'in'">
+            <jobcard-detail-edit (ComplateOrCancel)="onComplateOrCancel($event)" [EditValueDetail]="newJobDetail"
+                                 [MachineTypeId]="jobCardMaster.TypeMachineId"
+                                 [ProjectDetailId]="jobCardMaster.ProjectCodeDetailId"></jobcard-detail-edit>
+        </div>
+    </ng-template>
+</div>

@@ -1,0 +1,73 @@
+﻿<div class="master-dialog-vh">
+    <split direction="horizontal">
+        <split-area [size]="30">
+            <div class="child-left-container">
+                <div style="margin-top:63px;">
+
+                </div>
+                <ngx-datatable class="material"
+                               [rows]="jobCardMasters"
+                               [columns]="columns"
+                               [columnMode]="'standard'"
+                               [headerHeight]="50"
+                               [footerHeight]="0"
+                               [rowHeight]="50"
+                               [selectionType]="'single'"
+                               (select)="onSelectedJobCardMaster($event)"
+                               [scrollbarV]="true"
+                               [style.height]="'55vh'">
+                </ngx-datatable>
+            </div>
+        </split-area>
+        <split-area [size]="70">
+            <div class="child-container">
+                <!--Center-->
+                <div class="center-content">
+                    <div class="card-body" *ngIf="!showContext,else CancelDiv">
+                        <!--Component-->
+                        <jobcard-view-waiting [displayValue]="selected" [mode]="true" (selected)="onSelectedJobCardDetail($event)">
+                        </jobcard-view-waiting>
+                    </div>
+                    <ng-template #CancelDiv>
+                        <div class="child-left-container m-5">
+                            <div>
+                                <h5>{{message}}</h5>
+                            </div>
+                            <div class="mt-3 align-content-center">
+                                <button type="button" mat-raised-button color="accent" (click)="onChangeStatusJobCard()">Yes</button>
+                                <button type="button" mat-raised-button color="warn" (click)="showContext = !showContext">Cancel</button>
+                            </div>
+                        </div>
+                    </ng-template>
+                </div>
+                <!--Right-->
+                <div class="right-content">
+                    <button type="button" mat-icon-button color="primary" (click)="onShowComfirmBox(2)"
+                            [disabled]="!onComplate" matTooltip="Complate Require Machine" matTooltipPosition="left">
+                        <i class="fa fa-2x fa-check" aria-hidden="true"></i>
+                    </button>
+                    <button type="button" mat-icon-button color="warn" (click)="onShowComfirmBox(3)"
+                            [disabled]="!onCancel" matTooltip="Cancel Require Machine" matTooltipPosition="left">
+                        <i class="fa fa-2x fa-times" aria-hidden="true"></i>
+                    </button>
+                    <hr class="w-100"/>
+                    <button type="button" mat-icon-button color="primary" (click)="onAddOrEditJobCard(-77)"
+                            matTooltip="Add Require Machine Detail" matTooltipPosition="left">
+                        <i class="fa fa-2x fa-plus" aria-hidden="true"></i>
+                    </button>
+                    <!--
+                    <button type="button" mat-icon-button color="accent" (click)="onAddOrEditJobCard(-88)"
+                            matTooltip="Edit Require Machine Master" matTooltipPosition="left">
+                        <i class="fa fa-2x fa-pencil" aria-hidden="true"></i>
+                    </button>
+                    -->
+                    <hr class="w-100" />
+                    <button type="button" mat-icon-button color="warn" (click)="onCancelDialog()"
+                            matTooltip="Cancel" matTooltipPosition="left">
+                        <i class="fa fa-2x fa-minus" aria-hidden="true"></i>
+                    </button>
+                </div>
+            </div>
+        </split-area>
+    </split>
+</div>

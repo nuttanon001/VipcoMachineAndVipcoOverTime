@@ -1,0 +1,108 @@
+﻿<mat-tab-group>
+    <mat-tab>
+        <ng-template mat-tab-label>
+            <b>Master</b>
+        </ng-template>
+        <form class="mx-3">
+            <div class="form-group row pt-3">
+                <label for="EmpCode" class="col-sm-2 col-form-label">Employee:</label>
+                <div class="col-sm-4">
+                    <input type="text" class="form-control text-danger" id="EmpCode" placeholder="EmpCode">
+                </div>
+
+                <label for="SectionId" class="col-sm-2 col-form-label">Section:</label>
+                <div class="col-sm-4">
+                    <input type="text" class="form-control text-danger" id="SectionId" placeholder="Section">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="JobCardDate" class="col-sm-2 col-form-label">Date:</label>
+                <div class="col-sm-4">
+                    <input type="date" class="form-control" id="JobCardDate" placeholder="JobCardDate">
+                </div>
+
+                <label for="DueDate" class="col-sm-2 col-form-label">DueDate:</label>
+                <div class="col-sm-4">
+                    <input type="date" class="form-control" id="DueDate" placeholder="DueDate">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="Description" class="col-sm-2 col-form-label">Description:</label>
+                <div class="col-sm-4">
+                    <input type="text" class="form-control" id="Description" placeholder="Description">
+                </div>
+
+                <label for="Files" class="col-sm-2 col-form-label">Attach Files:</label>
+                <div class="col-sm-4">
+                    <input type="file" class="form-control" id="Files" placeholder="Files">
+                </div>
+            </div>
+        </form>
+
+    </mat-tab>
+    <mat-tab>
+        <ng-template mat-tab-label>
+            <b>Detail</b>
+        </ng-template>
+        <table class="table pt-3">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th class="text-danger">Material</th>
+                    <th>Quality</th>
+                    <th>UnitMeasure</th>
+                    <th class="text-danger">Job</th>
+                    <th class="text-danger">Cutting Plan</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th scope="row">1</th>
+                    <td class="text-danger">ASTM SA106B T125X250X9X14X12000mm</td>
+                    <td>5</td>
+                    <td>Line Unit</td>
+                    <td class="text-danger">J1748</td>
+                    <td class="text-danger">Y17-1748-SC20-A572-PL16-01</td>
+                </tr>
+                <tr>
+                    <th scope="row">2</th>
+                    <td class="text-danger">ASTM SA106B T125X250X9X14X12000mm</td>
+                    <td>5</td>
+                    <td>Plate Unit</td>
+                    <td class="text-danger">J1753</td>
+                    <td class="text-danger">Y17-1748-BU-PL18-01</td>
+                </tr>
+                <tr>
+                    <th scope="row">3</th>
+                    <td class="text-danger">ASTM TP321 L150X150X12X6000mm</td>
+                    <td>2</td>
+                    <td>Plate Unit</td>
+                    <td class="text-danger">J1753</td>
+                    <td class="text-danger">Y17-1748-BU-PL18-01</td>
+                </tr>
+                <tr>
+                    <th scope="row">4</th>
+                    <td class="text-danger">JIS G3101 AS335 H390X300X10X16X12000mm</td>
+                    <td>7</td>
+                    <td>Line Unit</td>
+                    <td class="text-danger">J1753</td>
+                    <td class="text-danger">Y17-1748-BU-PL18-01</td>
+                </tr>
+                <tr>
+                    <th scope="row">5</th>
+                    <td class="text-danger">JIS G3101 S25C H300X150X6.5X9X12000mm</td>
+                    <td>6</td>
+                    <td>Line Unit</td>
+                    <td class="text-danger">J1753</td>
+                    <td class="text-danger">Y17-1748-BU-PL18-01</td>
+                </tr>
+            </tbody>
+        </table>
+    </mat-tab>
+    <mat-tab>
+        <ng-template mat-tab-label>
+            <b>Material</b>
+        </ng-template>
+        <material></material>
+    </mat-tab>
+</mat-tab-group>

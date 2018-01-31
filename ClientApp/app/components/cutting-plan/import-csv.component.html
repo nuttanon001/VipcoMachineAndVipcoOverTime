@@ -1,0 +1,86 @@
+﻿<div class="master-container">
+    <div class="child-container">
+        <div class="edit-center-content">
+            <mat-tab-group>
+                <mat-tab>
+                    <ng-template mat-tab-label>
+                        <b>Import CSV</b>
+                    </ng-template>
+
+                    <div class="top-container">
+                        <small class="text-danger my-2">
+                            **ระบบต้องการ คอลั่มบนสุดเพื่ออ้างอิง โปรดอย่าทำการลบคอลั่มบนสุดของเอกสาร**
+                        </small>
+                        <div class="border border-info border-right-0 border-left-0">
+                            <div class="my-form">
+                                <div class="col-sm-1">
+                                    <button mat-button (click)="onClearData()" color="warn">ClearData</button>
+                                </div>
+                                <label for="fileFormat" class="my-label">FileFormat:</label>
+                                <div class="col-sm-2">
+                                    <button mat-button color="primary" (click)="onOpenDownLoadFormatFile('/files/ImportFormat.csv')">Download File Import</button>
+                                </div>
+
+                                <label for="inputFile" class="my-label">ImageMachine:</label>
+                                <div class="col-sm-2">
+                                    <input type="file" accept=".csv" class="my-input-file"
+                                           id="inputFile" #inputFile (change)="onFileChange($event)">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bottom-container">
+                        <!--Table-->
+                        <div *ngIf="importDatas.length" class="m-2">
+                            <table class="table table-hover table-sm small">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            No.
+                                        </th>
+                                        <th *ngFor="let header of textHeader;">
+                                            {{header}}
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let row of importDatas;let num = index">
+                                        <td>
+                                            {{num + 1}}.
+                                        </td>
+                                        <td>
+                                            {{row.JobNo || "-"}}
+                                        </td>
+                                        <td>
+                                            {{row.Level23 || "-"}}
+                                        </td>
+                                        <td>
+                                            {{row.CuttingPlan || "-"}}
+                                        </td>
+                                        <td>
+                                            {{row.MaterialSize || "-"}}
+                                        </td>
+                                        <td>
+                                            {{row.MaterialGrade || "-"}}
+                                        </td>
+                                        <td>
+                                            {{row.Quantity || "-"}}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </mat-tab>
+            </mat-tab-group>
+        </div>
+        <!--Right-->
+        <div class="right-content m-2">
+            <button type="button" mat-icon-button color="primary" (click)="onSubmit()"
+                    [disabled]="!importDatas.length" matTooltip="Save" matTooltipPosition="left">
+                <i class="fa fa-2x fa-floppy-o" aria-hidden="true"></i>
+            </button>
+        </div>
+    </div>
+</div>

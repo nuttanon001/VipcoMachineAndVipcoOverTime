@@ -1,0 +1,121 @@
+﻿<div *ngIf="editValue; else elseBlock">
+    <mat-tab-group>
+        <mat-tab>
+            <ng-template mat-tab-label>
+                <b>Machine</b>
+            </ng-template>
+            <div class="edit-container">
+                <form [formGroup]="editValueForm">
+                    <div class="my-form">
+                        <label for="MachineCode" class="my-label">Machine Code:</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="my-input" placeholder="Insert machine code here"
+                                   id="MachineCode" formControlName="MachineCode" required>
+                            <validation-messages [control]="editValueForm.controls.MachineCode"></validation-messages>
+                        </div>
+
+                        <label for="MachineName" class="my-label">Machine Name:</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="my-input" placeholder="Insert machine name here"
+                                   id="MachineName" formControlName="MachineName">
+                            <validation-messages [control]="editValueForm.controls.MachineName"></validation-messages>
+                        </div>
+                    </div>
+
+                    <div class="my-form">
+                        <label for="InstalledDate" class="my-label">Installed:</label>
+                        <div class="col-sm-4">
+                            <p-calendar formControlName="InstalledDate" [showIcon]="true"
+                                        appendTo="body"
+                                        id="InstalledDate" dateFormat="dd/mm/yy" placeholder="  Choose a installed date">
+                            </p-calendar>
+                            <validation-messages [control]="editValueForm.controls.InstalledDate"></validation-messages>
+                        </div>
+
+                        <label for="Remark" class="my-label">Remark:</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="my-input" placeholder="Insert remark here"
+                                   id="Remark" formControlName="Remark">
+                            <validation-messages [control]="editValueForm.controls.Remark"></validation-messages>
+                        </div>
+                    </div>
+
+                    <div class="my-form">
+                        <label for="Model" class="my-label">Model:</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="my-input" placeholder="Insert model here"
+                                   id="Model" formControlName="Model">
+                            <validation-messages [control]="editValueForm.controls.Model"></validation-messages>
+                        </div>
+
+                        <label for="Brand" class="my-label">Brand:</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="my-input" placeholder="Insert brand here"
+                                   id="Brand" formControlName="Brand">
+                            <validation-messages [control]="editValueForm.controls.Brand"></validation-messages>
+                        </div>
+                    </div>
+
+                    <div class="my-form">
+                        <label for="TypeMachineId" class="my-label">Type Machine:</label>
+                        <div class="col-sm-4">
+                            <p-dropdown class="my-input-combobox" [options]="machineTypes" filter="filter" [style]="{'width':'100%'}"
+                                        appendTo="body"
+                                        id="TypeMachineId" formControlName="TypeMachineId" required>
+                            </p-dropdown>
+                            <validation-messages [control]="editValueForm.controls.TypeMachineId"></validation-messages>
+                        </div>
+
+                        <label for="ImageFile" class="my-label">ImageMachine:</label>
+                        <div class="col-sm-4">
+                            <input type="file" accept="image/*" class="my-input-file"
+                                   id="ImageFile" #ImageFile (change)="onFileChange($event)">
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <label class="col-8"></label>
+                        <img [src]="editValueForm.controls.MachineImageString.value" class="size-img" />
+                    </div>
+                </form>
+            </div>
+        </mat-tab>
+        <mat-tab>
+            <ng-template mat-tab-label>
+                <b>Operators</b>
+            </ng-template>
+            <div class="edit-container">
+                <div style="margin-bottom:5px;">
+                    <button (click)="onNewOperatore()" mat-raised-button style="float:left">
+                        <i class="fa fa-get-pocket" aria-hidden="true"></i>
+                        <span>Add Operator</span>
+                    </button>
+                </div>
+                <ngx-datatable class="material"
+                               [rows]="editValue.MachineHasOperators"
+                               [columnMode]="'flex'"
+                               [headerHeight]="50"
+                               [footerHeight]="0"
+                               [rowHeight]="50"
+                               [selectionType]="'single'"
+                               [scrollbarV]="true"
+                               [style.height]="'calc(100vh - 214px)'">
+                    <ngx-datatable-column name="Code" prop="EmpCode" [flexGrow]="1"></ngx-datatable-column>
+                    <ngx-datatable-column name="Name" prop="EmployeeName" [flexGrow]="3"></ngx-datatable-column>
+                    <ngx-datatable-column [flexGrow]="1" [sortable]="false">
+                        <ng-template let-row="row" ngx-datatable-cell-template>
+                            <button mat-button (click)="onRemoveOperatore(row)" color="warn">Remove</button>
+                        </ng-template>
+                    </ngx-datatable-column>
+                </ngx-datatable>
+                <!--[columns]="columns"-->
+            </div>
+
+        </mat-tab>
+
+    </mat-tab-group>
+</div>
+
+<ng-template #elseBlock>
+    <mat-progress-bar mode="indeterminate" style="margin-top:50px;"></mat-progress-bar>
+    Waiting... for loading
+</ng-template>

@@ -1,0 +1,76 @@
+﻿<div class="master-dialog">
+    <H5 style="color:cadetblue">New or Update Standard Time Here</H5>
+    <div class="child-container">
+        <div class="center-content">
+            <form [formGroup]="standardForm">
+                <div class="my-form">
+                    <label for="StandardTimeCode" class="my-label">Code:</label>
+                    <div class="col-sm-4">
+                        <input type="text" class="my-input" placeholder="Insert standard time code here"
+                               id="StandardTimeCode" formControlName="StandardTimeCode" required>
+                        <validation-messages [control]="standardForm.controls.StandardTimeCode"></validation-messages>
+                    </div>
+
+                    <label for="Description" class="my-label">Spac:</label>
+                    <div class="col-sm-4">
+                        <input type="text" class="my-input" placeholder="Insert spac name here"
+                               id="Description" formControlName="Description" required>
+                        <validation-messages [control]="standardForm.controls.Description"></validation-messages>
+                    </div>
+                </div>
+
+                <div class="my-form">
+                    <label for="GradeMaterialId" class="my-label">Grade:</label>
+                    <div class="col-sm-4">
+                        <p-dropdown class="my-input-combobox" [options]="grades" filter="filter" [style]="{'width':'100%'}"
+                                    id="GradeMaterialId" formControlName="GradeMaterialId" required>
+                        </p-dropdown>
+                        <validation-messages [control]="standardForm.controls.GradeMaterialId"></validation-messages>
+                    </div>
+
+                    <label for="Remark" class="my-label">Remark:</label>
+                    <div class="col-sm-4">
+                        <input type="text" class="my-input" placeholder="Insert remark here"
+                               id="Remark" formControlName="Remark">
+                        <validation-messages [control]="standardForm.controls.Remark"></validation-messages>
+                    </div>
+                </div>
+
+                <div class="my-form">
+                    <label for="PreparationBefor" class="my-label">Befor Insert(Min):</label>
+                    <div class="col-sm-4">
+                        <input type="number" class="my-input" placeholder="Insert time befor here."
+                               id="PreparationBefor" formControlName="PreparationBefor">
+                        <validation-messages [control]="standardForm.controls.PreparationBefor"></validation-messages>
+                    </div>
+
+                    <label for="PreparationAfter" class="my-label">After Insert(Min):</label>
+                    <div class="col-sm-4">
+                        <input type="number" class="my-input" placeholder="Insert time after here."
+                               id="PreparationAfter" formControlName="PreparationAfter">
+                        <validation-messages [control]="standardForm.controls.PreparationAfter"></validation-messages>
+                    </div>
+                </div>
+
+                <div class="my-form">
+                    <label for="StandardTimeValue" class="my-label">Use Time(Min):</label>
+                    <div class="col-sm-4">
+                        <input type="number" class="my-input" placeholder="Insert use time here."
+                               id="StandardTimeValue" formControlName="StandardTimeValue">
+                        <validation-messages [control]="standardForm.controls.StandardTimeValue"></validation-messages>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="right-content">
+            <button type="button" mat-icon-button color="primary" (click)="onUpdateClick()"
+                    [disabled]="!standardForm.valid" matTooltip="Selected" matTooltipPosition="left">
+                <i class="fa fa-2x fa-hand-pointer-o" aria-hidden="true"></i>
+            </button>
+            <button type="button" mat-icon-button color="warn" (click)="onCancelClick()"
+                    matTooltip="Cancel" matTooltipPosition="left">
+                <i class="fa fa-2x fa-minus" aria-hidden="true"></i>
+            </button>
+        </div>
+    </div>
+</div>

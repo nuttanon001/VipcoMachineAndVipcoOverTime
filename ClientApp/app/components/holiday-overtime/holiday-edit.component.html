@@ -1,0 +1,36 @@
+﻿<div *ngIf="editValue; else elseBlock">
+    <mat-tab-group>
+        <mat-tab>
+            <ng-template mat-tab-label>
+                <b>Holiday</b>
+            </ng-template>
+            <div class="edit-container">
+                <form [formGroup]="editValueForm">
+                    <div class="my-form">
+                        <label for="HolidayName" class="my-label">Holiday Name:</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="my-input" placeholder="Insert holiday name here"
+                                   id="HolidayName" formControlName="HolidayName" required>
+                            <validation-messages [control]="editValueForm.controls.HolidayName"></validation-messages>
+                        </div>
+
+                        <label for="HolidayDate" class="my-label">Holiday Date:</label>
+                        <div class="col-sm-4">
+                            <p-calendar formControlName="HolidayDate" [showIcon]="true" required
+                                        appendTo="body" 
+                                        id="HolidayDate" dateFormat="dd/mm/yy" placeholder="  Choose a Holiday date">
+                            </p-calendar>
+                            <span class="is-request-date">**</span>
+                            <validation-messages [control]="editValueForm.controls.HolidayDate"></validation-messages>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </mat-tab>
+    </mat-tab-group>
+</div>
+
+<ng-template #elseBlock>
+    <mat-progress-bar mode="indeterminate" style="margin-top:50px;"></mat-progress-bar>
+    Waiting... for loading
+</ng-template>

@@ -1,0 +1,79 @@
+﻿<mat-tab-group>
+    <mat-tab>
+        <ng-template mat-tab-label>
+            <b>Information of Job</b>
+        </ng-template>
+        <form class="pt-3 mx-3">
+            <div class="form-group row ">
+                <label for="ProjectCode" class="col-sm-2 col-form-label">Job Code:</label>
+                <div class="col-sm-4">
+                    <input type="text" class="form-control" id="ProjectCode" placeholder="Job Code">
+                </div>
+
+                <label for="ProjectName" class="col-sm-2 col-form-label">Infomation:</label>
+                <div class="col-sm-4">
+                    <input type="text" class="form-control" id="ProjectName" placeholder="ProjectName">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="StartDate" class="col-sm-2 col-form-label">StartDate:</label>
+                <div class="col-sm-4">
+                    <input type="date" class="form-control" id="StartDate" placeholder="StartDate">
+                </div>
+
+                <label for="EndDate" class="col-sm-2 col-form-label">EndDate:</label>
+                <div class="col-sm-4">
+                    <input type="date" class="form-control" id="EndDate" placeholder="EndDate">
+                </div>
+            </div>
+        </form>
+    </mat-tab>
+    <mat-tab>
+        <ng-template mat-tab-label>
+            <b>Job Detail</b>
+        </ng-template>
+        <form class="form-inline py-3">
+            <div class="form-group mx-sm-4">
+                <label for="TypeProjectDetailId" class="sr-only">TypeCutting</label>
+                <select class="form-control text-danger" id="TypeMachine">
+                    <option>Cutting-1</option>
+                    <option>Cutting-2</option>
+                    <option>Cutting-3</option>
+                    <option>Cutting-4</option>
+                    <option>Cutting-5</option>
+                </select>
+            </div>
+            <div class="form-group mx-sm-4">
+                <label for="ProjectCodeDetailCode" class="sr-only">Cutting</label>
+                <input type="text" class="form-control" id="ProjectCodeDetailCode" placeholder="Cutting plan">
+            </div>
+            <button type="submit" class="btn btn-primary">New Detail</button>
+        </form>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>TypeCutting</th>
+                    <th>CuttingPlan</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th scope="row">1</th>
+                    <td>Cutting-1</td>
+                    <td>Y-1748-TS-A36-PL10-01</td>
+                </tr>
+                <tr>
+                    <th scope="row">2</th>
+                    <td>Cutting-1</td>
+                    <td>Y1737-GSP-PL25-01</td>
+                </tr>
+                <tr>
+                    <th scope="row">3</th>
+                    <td>Cutting-3</td>
+                    <td>Y1748-EP-GR70-19-01</td>
+                </tr>
+            </tbody>
+        </table>
+    </mat-tab>
+</mat-tab-group>

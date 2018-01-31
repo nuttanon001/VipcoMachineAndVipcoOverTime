@@ -1,0 +1,74 @@
+﻿<div *ngIf="editValue; else elseBlock">
+    <mat-tab-group>
+        <mat-tab>
+            <ng-template mat-tab-label>
+                <b>Group Standard Time</b>
+            </ng-template>
+            <div class="edit-container">
+                <form [formGroup]="editValueForm">
+                    <div class="my-form">
+                        <label for="TypeMachineId" class="my-label">Type Machine:</label>
+                        <div class="col-sm-4">
+                            <p-dropdown class="my-input-combobox" [options]="machineTypes" filter="filter" [style]="{'width':'100%'}"
+                                        id="TypeMachineId" formControlName="TypeMachineId" required>
+                            </p-dropdown>
+                            <validation-messages [control]="editValueForm.controls.TypeMachineId"></validation-messages>
+                        </div>
+
+                        <label for="Name" class="my-label">Name:</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="my-input" placeholder="Insert name of group standard time here"
+                                   id="Name" formControlName="Name">
+                            <validation-messages [control]="editValueForm.controls.Name"></validation-messages>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </mat-tab>
+        <mat-tab>
+            <ng-template mat-tab-label>
+                <b>Standard Time Values</b>
+            </ng-template>
+            <div class="edit-container">
+                <div style="margin-bottom:5px;">
+                    <button (click)="onNewStandardTime()" mat-raised-button style="float:left">
+                        <i class="fa fa-get-pocket" aria-hidden="true"></i>
+                        <span>Add StandardTime</span>
+                    </button>
+                </div>
+                <ngx-datatable class="material"
+                               [rows]="editValue.StandardTimes"
+                               [columnMode]="'flex'"
+                               [headerHeight]="50"
+                               [footerHeight]="0"
+                               [rowHeight]="50"
+                               [selectionType]="'single'"
+                               [scrollbarV]="true"
+                               [style.height]="'calc(100vh - 214px)'">
+                    <ngx-datatable-column name="Grade" prop="GradeMaterialString" [flexGrow]="1"></ngx-datatable-column>
+                    <ngx-datatable-column name="Code" prop="StandardTimeCode" [flexGrow]="1"></ngx-datatable-column>
+                    <ngx-datatable-column name="Spec" prop="Description" [flexGrow]="2"></ngx-datatable-column>
+                    <ngx-datatable-column name="Use(Min.)" prop="StandardTimeValue" [flexGrow]="1"></ngx-datatable-column>
+                    <ngx-datatable-column name="Befor(Min.)" prop="PreparationBefor" [flexGrow]="1"></ngx-datatable-column>
+                    <ngx-datatable-column name="After(Min.)" prop="PreparationAfter" [flexGrow]="1"></ngx-datatable-column>
+
+                    <ngx-datatable-column [flexGrow]="1" [sortable]="false">
+                        <ng-template let-row="row" ngx-datatable-cell-template>
+                            <button mat-button (click)="onEditStandardTime(row)" color="accent">Edit</button>
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column [flexGrow]="1" [sortable]="false">
+                        <ng-template let-row="row" ngx-datatable-cell-template>
+                            <button mat-button (click)="onRemoveStandardTime(row)" color="warn">Remove</button>
+                        </ng-template>
+                    </ngx-datatable-column>
+                </ngx-datatable>
+            </div>
+        </mat-tab>
+    </mat-tab-group>
+</div>
+
+<ng-template #elseBlock>
+    <mat-progress-bar mode="indeterminate" style="margin-top:50px;"></mat-progress-bar>
+    Waiting... for loading
+</ng-template>

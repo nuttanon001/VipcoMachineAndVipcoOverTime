@@ -1,0 +1,34 @@
+﻿<H5 mat-dialog-title style="color:cadetblue">New or Update JobLevel2/3 Here</H5>
+<hr />
+<div mat-dialog-content class="h-75">
+    <form [formGroup]="detailForm">
+        <div class="my-form">
+            <label for="ProjectCodeDetailCode" class="my-label-col-3">Level Name:</label>
+            <div class="col-sm-9">
+                <!--
+                    <p-dropdown class="my-input-combobox" [options]="templateCode" filter="filter" [style]="{'width':'100%'}"
+                            id="ProjectCodeDetailCode" formControlName="ProjectCodeDetailCode" required>
+                    </p-dropdown>
+                -->
+                <p-autoComplete class="my-input-combobox" placeholder="Insert level2/3 here"
+                                (completeMethod)="onSearchAutoComplate($event)" required
+                                [style]="{'width':'100%'}" [inputStyle]="{'width':'100%'}" [size]="30"
+                                id="ProjectCodeDetailCode" formControlName="ProjectCodeDetailCode" [suggestions]="projectDetails">
+                </p-autoComplete>
+                <validation-messages [control]="detailForm.controls.ProjectCodeDetailCode"></validation-messages>
+            </div>
+        </div>
+        <div class="my-form">
+            <label for="Description" class="my-label-col-3">Description:</label>
+            <div class="col-sm-9">
+                <input type="text" class="my-input" placeholder="Insert description here"
+                       id="Description" formControlName="Description">
+                <validation-messages [control]="detailForm.controls.Description"></validation-messages>
+            </div>
+        </div>
+    </form>
+</div>
+<div mat-dialog-actions>
+    <button mat-button (click)="onUpdateClick()" color="primary" [disabled]="!detailForm.valid">New/Update</button>
+    <button mat-button (click)="onCancelClick()" color="warn" >Cancel</button>
+</div>

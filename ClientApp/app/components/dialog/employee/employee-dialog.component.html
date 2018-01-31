@@ -1,0 +1,51 @@
+﻿<div class="master-dialog-vh">
+    <H5 style="color:cadetblue">Selected Employee</H5>
+    <div class="child-container">
+        <div class="center-content">
+            <split direction="horizontal" [gutterSize]="4" [visibleTransition]="true">
+                <split-area [size]="50" [order]="1">
+                    <div class="child-left-container">
+                        <data-table (selected)="onSelectedEmp($event)"
+                                    [columns]="columns"
+                                    [height]="'55vh'">
+                        </data-table>
+                    </div>
+                </split-area>
+                <split-area [size]="50" [order]="2" *ngIf="Show2ndTable">
+                    <div class="child-container">
+                        <div class="center-content">
+                            <div style="margin-top:65px;"></div>
+                            <ngx-datatable class="material"
+                                           [rows]="selectEmployee"
+                                           [columnMode]="'flex'"
+                                           [headerHeight]="50"
+                                           [footerHeight]="0"
+                                           [rowHeight]="50"
+                                           [selectionType]="'single'"
+                                           [scrollbarV]="true"
+                                           [style.height]="'55vh'">
+                                <ngx-datatable-column name="Code" prop="EmpCode" [flexGrow]="1"></ngx-datatable-column>
+                                <ngx-datatable-column name="Name" prop="NameThai" [flexGrow]="1"></ngx-datatable-column>
+                                <ngx-datatable-column [flexGrow]="1" [sortable]="false">
+                                    <ng-template let-row="row" ngx-datatable-cell-template>
+                                        <button mat-button (click)="onRemoveEmp(row)" color="warn">Remove</button>
+                                    </ng-template>
+                                </ngx-datatable-column>
+                            </ngx-datatable>
+                        </div>
+                    </div>
+                </split-area>
+            </split>
+        </div>
+        <div class="right-content">
+            <button type="button" mat-icon-button color="primary" (click)="onSelectedClick()"
+                    [disabled]="!CanSelected" matTooltip="Selected" matTooltipPosition="left">
+                <i class="fa fa-2x fa-hand-pointer-o" aria-hidden="true"></i>
+            </button>
+            <button type="button" mat-icon-button color="warn" (click)="onCancelClick()"
+                    matTooltip="Cancel" matTooltipPosition="left">
+                <i class="fa fa-2x fa-minus" aria-hidden="true"></i>
+            </button>
+        </div>
+    </div>
+</div>

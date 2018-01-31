@@ -1,0 +1,115 @@
+﻿<div class="master-container">
+    <b>Require Over-Time</b>
+    <div class="child-container">
+        <div class="center-content">
+            <form [formGroup]="ValueForm">
+                <div class="my-form">
+                    <label for="RequireBy" class="my-label">Require By:</label>
+                    <div class="col-sm-4">
+                        <input type="text" class="my-input" placeholder="Require name."
+                               id="RequireBy" formControlName="RequireBy">
+                        <validation-messages [control]="ValueForm.controls.RequireBy"></validation-messages>
+                    </div>
+
+                    <label for="JobNo" class="my-label">JobNo.:</label>
+                    <div class="col-sm-4">
+                        <p-dropdown class="my-input-combobox" [options]="projects" filter="filter" [style]="{'width':'100%'}"
+                                    id="JobNo" formControlName="JobNo">
+                        </p-dropdown>
+                        <validation-messages [control]="ValueForm.controls.JobNo"></validation-messages>
+                    </div>
+                </div>
+
+                <div class="my-form">
+                    <label for="OverTimeDate" class="my-label">Date:</label>
+                    <div class="col-sm-4">
+                        <p-calendar formControlName="OverTimeDate" [showIcon]="true"
+                                    id="OverTimeDate" dateFormat="dd/mm/yy" placeholder="  Choose a date"
+                                    appendTo="body">
+                        </p-calendar>
+                        <span class="is-request-date">**</span>
+                        <validation-messages [control]="ValueForm.controls.OverTimeDate"></validation-messages>
+                    </div>
+
+                    <label for="TemplateHour" class="my-label">OverTime Hour:</label>
+                    <div class="col-sm-4">
+                        <input type="number" class="my-input"
+                               id="TemplateHour" formControlName="TemplateHour">
+                        <validation-messages [control]="ValueForm.controls.TemplateHour"></validation-messages>
+                    </div>
+                </div>
+
+                <div class="my-form">
+                    <label for="DescriptionYesterday" class="my-label">Yesterday Info:</label>
+                    <div class="col-sm-4">
+                        <textarea class="my-input" placeholder="Description"
+                                  id="DescriptionYesterday" formControlName="DescriptionYesterday"
+                                  rows="4" readonly>
+                        </textarea>
+                        <validation-messages [control]="ValueForm.controls.DescriptionYesterday"></validation-messages>
+                    </div>
+
+                    <label for="Description" class="my-label">Information:</label>
+                    <div class="col-sm-4">
+                        <textarea class="my-input" placeholder="Information for require overtime."
+                                  id="Description" formControlName="Description"
+                                  rows="4">
+                        </textarea>
+                        <validation-messages [control]="ValueForm.controls.Description"></validation-messages>
+                    </div>
+                </div>
+            </form>
+            <hr class="w-100" />
+            <ngx-datatable class="material"
+                           [rows]="employees"
+                           [columnMode]="'flex'"
+                           [headerHeight]="50"
+                           [footerHeight]="0"
+                           [rowHeight]="50"
+                           [scrollbarV]="true"
+                           [style.height]="'60vh'">
+                <ngx-datatable-column name="Employee" prop="NameThai" [flexGrow]="1"></ngx-datatable-column>
+                <ngx-datatable-column name="OT/Date" prop="OverTimeDate" [pipe]="datePipe" [flexGrow]="1"></ngx-datatable-column>
+                <ngx-datatable-column name="Hour" prop="OverTime" [flexGrow]="1">
+                    <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value" let-row="row">
+                        <input autofocus
+                               (blur)="updateValue($event, 'OverTime', rowIndex)"
+                               type="number"
+                               min="0"
+                               name="OverTime"
+                               class="my-input"
+                               [value]="value"/>
+                    </ng-template>
+                </ngx-datatable-column>
+
+                <ngx-datatable-column name="Info" prop="Description" [flexGrow]="1">
+                    <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value" let-row="row">
+                        <input autofocus
+                               placeholder="Information for employee"
+                               (blur)="updateValue($event, 'Description', rowIndex)"
+                               type="text"
+                               name="Description"
+                               class="my-input"
+                               [value]="value"/>
+                    </ng-template>
+                </ngx-datatable-column>
+
+                <ngx-datatable-column [flexGrow]="1" [sortable]="false">
+                    <ng-template let-row="row" ngx-datatable-cell-template>
+                        <button mat-button (click)="onRemoveEmployee(row)" color="warn">Remove</button>
+                    </ng-template>
+                </ngx-datatable-column>
+            </ngx-datatable>
+        </div>
+        <div class="right-content">
+            <button type="button" mat-icon-button color="accent" (click)="onSelectedEmployee()"
+                    matTooltip="Selected Employee OverTime" matTooltipPosition="left">
+                <i class="fa fa-2x fa-plus" aria-hidden="true"></i>
+            </button>
+            <button type="button" mat-icon-button color="warn" (click)="onClearEmployee()"
+                    matTooltip="Clear All" matTooltipPosition="left">
+                <i class="fa fa-2x fa-minus" aria-hidden="true"></i>
+            </button>
+        </div>
+    </div>
+</div>

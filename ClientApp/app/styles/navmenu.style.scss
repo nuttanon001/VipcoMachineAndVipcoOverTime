@@ -1,0 +1,37 @@
+﻿.bg-bar {
+    background-color: #0a7ab2;
+}
+
+.navbar-nav {
+    button {
+        color: lightcyan;
+        &:hover {
+            color: black;
+            background-color: transparent;
+        }
+
+        &:focus {
+            color: black;
+            background-color: transparent;
+        }
+    }
+
+    a {
+        color: lightcyan;
+        cursor: pointer;
+
+        &:hover {
+            color: black;
+            background-color: transparent;
+        }
+
+        .active {
+            background-color: transparent;
+        }
+
+        &:focus {
+            color: black;
+            background-color: transparent;
+        }
+    }
+}

@@ -1,0 +1,49 @@
+﻿<div class="master-container">
+    <div class="child-col-container">
+        <h4>OverTime Chart Report </h4>
+        <form [formGroup]="chartForm" class="form-content">
+            <div>
+                <i class="fa fa-magic" aria-hidden="true"></i>
+                <p-dropdown [options]="modeChartType" formControlName="TypeChart" [filter]="true"
+                            matTooltip="Selected mode of chart"  appendTo="body"
+                            [style]="{'width':'250px'}" placeholder="Filter by mode of chart">
+                </p-dropdown>
+            </div>
+
+            <div>
+                <i class="fa fa-calendar" aria-hidden="true"></i>
+                <p-calendar formControlName="SelectedDate" [showIcon]="true"
+                            id="SelectedDate" dateFormat="dd/mm/yy" placeholder="  Choose a date"
+                            appendTo="body">
+                </p-calendar>
+            </div>
+
+            <div style="margin-left:25px;">
+                <i class="fa fa-chain" aria-hidden="true"></i>
+                <p-dropdown [options]="projectMasters" formControlName="ProjectMaster" [filter]="true"
+                            matTooltip="Selected Job-Number" appendTo="body"
+                            [style]="{'width':'250px'}" placeholder="Filter by job number.">
+                </p-dropdown>
+            </div>
+
+            <div>
+                <i class="fa fa-chain" aria-hidden="true"></i>
+                <p-dropdown [options]="groupEmployees" formControlName="GroupCode" [filter]="true"
+                            matTooltip="Selected group of employee" appendTo="body"
+                            [style]="{'width':'250px'}" placeholder="Filter by group name.">
+                </p-dropdown>
+            </div>
+
+            <div>
+                <button type="button" mat-mini-fab color="warn" (click)="resetFilter()"
+                        matTooltip="Reset all filter" style="margin:4px;">
+                    <i class="fa fa-2x fa-minus" aria-hidden="true" style="margin:0px;"></i>
+                </button>
+            </div>
+        </form>
+    </div>
+    <div class="bottom-container my-2">
+        <base-chart [chartLabels]="chartLabels" [chartData]="chartData"></base-chart>
+    </div>
+</div>
+

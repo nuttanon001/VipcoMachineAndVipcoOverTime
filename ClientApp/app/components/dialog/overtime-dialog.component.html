@@ -1,0 +1,38 @@
+﻿<div class="master-dialog-vh">
+    <div class="child-container">
+        <!--Center-->
+        <div class="center-content">
+            <div *ngIf="!showContext,else CancelDiv">
+                <!--Component-->
+                <overtime-view-waiting [displayValue]="overTimeMaster" [height]="'60vh'"></overtime-view-waiting>
+            </div>
+            <ng-template #CancelDiv>
+                <div class="center-page-col m-5">
+                    <div>
+                        <h5 class="text-info">{{message}}</h5>
+                    </div>
+                    <div class="mt-3 align-content-center">
+                        <button type="button" mat-raised-button color="accent" (click)="onDoAction()">Yes</button>
+                        <button type="button" mat-raised-button color="warn" (click)="showContext = !showContext">No</button>
+                    </div>
+                </div>
+            </ng-template>
+        </div>
+        <!--Right-->
+        <div class="right-content">
+            <button type="button" mat-icon-button color="primary" (click)="onShowComfirmBox(1)"
+                    matTooltip="Approve OverTime Require" matTooltipPosition="left">
+                <i class="fa fa-2x fa-check" aria-hidden="true"></i>
+            </button>
+            <button type="button" mat-icon-button color="warn" (click)="onShowComfirmBox(2)"
+                    matTooltip="Cancel OverTime Require" matTooltipPosition="left">
+                <i class="fa fa-2x fa-minus" aria-hidden="true"></i>
+            </button>
+            <hr class="w-100" />
+            <button type="button" mat-icon-button color="warn" (click)="onCancelDialog()"
+                    matTooltip="Go Back" matTooltipPosition="left">
+                <i class="fa fa-2x fa-undo" aria-hidden="true"></i>
+            </button>
+        </div>
+    </div>
+</div>

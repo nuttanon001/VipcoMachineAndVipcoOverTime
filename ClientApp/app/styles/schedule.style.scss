@@ -1,0 +1,133 @@
+﻿.master-container {
+    display: flex;
+    flex-direction: column;
+    width: calc(100vw - 50px);
+    height: -webkit-calc(100vh - 80px); /* google, safari */
+    height: calc(100vh - 80px);
+}
+
+.child-row-container {
+    display:flex;
+    flex-direction:row;
+}
+
+.child-col-container {
+    display: flex;
+    flex-direction: column;
+    flex-grow:2;
+}
+
+.bottom-container {
+    order: 2;
+    display: flex;
+    flex-grow: 1;
+    flex-direction: column;
+    height: 70vh;
+    overflow: scroll;
+}
+
+.form-content {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    flex-wrap:wrap;
+    flex-grow:3;
+    /*border-top: solid 1px lightsteelblue;*/
+    border-bottom: solid 1px lightsteelblue;
+
+    i {
+        margin-left: 15px;
+    }
+}
+
+.center-content {
+    display: flex;
+    flex-grow: 1;
+}
+
+hr {
+    background-color:steelblue;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.shadowbox {
+    background-color: whitesmoke;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+h4 {
+    color: darkcyan;
+}
+
+:host /deep/ .time-col {
+    padding: 2px;
+    margin: 2px;
+    background-color: lightsteelblue;
+    min-width: 150px;
+}
+
+:host /deep/ .type-col {
+    padding: 2px;
+    margin: 2px;
+    color:white;
+    background-color: maroon;
+    min-width: 150px;
+}
+
+:host /deep/ .singleLine {
+    //width:150px;
+    min-width: 105px;
+    top: 0px !important;
+    margin-top: 5px !important;
+    margin-bottom: 5px !important;
+    position: relative !important;
+}
+
+
+.ui-datatable {
+    white-space: normal;
+    tbody {
+        white-space: normal;
+        td {
+            white-space: normal;
+        }
+    }
+}
+
+.fixed-size {
+    table-layout: fixed;
+    word-wrap: break-word;
+}
+
+.glyphicon.glyphicon-time {
+    font-size: 20px;
+}
+
+.plan-col {
+    background-color: forestgreen;
+    color: forestgreen;
+    border-bottom:solid 1px black;
+}
+
+.actual-col {
+    background-color: steelblue;
+    color: steelblue;
+    /*border-top: solid 1px black;*/
+}
+
+.empty-col {
+    background-color: transparent;
+    color: transparent;
+}
+
+:host /deep/ .chart {
+    padding-left:0;
+    padding-right:0;
+    margin-left:auto;
+    margin-right:auto;
+
+    display: block;
+    height: 420px;
+    width: 700px;
+}

@@ -1,0 +1,140 @@
+﻿<div *ngIf="displayValue,else elseBlock">
+    <mat-tab-group>
+        <mat-tab>
+            <ng-template mat-tab-label>
+                <b>No Task Machine</b>
+            </ng-template>
+            <div class="view-container">
+                <div class="row my-1">
+                    <div class="my-label">
+                        R/M No :
+                    </div>
+                    <div class="my-value">
+                        {{jobCardDetail?.JobMasterNoString || "-"}}
+                    </div>
+
+                    <div class="my-label">
+                        Type Machine :
+                    </div>
+                    <div class="my-value">
+                        {{jobCardDetail?.TypeMachineString || "-"}}
+                    </div>
+                </div>
+                <div class="row my-1">
+                    <div class="my-label">
+                        Job Level2/3 :
+                    </div>
+                    <div class="my-value">
+                        {{jobCardDetail?.FullNameString || "-"}}
+                    </div>
+
+                    <div class="my-label">
+                        CuttingPlan/SD :
+                    </div>
+                    <div class="my-value">
+                        {{jobCardDetail?.CuttingPlanString || "-"}}
+                    </div>
+                </div>
+                <div class="row my-1">
+                    <div class="my-label">
+                        StandardTime :
+                    </div>
+                    <div class="my-value">
+                        {{jobCardDetail?.StandardTimeString || "-"}}
+                    </div>
+
+                    <div class="my-label">
+                        Material :
+                    </div>
+                    <div class="my-value">
+                        {{jobCardDetail?.Material || "-"}}
+                    </div>
+                </div>
+                <div class="row my-1">
+                    <div class="my-label">
+                        Quantity :
+                    </div>
+                    <div class="my-value">
+                        {{jobCardDetail?.Quality || "-"}}
+                    </div>
+
+                    <div class="my-label">
+                        Uom :
+                    </div>
+                    <div class="my-value">
+                        {{jobCardDetail?.UnitsMeasureString || "-"}}
+                    </div>
+                </div>
+                <hr />
+
+                <div class="row my-1">
+                    <div class="my-label">
+                        Task Code :
+                    </div>
+                    <div class="my-value">
+                        {{displayValue.NoTaskMachineCode || "-"}}
+                    </div>
+                </div>
+                <div class="row my-1">
+                    <div class="my-label">
+                        Description :
+                    </div>
+                    <div class="my-value">
+                        {{displayValue.Description || "-"}}
+                    </div>
+
+                    <div class="my-label">
+                        Remark :
+                    </div>
+                    <div class="my-value">
+                        {{displayValue.Remark || "-"}}
+                    </div>
+                </div>
+                <div class="row my-1">
+                    <div class="my-label">
+                        Quantity :
+                    </div>
+                    <div class="my-value">
+                        {{displayValue.Quantity || "-"}}
+                    </div>
+
+                    <div class="my-label">
+                        SendDate :
+                    </div>
+                    <div class="my-value">
+                        {{(displayValue.Date | date:'dd/MM/yyyy') || "-"}}
+                    </div>
+                </div>
+                <div class="row my-1">
+                    <div class="my-label">
+                        AssignedBy :
+                    </div>
+                    <div class="my-value">
+                        {{displayValue.AssignedByString || "-"}}
+                    </div>
+
+                    <div class="my-label">
+                        GroupName :
+                    </div>
+                    <div class="my-value">
+                        {{displayValue.GroupCodeString || "-"}}
+                    </div>
+                </div>
+
+                <div class="row my-1">
+                    <div class="my-label">
+                        GroupMis :
+                    </div>
+                    <div class="my-value">
+                        {{displayValue.GroupMisString || "-"}}
+                    </div>
+                </div>
+            </div>
+        </mat-tab>
+    </mat-tab-group>
+</div>
+
+<ng-template #elseBlock>
+    <mat-progress-bar mode="indeterminate" style="margin-top:50px;"></mat-progress-bar>
+    Waiting... for loading
+</ng-template>

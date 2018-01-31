@@ -1,0 +1,102 @@
+﻿<mat-tab-group>
+    <mat-tab>
+        <ng-template mat-tab-label>
+            <b>Information of Machine</b>
+        </ng-template>
+        <form class="mx-3">
+            <div class="form-group row pt-3">
+                <label for="MachineCode" class="col-sm-2 col-form-label">Code:</label>
+                <div class="col-sm-4">
+                    <input type="text" class="form-control" id="MachineCode" placeholder="MachineCode">
+                </div>
+
+                <label for="MachineName" class="col-sm-2 col-form-label">Name:</label>
+                <div class="col-sm-3">
+                    <input type="text" class="form-control" id="MachineName" placeholder="MachineName">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="InstalledDate" class="col-sm-2 col-form-label">Install:</label>
+                <div class="col-sm-4">
+                    <input type="date" class="form-control" id="InstalledDate" placeholder="InstalledDate">
+                </div>
+
+                <label for="Model" class="col-sm-2 col-form-label">Model:</label>
+                <div class="col-sm-3">
+                    <input type="text" class="form-control" id="Model" placeholder="Model">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="Brand" class="col-sm-2 col-form-label">Brand:</label>
+                <div class="col-sm-4">
+                    <input type="text" class="form-control" id="Brand" placeholder="Brand">
+                </div>
+
+                <label for="MachineImage" class="col-sm-2 col-form-label">MachineImage:</label>
+                <div class="col-sm-3">
+                    <input type="file" class="form-control" id="MachineImage" placeholder="MachineImage">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="TypeMachine" class="col-sm-2 col-form-label">TypeMachine:</label>
+                <div class="col-sm-4">
+                    <select class="form-control text-danger" id="TypeMachine">
+                        <option *ngFor="let item of typeMachines">{{item.value}}</option>
+                    </select>
+                </div>
+
+                <label for="MachineStatus" class="col-sm-2 col-form-label">MachineStatus:</label>
+                <div class="col-sm-3">
+                    <select class="form-control" id="MachineStatus">
+                        <option *ngFor="let item of machineStatuses">{{item.value}}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="Remark" class="col-sm-2 col-form-label">Remark:</label>
+                <div class="col-sm-4">
+                    <input type="text" class="form-control" id="Remark" placeholder="Remark">
+                </div>
+            </div>
+        </form>
+    </mat-tab>
+    <mat-tab>
+        <ng-template mat-tab-label>
+            <b>Type Machine</b>
+        </ng-template>
+        <div class="mx-3 pt-3">
+            <developer-machine-type></developer-machine-type>
+        </div>
+    </mat-tab>
+    <mat-tab>
+        <ng-template mat-tab-label>
+            <b>Operator</b>
+        </ng-template>
+        <table class="table pt-3">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th scope="row">1</th>
+                    <td>Mark</td>
+                    <td>Otto</td>
+                </tr>
+                <tr>
+                    <th scope="row">2</th>
+                    <td>Jacob</td>
+                    <td>Thornton</td>
+                </tr>
+                <tr>
+                    <th scope="row">3</th>
+                    <td>Larry</td>
+                    <td>the Bird</td>
+                </tr>
+            </tbody>
+        </table>
+    </mat-tab>
+</mat-tab-group>

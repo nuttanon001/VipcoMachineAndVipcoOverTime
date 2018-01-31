@@ -1,0 +1,144 @@
+﻿<div *ngIf="editValue; else elseBlock">
+    <mat-tab-group>
+        <mat-tab>
+            <ng-template mat-tab-label>
+                <b>No work for machine</b>
+            </ng-template>
+            <div class="edit-container mx-3">
+                <div *ngIf="jobCardDetail">
+
+                    <div class="my-form">
+                        <label for="JobMasterNoString" class="my-label">Require/McNo :</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="my-input" [value]="jobCardDetail.JobMasterNoString"
+                                   (click)="onSelectJobCardDetail()" placeholder="Click to selected require machine"
+                                   id="JobMasterNoString" readonly>
+                        </div>
+                        <label for="TypeMachineString" class="my-label">Type Machine:</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="my-input" [value]="jobCardDetail.TypeMachineString"
+                                   (click)="onSelectJobCardDetail()" placeholder="Click to selected require machine"
+                                   id="TypeMachineString" readonly>
+                        </div>
+                    </div>
+
+                    <div class="my-form">
+                        <label for="FullNameString" class="my-label">Job Level2/3 :</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="my-input" [value]="jobCardDetail.FullNameString"
+                                   (click)="onSelectJobCardDetail()" placeholder="Click to selected require machine"
+                                   id="FullNameString" readonly>
+                        </div>
+                        <label for="CuttingPlanString" class="my-label">CuttingPlan/ShopDrawing:</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="my-input" [value]="jobCardDetail.CuttingPlanString"
+                                   (click)="onSelectJobCardDetail()" placeholder="Click to selected require machine"
+                                   id="CuttingPlanString" readonly>
+                        </div>
+                    </div>
+
+                    <div class="my-form">
+                        <label for="StandardTimeString" class="my-label">StandardTime :</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="my-input" [value]="jobCardDetail.StandardTimeString"
+                                   (click)="onStandardTimeClick()" placeholder="Click to selected require machine"
+                                   id="StandardTimeString" readonly>
+                        </div>
+                        <label for="Material" class="my-label">Material :</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="my-input" [value]="jobCardDetail.Material"
+                                   (click)="onSelectJobCardDetail()" placeholder="Click to selected require machine"
+                                   id="Material" readonly>
+                        </div>
+                    </div>
+
+                    <div class="my-form">
+                        <label for="Quality" class="my-label">Quantity :</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="my-input" [value]="jobCardDetail.Quality"
+                                   (click)="onSelectJobCardDetail()" placeholder="Click to selected require machine"
+                                   id="Quality" readonly>
+                        </div>
+                        <label for="UnitsMeasureString" class="my-label">Uom :</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="my-input" [value]="jobCardDetail.UnitsMeasureString"
+                                   (click)="onSelectJobCardDetail()" placeholder="Click to selected require machine"
+                                   id="UnitsMeasureString" readonly>
+                        </div>
+                    </div>
+
+                </div>
+                <hr class="w-100" />
+                <form [formGroup]="editValueForm">
+
+                    <div class="my-form">
+                        <label for="NoTaskMachineCode" class="my-label">Task Code:</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="my-input" placeholder="Code will automatically generated."
+                                   id="NoTaskMachineCode" formControlName="NoTaskMachineCode"
+                                   readonly>
+                            <validation-messages [control]="editValueForm.controls.NoTaskMachineCode"></validation-messages>
+                        </div>
+                    </div>
+
+                    <div class="my-form">
+                        <label for="Description" class="my-label">Description:</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="my-input" placeholder="Insert code for description here"
+                                   id="Description" formControlName="Description">
+                            <validation-messages [control]="editValueForm.controls.Description"></validation-messages>
+                        </div>
+
+                        <label for="Remark" class="my-label">Remark:</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="my-input" placeholder="Insert code for remark here"
+                                   id="Remark" formControlName="Remark">
+                            <validation-messages [control]="editValueForm.controls.Remark"></validation-messages>
+                        </div>
+                    </div>
+
+                    <div class="my-form">
+                        <label for="Quantity" class="my-label">Quantity:</label>
+                        <div class="col-sm-4">
+                            <input type="number" class="my-input" min="0"
+                                   id="Quantity" formControlName="Quantity" readonly>
+                            <validation-messages [control]="editValueForm.controls.Quantity"></validation-messages>
+                        </div>
+
+                        <label for="Date" class="my-label">SendDate:</label>
+                        <div class="col-sm-4">
+                            <p-calendar formControlName="Date" [showIcon]="true"
+                                        id="Date" dateFormat="dd/mm/yy" placeholder="  Choose a date"
+                                        appendTo="body">
+                            </p-calendar>
+                            <validation-messages [control]="editValueForm.controls.Date"></validation-messages>
+                        </div>
+                    </div>
+
+                    <div class="my-form">
+                        <label for="AssignedByString" class="my-label">AssignedBy:</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="my-input-click" placeholder="Choose employee assigned here"
+                                   (click)="onSelectedAssignedBy()"
+                                   id="AssignedByString" formControlName="AssignedByString" readonly>
+                            <validation-messages [control]="editValueForm.controls.AssignedByString"></validation-messages>
+                        </div>
+
+                        <label for="GroupMisString" class="my-label">GroupName:</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="my-input-click" placeholder="Choose group name here"
+                                   (click)="onSelectedGroupMisBy()"
+                                   id="GroupMisString" formControlName="GroupMisString" required readonly>
+                            <validation-messages [control]="editValueForm.controls.GroupCodeString"></validation-messages>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </mat-tab>
+    </mat-tab-group>
+</div>
+
+<ng-template #elseBlock>
+    <mat-progress-bar mode="indeterminate" style="margin-top:50px;"></mat-progress-bar>
+    Waiting... for loading
+</ng-template>

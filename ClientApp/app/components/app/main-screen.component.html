@@ -1,0 +1,31 @@
+﻿<div class="master-container w-100 h-100">
+    <hr class="w-100" />
+    <div class="mx-auto" >
+        <h3 style="color:steelblue;">Please Selected Application.</h3>
+    </div>
+    <hr class="w-100"/>
+    <div class="center-content">
+        <div class="center-page">
+            <div class="mx-1">
+                <button mat-fab color="primary" (click)="onClickOption('machine')"
+                        style="height:200px;width:200px" matTooltip="Open VIPCO Machine System application">
+                    <mat-icon svgIcon="machine" style="height:150px;width:150px;margin:auto"></mat-icon>
+                </button>
+            </div>
+            <div class="mx-1">
+                <button mat-fab color="warn" (click)="onClickOption('overtime')"
+                        style="height:200px;width:200px" matTooltip="Open VIPCO Overtime System application">
+                    <mat-icon svgIcon="overtime" style="height:150px;width:150px;margin:auto"></mat-icon>
+                </button>
+            </div>
+        </div>
+        <div class="center-page">
+            <div class="mx-1">
+                <button mat-fab color="accent" (click)="onClickOption('paint')"
+                        style="height:200px;width:200px" matTooltip="Open VIPCO Paint System application">
+                    <mat-icon svgIcon="paint" style="height:150px;width:150px;margin:auto"></mat-icon>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

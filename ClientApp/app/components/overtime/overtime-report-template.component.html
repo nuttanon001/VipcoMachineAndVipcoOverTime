@@ -1,0 +1,248 @@
+﻿<div class="control-item">
+    <button type="button" mat-mini-fab color="warn" (click)="onBackToMaster()"
+            matTooltip="Go back." style="margin:4px;">
+        <i class="fa fa-2x fa-chevron-circle-left" aria-hidden="true" style="margin:0px;"></i>
+    </button>
+
+    <button type="button" mat-mini-fab color="primary" (click)="onPrintOverTimeMaster()"
+            matTooltip="Print." style="margin:4px;">
+        <i class="fa fa-2x fa-print" aria-hidden="true" style="margin:0px;"></i>
+    </button>
+
+</div>
+<div *ngIf="OverTime" class="report-box" id="printdiv">
+    <table border="0" cellpadding="0" cellspacing="0"
+           style="border-collapse:collapse;table-layout:fixed;">
+        <colgroup>
+            <col width="55">
+            <col width="55">
+            <col width="55">
+            <col width="55">
+            <col width="55">
+            <col width="55">
+            <col width="55">
+            <col width="55">
+            <col width="55">
+            <col width="55">
+            <col width="55">
+            <col width="55">
+            <col width="55">
+        </colgroup>
+        <tr height="25">
+            <td colspan="15" height="25" class="title">
+                บริษัท วิศวกิจพัฒนา จำกัด
+            </td>
+        </tr>
+        <tr height="25">
+            <td colspan="15" height="25" class="sub-title">
+                ใบขออนุญาตทำงานล่วงเวลา / ทำงานในวันหยุด
+            </td>
+        </tr>
+        <tr height="18">
+            <td height="18" colspan="11"></td>
+            <td class="label text-right" colspan="2">วันที่</td>
+            <td class="value line-btm" colspan="2">{{OverTime.DateOverTime}}</td>
+        </tr>
+        <tr height="18">
+            <td height="18" class="label text-left" colspan="2">ฝ่าย/หน่วยงาน</td>
+            <td class="value line-btm" colspan="5">
+                {{OverTime.GroupName}}
+            </td>
+            <td class="label text-right" colspan="2">JOB NO.</td>
+            <td class="value line-btm" colspan="6">
+                {{OverTime.JobNumber}}
+            </td>
+        </tr>
+        <tr height="18">
+            <td height="18" class="label text-left" colspan="3">ประเภทค่าล่วงเวลา</td>
+            <td class="value font-box text-right">
+                <div *ngIf="OverTime.OneTime;else oneTimeBlock">
+                    R
+                </div>
+                <ng-template #oneTimeBlock>
+                    &pound;
+                </ng-template>
+            </td>
+            <td class="label" colspan="2">1 เท่า</td>
+            <td class="value font-box text-right">
+                <div *ngIf="OverTime.OnePointFiveTime;else onePoFiveTimeBlock">
+                    R
+                </div>
+                <ng-template #onePoFiveTimeBlock>
+                    &pound;
+                </ng-template>
+            </td>
+            <td class="label" colspan="2">1.5 เท่า</td>
+            <td class="value font-box text-right">
+                <div *ngIf="OverTime.TwoTime;else TwoTimeBlock">
+                    R
+                </div>
+                <ng-template #TwoTimeBlock>
+                    &pound;
+                </ng-template>
+            </td>
+            <td class="label" colspan="2">2 เท่า</td>
+            <td class="value font-box text-right">
+                <div *ngIf="OverTime.ThreeTime;else ThreeTimeBlock">
+                    R
+                </div>
+                <ng-template #ThreeTimeBlock>
+                    &pound;
+                </ng-template>
+            </td>
+            <td class="label" colspan="2">3 เท่า</td>
+        </tr>
+        <tr height="18">
+            <td height="18" class="label text-left" colspan="3">ประเภทวันทำงาน</td>
+            <td class="value font-box text-right">
+                <div *ngIf="OverTime.TypeWeekDay;else TypeWeekDayBlock">
+                    R
+                </div>
+                <ng-template #TypeWeekDayBlock>
+                    &pound;
+                </ng-template>
+            </td>
+            <td class="label" colspan="3">วันธรรมดา</td>
+            <td class="value font-box text-right" colspan="3">
+                <div *ngIf="OverTime.TypeWeekEnd;else TypeWeekEndBlock">
+                    R
+                </div>
+                <ng-template #TypeWeekEndBlock>
+                    &pound;
+                </ng-template>
+            </td>
+            <td class="label" colspan=2>วันหยุด</td>
+        </tr>
+        <tr height="18">
+            <td rowspan="2" height="36" class="column line-all">
+                ลำดับ
+            </td>
+            <td colspan="3" rowspan="2" class="column line-all">
+                รายชื่อ
+            </td>
+            <td colspan="2" class="column line-all">
+                เวลาทำงาน
+            </td>
+            <td colspan="2" class="column line-all">
+                จำนวน
+            </td>
+            <td colspan="3" rowspan="2" class="column line-all">
+                ลงชื่อพนักงาน
+            </td>
+            <td colspan="4" rowspan="2" class="column line-all">
+                หมายเหตุ
+            </td>
+        </tr>
+        <tr height="18">
+            <td height="18" class="column line-all">เริ่ม</td>
+            <td class="column line-all">ถึง</td>
+            <td colspan=2 class="column line-all">
+                ชั่วโมง
+            </td>
+        </tr>
+
+        <!--Body Table-->
+        <tr height="15" *ngFor="let item of OverTime.Details">
+            <td height=15 class="item-row item-line line-left">
+                {{item.RowNumber > 0 ? item.RowNumber : ''}}
+            </td>
+            <td class="item-row text-left item-line" colspan=3>
+                &nbsp;{{item.Name}}
+            </td>
+            <td class="item-row item-line">
+                {{item.StartTime}}
+            </td>
+            <td class="item-row item-line">
+                {{item.EndTime}}
+            </td>
+            <td colspan=2 class="item-row item-line">
+                {{item.HourOverTime > 0 ? item.HourOverTime : ''}}
+            </td>
+            <td class="item-row item-line" colspan="3">&nbsp;</td>
+            <td colspan="4" class="item-row item-line line-right">
+                {{item.Remark}}
+            </td>
+        </tr>
+
+        <!--Footer Table-->
+        <tr height="18">
+            <td height="18" class="label line-all" colspan="11">
+                วางแผนงาน/ผลงาน :
+            </td>
+            <td class="label line-all" colspan="4">
+                ผู้ประเมิน: <span class="value">{{OverTime.ApproverBy}}</span>
+            </td>
+        </tr>
+        <tr height="18">
+            <td height="18" class="label line-all" colspan="11">
+                1.เป้าหมายทำ OT เมื่อวาน:
+            </td>
+            <td class="label line-all" colspan="4">
+                ทวนสอบ:
+            </td>
+        </tr>
+        <tr height="18">
+            <td height="18" colspan="11" class="value line-all">
+                {{OverTime.LastPlan}}
+            </td>
+            <td colspan="4" class="line-all">&nbsp;</td>
+        </tr>
+        <tr height="18">
+            <td height="18" class="label line-all" colspan="11">
+                2.ประเมินผลการทำ OT เมื่อวาน:
+            </td>
+            <td colspan="4" class="line-all">&nbsp;</td>
+        </tr>
+        <tr height="18">
+            <td height="18" class="value line-all" colspan="11">
+                {{OverTime.LastActual}}
+            </td>
+            <td colspan="4" class="line-all">&nbsp;</td>
+        </tr>
+        <tr height="18">
+            <td height="18" class="label line-all" colspan="11">
+                3. เป้าหมายทำ OT วันนี้:
+            </td>
+            <td colspan="4" class="line-all">&nbsp;</td>
+        </tr>
+        <tr height="18">
+            <td height="18" colspan="11" class="value line-all">
+                {{OverTime.NowPlan}}
+            </td>
+            <td colspan="4" class="line-all">&nbsp;</td>
+        </tr>
+        <tr height="10">
+            <td height="10" colspan="11">&nbsp;</td>
+            <td colspan="4">&nbsp;</td>
+        </tr>
+        <tr height="18">
+            <td height="18" class="label text-right" colspan="2">รวม</td>
+            <td class="value line-btm text-center" colspan="4">{{OverTime.Total}}</td>
+            <td class="label">คน</td>
+            <td class="label text-right" colspan="2">ลงชื่อ&nbsp;</td>
+            <td class="value line-btm" colspan="4">&nbsp;</td>
+            <td class="label" colspan="2">&nbsp;ผู้อนุมัติ 1</td>
+        </tr>
+        <tr height="18">
+            <td height="18" colspan="9" class="label text-right">(</td>
+            <td colspan="4">&nbsp;</td>
+            <td colspan="2">)</td>
+        </tr>
+        <tr height="18">
+            <td height="18" colspan="2" class="label text-right">ลงชื่อ&nbsp;</td>
+            <td class="line-btm" colspan="4">&nbsp;</td>
+            <td class="label">&nbsp;ผู้ขอ</td>
+            <td class="label text-right" colspan="2">ลงชื่อ&nbsp;</td>
+            <td class="line-btm" colspan="4">&nbsp;</td>
+            <td class="label" colspan="2">&nbsp;ผู้อนุมัติ 2</td>
+        </tr>
+        <tr height="18">
+            <td height="18" colspan="2" class="label text-right">(</td>
+            <td class="value text-center" colspan="4">{{OverTime.RequireBy}}</td>
+            <td>)</td>
+            <td class="label text-right" colspan="2">(</td>
+            <td colspan="4">&nbsp;</td>
+            <td colspan="2">)</td>
+        </tr>
+    </table>
+</div>

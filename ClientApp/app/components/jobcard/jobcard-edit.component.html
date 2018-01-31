@@ -1,0 +1,235 @@
+﻿<div *ngIf="editValue; else elseBlock">
+    <mat-tab-group>
+        <mat-tab>
+            <ng-template mat-tab-label>
+                <b>Require Machine Master</b>
+            </ng-template>
+            <div class="edit-container mx-3">
+                <form [formGroup]="editValueForm">
+                    <div class="my-form">
+                        <label for="JobCardMasterNo" class="my-label">Require/McNo:</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="my-input" placeholder="Code will automatically generated."
+                                   id="JobCardMasterNo" formControlName="JobCardMasterNo" readonly>
+                            <validation-messages [control]="editValueForm.controls.JobCardMasterNo"></validation-messages>
+                        </div>
+
+                        <label for="Description" class="my-label">Description:</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="my-input" placeholder="Insert for description"
+                                   id="Description" formControlName="Description">
+                            <validation-messages [control]="editValueForm.controls.Description"></validation-messages>
+                        </div>
+                    </div>
+
+                    <div class="my-form">
+                        <label for="JobCardDate" class="my-label">Date:</label>
+                        <div class="col-sm-4">
+                            <p-calendar formControlName="JobCardDate" [showIcon]="true" required
+                                        id="JobCardDate" dateFormat="dd/mm/yy" placeholder="  Choose a date"
+                                        appendTo="body">
+                            </p-calendar>
+                            <span class="is-request-date">**</span>
+                            <validation-messages [control]="editValueForm.controls.JobCardDate"></validation-messages>
+                        </div>
+
+                        <label for="DueDate" class="my-label">DueDate:</label>
+                        <div class="col-sm-4">
+                            <p-calendar formControlName="DueDate" [showIcon]="true"
+                                        id="DueDate" dateFormat="dd/mm/yy" placeholder="  Choose a due date" required
+                                        [minDate]="editValueForm.controls.JobCardDate.value"
+                                        appendTo="body">
+                            </p-calendar>
+                            <span class="is-request-date">**</span>
+                            <validation-messages [control]="editValueForm.controls.DueDate"></validation-messages>
+                        </div>
+                    </div>
+
+                    <div class="my-form">
+                        <label for="TypeMachineId" class="my-label">Type Machine:</label>
+                        <div class="col-sm-4">
+                            <p-dropdown class="my-input-combobox" [options]="machineTypes" filter="filter" [style]="{'width':'100%'}"
+                                        id="TypeMachineId" formControlName="TypeMachineId" required>
+                            </p-dropdown>
+                            <validation-messages [control]="editValueForm.controls.TypeMachineId"></validation-messages>
+                        </div>
+
+                        <label for="ProjectDetailString" class="my-label">Job Lv2/3:</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="my-input" placeholder="Choose job level 2/3 here"
+                                   (click)="onProjectDetailClick()" style="cursor:pointer;"
+                                   id="ProjectDetailString" formControlName="ProjectDetailString" required readonly>
+                            <validation-messages [control]="editValueForm.controls.ProjectDetailString"></validation-messages>
+                        </div>
+                    </div>
+
+                    <div class="my-form">
+                        <label for="EmployeeWriteString" class="my-label">Creator:</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="my-input" placeholder="Choose employee create"
+                                   (click)="onEmployeeWriteClick('W')" style="cursor:pointer;"
+                                   id="EmployeeWriteString" formControlName="EmployeeWriteString" required readonly>
+                            <validation-messages [control]="editValueForm.controls.EmployeeWriteString"></validation-messages>
+                        </div>
+
+                        <label for="EmployeeRequireString" class="my-label">Require:</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="my-input" placeholder="Choose group of employee require machine"
+                                   (click)="onEmployeeGroupClick()" style="cursor:pointer;"
+                                   id="EmployeeRequireString" formControlName="EmployeeRequireString" required readonly>
+                            <validation-messages [control]="editValueForm.controls.EmployeeRequireString"></validation-messages>
+                        </div>
+                    </div>
+
+                    <div class="my-form">
+                        <label for="AttactFile" class="my-label">AttactFile:</label>
+                        <div class="col-4">
+                            <attact-file id="AttactFile" (results)="onUpdateAttachResults($event)">
+                            </attact-file>
+                        </div>
+
+                        <label for="Remark" class="my-label">Remark:</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="my-input" placeholder="Insert for remark"
+                                   id="Remark" formControlName="Remark">
+                            <validation-messages [control]="editValueForm.controls.Remark"></validation-messages>
+                        </div>
+                    </div>
+                </form>
+                <div class="mb-2">
+                    <hr />
+                    <h5>List of File {{editValue.AttachFile?.length || 0}}</h5>
+                    <p style="color:red;">** 5MB Maximum for Attachment File Size **</p>
+                    <div *ngFor="let file of editValue.AttachFile;let num = index">
+                        <a class="item" style="padding:0;margin:1px;">
+                            {{num + 1}}. {{file.name}}
+                        </a>
+                    </div>
+                </div>
+                <div *ngIf="attachFiles.length > 0">
+                    <table class="table table-hover table-sm small">
+                        <colgroup>
+                            <col span="1" style="width: 80%;">
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th>File Name</th>
+                                <th>Remove</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let file of attachFiles; let num2 = index">
+                                <td (click)="onOpenNewLink(file.FileAddress)" style="cursor:pointer;">
+                                    {{num2 + 1}}. {{file.FileName}}
+                                </td>
+                                <td>
+                                    <div>
+                                        <a class="btn btn-sm btn-danger" matTooltip="Remove Attach File" (click)="onDeleteAttachFile(file)">
+                                            <em class="fa fa-remove"></em>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </mat-tab>
+        <!--<mat-tab>
+            <ng-template mat-tab-label>
+                <b>Attach File</b>
+            </ng-template>
+            <div class="edit-container mx-3">
+                <div class="mb-2">
+                    <attact-file (results)="onUpdateAttachResults($event)">
+                    </attact-file>
+                    <hr />
+                    <h5>List of File {{editValue.AttachFile?.length || 0}}</h5>
+                    <p style="color:red;">** 5MB Maximum for Attachment File Size **</p>
+                    <div *ngFor="let file of editValue.AttachFile;let num = index">
+                        <a class="item" style="padding:0;margin:1px;">
+                            {{num + 1}}. {{file.name}}
+                        </a>
+                    </div>
+                </div>
+                <div *ngIf="attachFiles.length > 0">
+                    <table class="table table-hover table-sm small">
+                        <colgroup>
+                            <col span="1" style="width: 80%;">
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th>File Name</th>
+                                <th>Remove</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let file of attachFiles; let num2 = index">
+                                <td (click)="onOpenNewLink(file.FileAddress)" style="cursor:pointer;">
+                                    {{num2 + 1}}. {{file.FileName}}
+                                </td>
+                                <td>
+                                    <div>
+                                        <a class="btn btn-sm btn-danger" matTooltip="Remove Attach File" (click)="onDeleteAttachFile(file)">
+                                            <em class="fa fa-remove"></em>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </mat-tab>-->
+        <mat-tab>
+            <ng-template mat-tab-label>
+                <b>Require Machine Detail</b>
+            </ng-template>
+            <div *ngIf="!jobDetail;else editDetail" class="edit-container" >
+                <div style="margin-bottom:5px;">
+                    <button (click)="onNewOrEditDetail()" mat-raised-button style="float:left">
+                        <i class="fa fa-get-pocket" aria-hidden="true"></i>
+                        <span>Add Detail</span>
+                    </button>
+                </div>
+                <ngx-datatable class="material"
+                               [rows]="editValue.JobCardDetails"
+                               [columnMode]="'flex'"
+                               [headerHeight]="50"
+                               [footerHeight]="0"
+                               [rowHeight]="50"
+                               [scrollbarV]="true"
+                               [style.height]="'calc(100vh - 214px)'">
+                    <ngx-datatable-column name="CuttingPlan" prop="CuttingPlanString" [flexGrow]="3"></ngx-datatable-column>
+                    <ngx-datatable-column name="StandardTime" prop="StandardTimeString" [flexGrow]="1"></ngx-datatable-column>
+                    <ngx-datatable-column name="Material" prop="Material" [flexGrow]="2"></ngx-datatable-column>
+                    <ngx-datatable-column name="Quality" prop="Quality" [flexGrow]="1"></ngx-datatable-column>
+                    <ngx-datatable-column name="Uom" prop="UnitsMeasureString" [flexGrow]="1"></ngx-datatable-column>
+                    <ngx-datatable-column name="Status" prop="StatusString" [flexGrow]="1" [cellClass]="getCellClass"></ngx-datatable-column>
+                    <ngx-datatable-column [flexGrow]="1" [sortable]="false">
+                        <ng-template let-row="row" ngx-datatable-cell-template>
+                            <button mat-button (click)="onNewOrEditDetail(row)" color="accent">Edit</button>
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column [flexGrow]="1" [sortable]="false">
+                        <ng-template let-row="row" ngx-datatable-cell-template>
+                            <button mat-button (click)="onRemoveDetail(row)" color="warn">Remove</button>
+                        </ng-template>
+                    </ngx-datatable-column>
+                </ngx-datatable>
+            </div>
+            <ng-template #editDetail >
+                <div class="m-3" [@flyInOut]="'in'">
+                    <jobcard-detail-edit (ComplateOrCancel)="onComplateOrCancel($event)" [EditValueDetail]="jobDetail"
+                                         [MachineTypeId]="editValueForm.controls.TypeMachineId.value"
+                                         [ProjectDetailId]="editValueForm.controls.ProjectCodeDetailId.value"></jobcard-detail-edit>
+                </div>
+            </ng-template>
+        </mat-tab>
+    </mat-tab-group>
+</div>
+
+<ng-template #elseBlock>
+    <mat-progress-bar mode="indeterminate" style="margin-top:50px;"></mat-progress-bar>
+    Waiting... for loading
+</ng-template>

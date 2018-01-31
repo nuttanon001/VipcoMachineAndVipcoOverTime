@@ -1,0 +1,54 @@
+﻿<div class="master-dialog-vh">
+    <H5 style="color:cadetblue">Unit Measure</H5>
+    <div class="child-container">
+        <div class="center-content">
+            <div *ngIf="showNewModel; else detailEdit">
+                <data-table (selected)="onSelectedValue($event)"
+                            [columns]="columns"
+                            [height]="'55vh'">
+                </data-table>
+            </div>
+            <ng-template #detailEdit>
+                <div class="edit-container">
+                    <form [formGroup]="editValueForm">
+                        <div class="my-form">
+                            <label for="UnitMeasureName" class="my-label">Uom Name:</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="my-input" placeholder="Insert uom name here"
+                                       id="UnitMeasureName" formControlName="UnitMeasureName" required>
+                                <validation-messages [control]="editValueForm.controls.UnitMeasureName"></validation-messages>
+                            </div>
+
+                            <label for="test" class="my-label"></label>
+                            <div class="col-sm-4">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </ng-template>
+        </div>
+        <div class="right-content">
+            <button type="button" mat-icon-button color="accent" (click)="onNewModel()"
+                    [disabled]="!showNewModel" matTooltip="Create new" matTooltipPosition="left">
+                <i class="fa fa-2x fa-plus" aria-hidden="true"></i>
+            </button>
+            <button type="button" mat-icon-button color="warn" (click)="onCancelNewModel()"
+                    [disabled]="showNewModel" matTooltip="Cancel" matTooltipPosition="left">
+                <i class="fa fa-2x fa-times" aria-hidden="true"></i>
+            </button>
+            <button type="button" mat-icon-button color="accent" (click)="onValueSave()"
+                    [disabled]="!CanSaveAndSelected" matTooltip="SaveAndSelected" matTooltipPosition="left">
+                <i class="fa fa-2x fa-save" aria-hidden="true"></i>
+            </button>
+            <hr />
+            <button type="button" mat-icon-button color="primary" (click)="onSelectedClick()"
+                    [disabled]="!CanSelected" matTooltip="Selected" matTooltipPosition="left">
+                <i class="fa fa-2x fa-hand-pointer-o" aria-hidden="true"></i>
+            </button>
+            <button type="button" mat-icon-button color="warn" (click)="onCancelClick()"
+                    matTooltip="Cancel" matTooltipPosition="left">
+                <i class="fa fa-2x fa-minus" aria-hidden="true"></i>
+            </button>
+        </div>
+    </div>
+</div>

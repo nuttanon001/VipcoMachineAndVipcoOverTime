@@ -1,0 +1,81 @@
+﻿<div class="edit-container mx-3 my-2">
+    <div mat-dialog-actions style="border-bottom:1px solid #32a8cc;">
+        <h5>
+            New/Edit Require Machine Detail.
+        </h5>
+    </div>
+    <form [formGroup]="editValueForm">
+        <div class="my-form">
+            <label for="CuttingPlanString" class="my-label">Cutting/ShopDrawing:</label>
+            <div class="col-sm-4">
+                <input type="text" class="my-input" placeholder="Click to select cutting plan here"
+                       (click)="onCuttingPlanClick()" style="cursor:pointer;"
+                       id="CuttingPlanString" formControlName="CuttingPlanString" readonly>
+                <validation-messages [control]="editValueForm.controls.CuttingPlanString"></validation-messages>
+            </div>
+
+            <label for="StandardTimeString" class="my-label">StandardTime:</label>
+            <div class="col-sm-4">
+                <input type="text" class="my-input" placeholder="Click to select standard time here"
+                       (click)="onStandardTimeClick()" style="cursor:pointer;"
+                       id="StandardTimeString" formControlName="StandardTimeString" readonly>
+                <validation-messages [control]="editValueForm.controls.StandardTimeString"></validation-messages>
+            </div>
+        </div>
+
+        <div class="my-form">
+            <label for="Material" class="my-label">Material:</label>
+            <div class="col-sm-4">
+                <!--<input type="text" class="my-input" placeholder="Insert material here"
+                       id="Material" formControlName="Material" >-->
+                <p-autoComplete  class="my-input-combobox" placeholder="Insert material here"
+                                 (completeMethod)="onSearchAutoComplate($event)"
+                                 appendTo="body"
+                                 [style]="{'width':'100%'}" [inputStyle]="{'width':'100%'}" [size]="30"
+                                 id="Material" formControlName="Material" [suggestions]="materials">
+                </p-autoComplete>
+                <validation-messages [control]="editValueForm.controls.Material"></validation-messages>
+            </div>
+
+            <label for="Quality" class="my-label">Quantity:</label>
+            <div class="col-sm-4">
+                <input type="number" min="0" class="my-input" placeholder="Insert quantity of material here"
+                       id="Quality" formControlName="Quality">
+                <validation-messages [control]="editValueForm.controls.Quality"></validation-messages>
+            </div>
+        </div>
+
+        <div class="my-form">
+            <label for="UnitsMeasureString" class="my-label">Uom:</label>
+            <div class="col-sm-4">
+                <input type="text" class="my-input" placeholder="Click to select unit of measure here."
+                       (click)="onUnitsMeasureClick()" style="cursor:pointer;"
+                       id="UnitsMeasureString" formControlName="UnitsMeasureString" readonly>
+                <validation-messages [control]="editValueForm.controls.UnitsMeasureString"></validation-messages>
+            </div>
+
+            <label for="Remark" class="my-label">Remark:</label>
+            <div class="col-sm-4">
+                <input type="text" class="my-input" placeholder="Insert remark here"
+                       id="Remark" formControlName="Remark">
+                <validation-messages [control]="editValueForm.controls.Remark"></validation-messages>
+            </div>
+        </div>
+
+        <div class="my-form">
+            <label for="UnitNo" class="my-label">UnitNo:</label>
+            <div class="col-sm-4">
+                <p-dropdown class="my-input-combobox" [options]="unitNos" filter="filter" [style]="{'width':'100%'}"
+                            appendTo="body"
+                            id="UnitNo" formControlName="UnitNo">
+                </p-dropdown>
+                <validation-messages [control]="editValueForm.controls.UnitNo"></validation-messages>
+            </div>
+        </div>
+    </form>
+
+    <div style="border-top:1px solid #32a8cc;">
+        <button mat-raised-button (click)="onNewOrUpdateClick()" [disabled]="!editValueForm.valid" color="primary" class="my-1">New/Update</button>
+        <button mat-raised-button (click)="onCancelClick()" color="warn" class="my-1">Cancel</button>
+    </div>
+</div>

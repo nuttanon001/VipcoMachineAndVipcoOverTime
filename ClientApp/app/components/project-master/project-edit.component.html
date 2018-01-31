@@ -1,0 +1,90 @@
+﻿<div *ngIf="editValue; else elseBlock">
+    <mat-tab-group>
+        <mat-tab>
+            <ng-template mat-tab-label>
+                <b>Job Master</b>
+            </ng-template>
+            <div class="edit-container">
+                <form [formGroup]="editValueForm">
+                    <div class="my-form">
+                        <label for="ProjectCode" class="my-label">Job Code:</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="my-input" placeholder="Insert job code here"
+                                   id="ProjectCode" formControlName="ProjectCode" required>
+                            <validation-messages [control]="editValueForm.controls.ProjectCode"></validation-messages>
+                        </div>
+
+                        <label for="ProjectName" class="my-label">Job Name:</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="my-input" placeholder="Insert job name here"
+                                   id="ProjectName" formControlName="ProjectName">
+                            <validation-messages [control]="editValueForm.controls.ProjectName"></validation-messages>
+                        </div>
+                    </div>
+
+                    <div class="my-form">
+                        <label for="StartDate" class="my-label">OpenDate:</label>
+                        <div class="col-sm-4">
+                            <p-calendar formControlName="StartDate" [showIcon]="true"
+                                        appendTo="body"
+                                        id="StartDate" dateFormat="dd/mm/yy" placeholder="  Choose a open date">
+                            </p-calendar>
+                            <validation-messages [control]="editValueForm.controls.StartDate"></validation-messages>
+                        </div>
+
+                        <label for="EndDate" class="my-label">CloseDate:</label>
+                        <div class="col-sm-4">
+                            <p-calendar formControlName="EndDate" [showIcon]="true"
+                                        appendTo="body"
+                                        id="EndDate" dateFormat="dd/mm/yy" placeholder="  Choose a close date"
+                                        [minDate]="editValueForm.controls.StartDate.value">
+                            </p-calendar>
+                            <validation-messages [control]="editValueForm.controls.EndDate"></validation-messages>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </mat-tab>
+        <mat-tab>
+            <ng-template mat-tab-label>
+                <b>Job Detail Level2/3</b>
+            </ng-template>
+            <div class="edit-container">
+                <div style="margin-bottom:5px;">
+                    <button (click)="onNewDetail()" mat-raised-button style="float:left">
+                        <i class="fa fa-get-pocket" aria-hidden="true"></i>
+                        <span>Add Detail</span>
+                    </button>
+                </div>
+                <!--[columns]="columns"-->
+                <ngx-datatable class="material"
+                               [rows]="editValue.ProjectCodeDetails"
+                               [columnMode]="'flex'"
+                               [headerHeight]="50"
+                               [footerHeight]="0"
+                               [rowHeight]="50"
+                               [selectionType]="'single'"
+                               [scrollbarV]="true"
+                               [style.height]="'calc(100vh - 214px)'">
+                    <ngx-datatable-column name="Code" prop="ProjectCodeDetailCode" [flexGrow]="1"></ngx-datatable-column>
+                    <ngx-datatable-column name="Description" prop="Description" [flexGrow]="3"></ngx-datatable-column>
+                    <ngx-datatable-column [flexGrow]="1" [sortable]="false">
+                        <ng-template let-row="row" ngx-datatable-cell-template>
+                            <button mat-button (click)="onEditDetail(row)" color="accent">Edit</button>
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column [flexGrow]="1" [sortable]="false">
+                        <ng-template let-row="row" ngx-datatable-cell-template>
+                            <button mat-button (click)="onRemoveDetail(row)" color="warn">Remove</button>
+                        </ng-template>
+                    </ngx-datatable-column>
+                </ngx-datatable>
+            </div>
+        </mat-tab>
+    </mat-tab-group>
+</div>
+
+<ng-template #elseBlock>
+    <mat-progress-bar mode="indeterminate" style="margin-top:50px;"></mat-progress-bar>
+    Waiting... for loading
+</ng-template>

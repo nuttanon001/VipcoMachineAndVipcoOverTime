@@ -1,0 +1,300 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
+    <TypeScriptToolsVersion>Latest</TypeScriptToolsVersion>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="6.1.1" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="3.0.1" />
+    <PackageReference Include="DocumentFormat.OpenXml" Version="2.7.2" />
+    <PackageReference Include="EntityFrameworkCore.PrimaryKey" Version="1.2.0" />
+    <PackageReference Include="MailKit" Version="1.18.0" />
+    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.0.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Files not to publish (note that the 'dist' subfolders are re-added below) -->
+    <Compile Remove="ClientApp\app\base-class\**" />
+    <Compile Remove="ClientApp\app\lazy\**" />
+    <Content Remove="ClientApp\**" />
+    <EmbeddedResource Remove="ClientApp\app\base-class\**" />
+    <EmbeddedResource Remove="ClientApp\app\lazy\**" />
+    <None Remove="ClientApp\app\base-class\**" />
+    <None Remove="ClientApp\app\lazy\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="ClientApp\app\components\base-component\base-dialog.component.ts" />
+    <None Remove="ClientApp\app\components\base-component\base-edit.component.ts" />
+    <None Remove="ClientApp\app\components\base-component\base-master.component.ts" />
+    <None Remove="ClientApp\app\components\base-component\base-view.component.ts" />
+    <None Remove="ClientApp\app\components\base-component\data-table.component.ts" />
+    <None Remove="ClientApp\app\components\base-component\reuse-table.component.ts" />
+    <None Remove="ClientApp\app\components\developer\developer-center.component.ts" />
+    <None Remove="ClientApp\app\components\developer\developer-jobcard.component.ts" />
+    <None Remove="ClientApp\app\components\developer\developer-machine-type.component.ts" />
+    <None Remove="ClientApp\app\components\developer\developer-machine.component.ts" />
+    <None Remove="ClientApp\app\components\developer\developer-master.component.ts" />
+    <None Remove="ClientApp\app\components\developer\developer.index.ts" />
+    <None Remove="ClientApp\app\components\dialog\dialog.index.ts" />
+    <None Remove="ClientApp\app\components\jobcard\jobcard-center.component.ts" />
+    <None Remove="ClientApp\app\components\jobcard\jobcard-master.component.ts" />
+    <None Remove="ClientApp\app\components\jobcard\jobcard-view-waiting.component.ts" />
+    <None Remove="ClientApp\app\components\machine\machine-center.component.ts" />
+    <None Remove="ClientApp\app\components\overtime\overtime-center.component.ts" />
+    <None Remove="ClientApp\app\components\overtime\overtime-view-waiting.component.ts" />
+    <None Remove="ClientApp\app\components\project-master\project-center.component.ts" />
+    <None Remove="ClientApp\app\components\project-master\project.index.ts" />
+    <None Remove="ClientApp\app\components\standard-time\standard-time-center.component.ts" />
+    <None Remove="ClientApp\app\components\task-machine\task-machine-center.component.ts" />
+    <None Remove="ClientApp\app\models\attach-file.model.ts" />
+    <None Remove="ClientApp\app\models\classification-material\classification-material.model.ts" />
+    <None Remove="ClientApp\app\models\cutting-plan\cutting-plan-import.model.ts" />
+    <None Remove="ClientApp\app\models\cutting-plan\cutting-plan.model.ts" />
+    <None Remove="ClientApp\app\models\employee-group\employee-group-mis.model.ts" />
+    <None Remove="ClientApp\app\models\employee-group\employee-group.model.ts" />
+    <None Remove="ClientApp\app\models\employee\employee.model.ts" />
+    <None Remove="ClientApp\app\models\grade-material\grade-material.model.ts" />
+    <None Remove="ClientApp\app\models\jobcard-detail\jobcard-detail.model.ts" />
+    <None Remove="ClientApp\app\models\jobcard-master\jobcard-master.model.ts" />
+    <None Remove="ClientApp\app\models\machine\machine.model.ts" />
+    <None Remove="ClientApp\app\models\material\material.model.ts" />
+    <None Remove="ClientApp\app\models\message\message.model.ts" />
+    <None Remove="ClientApp\app\models\over-time\over-time.model.ts" />
+    <None Remove="ClientApp\app\models\overtime-detail\overtime-detail.model.ts" />
+    <None Remove="ClientApp\app\models\overtime-master\holiday-overtime.model.ts" />
+    <None Remove="ClientApp\app\models\overtime-master\option-overtime-last.model.ts" />
+    <None Remove="ClientApp\app\models\overtime-master\option-overtime-schedule.model.ts" />
+    <None Remove="ClientApp\app\models\overtime-master\overtime-master-report.model.ts" />
+    <None Remove="ClientApp\app\models\overtime-master\overtime-master.model.ts" />
+    <None Remove="ClientApp\app\models\page\page-data.model.ts" />
+    <None Remove="ClientApp\app\models\page\page.model.ts" />
+    <None Remove="ClientApp\app\models\projectcode-detail\projectcode-detail.model.ts" />
+    <None Remove="ClientApp\app\models\projectcode-master\projectcode-master.model.ts" />
+    <None Remove="ClientApp\app\models\property-machine\prooerty-machine.model.ts" />
+    <None Remove="ClientApp\app\models\standard-time\standard-time.model.ts" />
+    <None Remove="ClientApp\app\models\task-machine\no-task-machine.model.ts" />
+    <None Remove="ClientApp\app\models\task-machine\option-chart.model.ts" />
+    <None Remove="ClientApp\app\models\task-machine\option-schedule.model.ts" />
+    <None Remove="ClientApp\app\models\task-machine\plan.model.ts" />
+    <None Remove="ClientApp\app\models\template-project-detail\template-project-detail.model.ts" />
+    <None Remove="ClientApp\app\models\type-machine\type-machine.model.ts" />
+    <None Remove="ClientApp\app\models\type-standard-time\type-standard-time.model.ts" />
+    <None Remove="ClientApp\app\models\units-measure\units-measure.model.ts" />
+    <None Remove="ClientApp\app\modules\cutting-plan\cutting-plan.module.ts" />
+    <None Remove="ClientApp\app\modules\cutting-plan\cutting-plan.routing.ts" />
+    <None Remove="ClientApp\app\modules\developer\developer.routing.ts" />
+    <None Remove="ClientApp\app\modules\employee\employee.routing.ts" />
+    <None Remove="ClientApp\app\modules\jobcard\jobcard.module.ts" />
+    <None Remove="ClientApp\app\modules\jobcard\jobcard.routing.ts" />
+    <None Remove="ClientApp\app\modules\machine\machine.module.ts" />
+    <None Remove="ClientApp\app\modules\machine\machine.routing.ts" />
+    <None Remove="ClientApp\app\modules\module.index.ts" />
+    <None Remove="ClientApp\app\modules\overtime\overtime.module.ts" />
+    <None Remove="ClientApp\app\modules\overtime\overtime.routing.ts" />
+    <None Remove="ClientApp\app\modules\project\project.module.ts" />
+    <None Remove="ClientApp\app\modules\project\project.routing.ts" />
+    <None Remove="ClientApp\app\modules\standard-time\standard-time.module.ts" />
+    <None Remove="ClientApp\app\modules\standard-time\standard-time.routing.ts" />
+    <None Remove="ClientApp\app\modules\task-machine\task-machine.module.ts" />
+    <None Remove="ClientApp\app\modules\task-machine\task-machine.routing.ts" />
+    <None Remove="ClientApp\app\pipes\date-only.pipe.ts" />
+    <None Remove="ClientApp\app\services\base-service\base-communicate.service.ts" />
+    <None Remove="ClientApp\app\services\cutting-plan\cutting-plan.service.ts" />
+    <None Remove="ClientApp\app\services\data-table\data-table.service.ts" />
+    <None Remove="ClientApp\app\services\employee-group\employee-group.service.ts" />
+    <None Remove="ClientApp\app\services\employee\employee.service.ts" />
+    <None Remove="ClientApp\app\services\jobcard-detail\jobcard-detail.service.ts" />
+    <None Remove="ClientApp\app\services\jobcard-master\jobcard-master.service.ts" />
+    <None Remove="ClientApp\app\services\machine-has-operator\machine-has-operator.service.ts" />
+    <None Remove="ClientApp\app\services\machine\machine.service.ts" />
+    <None Remove="ClientApp\app\services\material\material.service.ts" />
+    <None Remove="ClientApp\app\services\over-time\over-time.service.ts" />
+    <None Remove="ClientApp\app\services\overtime-detail\overtime-detail.service.ts" />
+    <None Remove="ClientApp\app\services\overtime-master\overtime-master.service.ts" />
+    <None Remove="ClientApp\app\services\projectcode-detail\projectcode-detail-edit.service.ts" />
+    <None Remove="ClientApp\app\services\projectcode-detail\projectcode-detail.service.ts" />
+    <None Remove="ClientApp\app\services\projectcode-master\projectcode-master.service.ts" />
+    <None Remove="ClientApp\app\services\property-machine\property-machine.service.ts" />
+    <None Remove="ClientApp\app\services\standard-time\standard-time.service.ts" />
+    <None Remove="ClientApp\app\services\task-machine\task-machine.service.ts" />
+    <None Remove="ClientApp\app\services\template-project-detail\template-project-detail.service.ts" />
+    <None Remove="ClientApp\app\services\type-machine\type-machine.service.ts" />
+    <None Remove="ClientApp\app\services\type-standard-time\type-standard-time.service.ts" />
+    <None Remove="ClientApp\app\services\units-measure\units-measure.service.ts" />
+    <None Remove="ClientApp\app\services\user\user.service.ts" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="ViewModels\TypeStandardTimeViewModel.cs" />
+    <None Include="ViewModels\UserViewModel.cs" />
+    <None Include="wwwroot\reports\exportpdf.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <TypeScriptCompile Include="ClientApp\app\components\base-component\base-dialog.component.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\base-component\base-edit.component.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\base-component\base-master.component.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\base-component\base-view.component.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\base-component\data-table.component.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\base-component\reuse-table.component.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\cutting-plan\cutting-center.component.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\developer\developer-center.component.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\developer\developer-jobcard.component.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\developer\developer-machine-type.component.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\developer\developer-machine.component.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\developer\developer-master.component.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\developer\developer.index.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\dialog\dialog.index.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\jobcard\jobcard-center.component.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\jobcard\jobcard-master.component.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\jobcard\jobcard-view-waiting.component.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\machine\machine-center.component.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\overtime\overtime-center.component.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\overtime\overtime-view-waiting.component.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\project-master\project-center.component.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\project-master\project.index.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\standard-time\standard-time-center.component.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\task-machine\task-machine-center.component.ts" />
+    <TypeScriptCompile Include="ClientApp\app\models\attach-file\attach-file.model.ts" />
+    <TypeScriptCompile Include="ClientApp\app\models\classification-material\classification-material.model.ts" />
+    <TypeScriptCompile Include="ClientApp\app\models\cutting-plan\cutting-plan-import.model.ts" />
+    <TypeScriptCompile Include="ClientApp\app\models\cutting-plan\cutting-plan.model.ts" />
+    <TypeScriptCompile Include="ClientApp\app\models\employee-group\employee-group-mis.model.ts" />
+    <TypeScriptCompile Include="ClientApp\app\models\employee-group\employee-group.model.ts" />
+    <TypeScriptCompile Include="ClientApp\app\models\employee\employee.model.ts" />
+    <TypeScriptCompile Include="ClientApp\app\models\grade-material\grade-material.model.ts" />
+    <TypeScriptCompile Include="ClientApp\app\models\jobcard-detail\jobcard-detail.model.ts" />
+    <TypeScriptCompile Include="ClientApp\app\models\jobcard-master\jobcard-master.model.ts" />
+    <TypeScriptCompile Include="ClientApp\app\models\machine-has-operator\machine-has-operator.model.ts" />
+    <TypeScriptCompile Include="ClientApp\app\models\machine\machine.model.ts" />
+    <TypeScriptCompile Include="ClientApp\app\models\material\material.model.ts" />
+    <TypeScriptCompile Include="ClientApp\app\models\message\message.model.ts" />
+    <TypeScriptCompile Include="ClientApp\app\models\model.index.ts" />
+    <TypeScriptCompile Include="ClientApp\app\models\over-time\over-time.model.ts" />
+    <TypeScriptCompile Include="ClientApp\app\models\overtime-detail\overtime-detail.model.ts" />
+    <TypeScriptCompile Include="ClientApp\app\models\overtime-master\holiday-overtime.model.ts" />
+    <TypeScriptCompile Include="ClientApp\app\models\overtime-master\option-overtime-chart.model.ts" />
+    <TypeScriptCompile Include="ClientApp\app\models\overtime-master\option-overtime-last.model.ts" />
+    <TypeScriptCompile Include="ClientApp\app\models\overtime-master\option-overtime-schedule.model.ts" />
+    <TypeScriptCompile Include="ClientApp\app\models\overtime-master\overtime-master-report.model.ts" />
+    <TypeScriptCompile Include="ClientApp\app\models\overtime-master\overtime-master.model.ts" />
+    <TypeScriptCompile Include="ClientApp\app\models\page\page-data.model.ts" />
+    <TypeScriptCompile Include="ClientApp\app\models\page\page.model.ts" />
+    <TypeScriptCompile Include="ClientApp\app\models\projectcode-detail\projectcode-detail.model.ts" />
+    <TypeScriptCompile Include="ClientApp\app\models\projectcode-master\projectcode-master.model.ts" />
+    <TypeScriptCompile Include="ClientApp\app\models\property-machine\prooerty-machine.model.ts" />
+    <TypeScriptCompile Include="ClientApp\app\models\standard-time\standard-time.model.ts" />
+    <TypeScriptCompile Include="ClientApp\app\models\task-machine\no-task-machine.model.ts" />
+    <TypeScriptCompile Include="ClientApp\app\models\task-machine\option-chart.model.ts" />
+    <TypeScriptCompile Include="ClientApp\app\models\task-machine\option-schedule.model.ts" />
+    <TypeScriptCompile Include="ClientApp\app\models\task-machine\plan.model.ts" />
+    <TypeScriptCompile Include="ClientApp\app\models\task-machine\task-machine.model.ts" />
+    <TypeScriptCompile Include="ClientApp\app\models\template-project-detail\template-project-detail.model.ts" />
+    <TypeScriptCompile Include="ClientApp\app\models\type-machine\type-machine.model.ts" />
+    <TypeScriptCompile Include="ClientApp\app\models\type-standard-time\type-standard-time.model.ts" />
+    <TypeScriptCompile Include="ClientApp\app\models\units-measure\units-measure.model.ts" />
+    <TypeScriptCompile Include="ClientApp\app\modules\cutting-plan\cutting-plan.module.ts" />
+    <TypeScriptCompile Include="ClientApp\app\modules\cutting-plan\cutting-plan.routing.ts" />
+    <TypeScriptCompile Include="ClientApp\app\modules\developer\developer.routing.ts" />
+    <TypeScriptCompile Include="ClientApp\app\modules\employee\employee.routing.ts" />
+    <TypeScriptCompile Include="ClientApp\app\modules\jobcard\jobcard.module.ts" />
+    <TypeScriptCompile Include="ClientApp\app\modules\jobcard\jobcard.routing.ts" />
+    <TypeScriptCompile Include="ClientApp\app\modules\machine\machine.module.ts" />
+    <TypeScriptCompile Include="ClientApp\app\modules\machine\machine.routing.ts" />
+    <TypeScriptCompile Include="ClientApp\app\modules\module.index.ts" />
+    <TypeScriptCompile Include="ClientApp\app\modules\overtime\overtime.module.ts" />
+    <TypeScriptCompile Include="ClientApp\app\modules\overtime\overtime.routing.ts" />
+    <TypeScriptCompile Include="ClientApp\app\modules\project\project.module.ts" />
+    <TypeScriptCompile Include="ClientApp\app\modules\project\project.routing.ts" />
+    <TypeScriptCompile Include="ClientApp\app\modules\standard-time\standard-time.module.ts" />
+    <TypeScriptCompile Include="ClientApp\app\modules\standard-time\standard-time.routing.ts" />
+    <TypeScriptCompile Include="ClientApp\app\modules\task-machine\task-machine.module.ts" />
+    <TypeScriptCompile Include="ClientApp\app\modules\task-machine\task-machine.routing.ts" />
+    <TypeScriptCompile Include="ClientApp\app\pipes\date-only.pipe.ts" />
+    <TypeScriptCompile Include="ClientApp\app\services\base-service\base-communicate.service.ts" />
+    <TypeScriptCompile Include="ClientApp\app\services\cutting-plan\cutting-plan.service.ts" />
+    <TypeScriptCompile Include="ClientApp\app\services\data-table\data-table.service.ts" />
+    <TypeScriptCompile Include="ClientApp\app\services\employee-group\employee-group.service.ts" />
+    <TypeScriptCompile Include="ClientApp\app\services\employee\employee.service.ts" />
+    <TypeScriptCompile Include="ClientApp\app\services\grade-material\grade-material.service.ts" />
+    <TypeScriptCompile Include="ClientApp\app\services\jobcard-detail\jobcard-detail.service.ts" />
+    <TypeScriptCompile Include="ClientApp\app\services\jobcard-master\jobcard-master.service.ts" />
+    <TypeScriptCompile Include="ClientApp\app\services\machine-has-operator\machine-has-operator.service.ts" />
+    <TypeScriptCompile Include="ClientApp\app\services\machine\machine.service.ts" />
+    <TypeScriptCompile Include="ClientApp\app\services\material\material.service.ts" />
+    <TypeScriptCompile Include="ClientApp\app\services\over-time\over-time.service.ts" />
+    <TypeScriptCompile Include="ClientApp\app\services\overtime-detail\overtime-detail.service.ts" />
+    <TypeScriptCompile Include="ClientApp\app\services\overtime-master\overtime-master.service.ts" />
+    <TypeScriptCompile Include="ClientApp\app\services\projectcode-detail\projectcode-detail-edit.service.ts" />
+    <TypeScriptCompile Include="ClientApp\app\services\projectcode-detail\projectcode-detail.service.ts" />
+    <TypeScriptCompile Include="ClientApp\app\services\projectcode-master\projectcode-master.service.ts" />
+    <TypeScriptCompile Include="ClientApp\app\services\property-machine\property-machine.service.ts" />
+    <TypeScriptCompile Include="ClientApp\app\services\service.index.ts" />
+    <TypeScriptCompile Include="ClientApp\app\services\standard-time\standard-time.service.ts" />
+    <TypeScriptCompile Include="ClientApp\app\services\task-machine\task-machine.service.ts" />
+    <TypeScriptCompile Include="ClientApp\app\services\template-project-detail\template-project-detail.service.ts" />
+    <TypeScriptCompile Include="ClientApp\app\services\type-machine\type-machine.service.ts" />
+    <TypeScriptCompile Include="ClientApp\app\services\type-standard-time\type-standard-time.service.ts" />
+    <TypeScriptCompile Include="ClientApp\app\services\units-measure\units-measure.service.ts" />
+    <TypeScriptCompile Include="ClientApp\app\services\user\user.service.ts" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\files\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ReportClasses_2\ClassLibrary1\ReportClasses.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="wwwroot\exportpdf.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="wwwroot\reports\exportpdf.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <Target Name="DebugRunWebpack" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('wwwroot\dist') ">
+    <!-- Ensure Node.js is installed -->
+    <Exec Command="node --version" ContinueOnError="true">
+      <Output TaskParameter="ExitCode" PropertyName="ErrorCode" />
+    </Exec>
+    <Error Condition="'$(ErrorCode)' != '0'" Text="Node.js is required to build and run this project. To continue, please install Node.js from https://nodejs.org/, and then restart your command prompt or IDE." />
+
+    <!-- In development, the dist files won't exist on the first run or when cloning to
+         a different machine, so rebuild them if not already present. -->
+    <Message Importance="high" Text="Performing first-run Webpack build..." />
+    <Exec Command="node node_modules/webpack/bin/webpack.js --config webpack.config.vendor.js" />
+    <Exec Command="node node_modules/webpack/bin/webpack.js" />
+  </Target>
+
+  <Target Name="PublishRunWebpack" AfterTargets="ComputeFilesToPublish">
+    <!-- As part of publishing, ensure the JS resources are freshly built in production mode -->
+    <Exec Command="npm install" />
+    <Exec Command="node node_modules/webpack/bin/webpack.js --config webpack.config.vendor.js --env.prod" />
+    <Exec Command="node node_modules/webpack/bin/webpack.js --env.prod" />
+
+    <!-- Include the newly-built files in the publish output -->
+    <ItemGroup>
+      <DistFiles Include="wwwroot\dist\**; ClientApp\dist\**" />
+      <ResolvedFileToPublish Include="@(DistFiles->'%(FullPath)')" Exclude="@(ResolvedFileToPublish)">
+        <RelativePath>%(DistFiles.Identity)</RelativePath>
+        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      </ResolvedFileToPublish>
+    </ItemGroup>
+  </Target>
+
+</Project>

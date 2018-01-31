@@ -1,0 +1,40 @@
+﻿<form class="pt-3 mx-3">
+    <div class="form-group row">
+        <label for="ClassificationId" class="col-sm-2 col-form-label">Classification:</label>
+        <div class="col-sm-4">
+            <select class="form-control text-danger" id="ClassificationId">
+                <option *ngFor="let item of classMate">{{item}}</option>
+            </select>
+        </div>
+
+        <label for="GradeMaterialId" class="col-sm-2 col-form-label">GradeMaterial:</label>
+        <div class="col-sm-4">
+            <select class="form-control text-danger" id="GradeMaterialId">
+                <option *ngFor="let item of gradeMate">{{item}}</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label for="Description" class="col-sm-2 col-form-label">Description:</label>
+        <div class="col-sm-4">
+            <input type="text" class="form-control" id="Description" placeholder="Description">
+        </div>
+
+        <label for="Dimension" class="col-sm-2 col-form-label">Dimension:</label>
+        <div class="col-sm-4">
+            <input type="text" class="form-control" id="Dimension" placeholder="Dimensione">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="Thickness" class="col-sm-2 col-form-label">Thickness:</label>
+        <div class="col-sm-4">
+            <input type="number" class="form-control" id="Thickness" placeholder="Thickness">
+        </div>
+
+        <label for="Weight" class="col-sm-2 col-form-label">Weight:</label>
+        <div class="col-sm-4">
+            <input type="number" class="form-control" id="Weight" placeholder="Weight">
+        </div>
+    </div>
+</form>

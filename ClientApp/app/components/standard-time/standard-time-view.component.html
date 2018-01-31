@@ -1,0 +1,40 @@
+﻿<div *ngIf="displayValue,else elseBlock">
+    <mat-tab-group>
+        <mat-tab>
+            <ng-template mat-tab-label>
+                <b>Group Standard Time</b>
+            </ng-template>
+            <div class="view-container">
+                <div class="row my-1">
+                    <div class="my-label">
+                        Name :
+                    </div>
+                    <div class="my-value">
+                        {{displayValue.Name || "-"}}
+                    </div>
+
+                    <div class="my-label">
+                        Group Machine :
+                    </div>
+                    <div class="my-value">
+                        {{displayValue.TypeMachineString || "-"}}
+                    </div>
+                </div>
+            </div>
+        </mat-tab>
+        <mat-tab>
+            <ng-template mat-tab-label>
+                <b>Standard Time Values</b>
+            </ng-template>
+            <div class="view-container">
+                <reuse-table [rows]="standards" [columns]="columns">
+                </reuse-table>
+            </div>
+        </mat-tab>
+    </mat-tab-group>
+</div>
+
+<ng-template #elseBlock>
+    <mat-progress-bar mode="indeterminate" style="margin-top:50px;"></mat-progress-bar>
+    Waiting... for loading
+</ng-template>

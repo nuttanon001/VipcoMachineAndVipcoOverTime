@@ -1,0 +1,11 @@
+﻿<H5 mat-dialog-title style="color:cadetblue">Selected Material</H5>
+<hr />
+<div mat-dialog-content class="h-75 w-100 master-container">
+    <data-table (selected)="onSelectedMaterial($event)" [columns]="columns" [height]="'calc(100vh - 400px)'">
+    </data-table>
+</div>
+<hr />
+<div mat-dialog-actions>
+    <button mat-button (click)="onSelectedClick()" [disabled]="!CanSelected" color="primary">Selected</button>
+    <button mat-button (click)="onCancelClick()" color="warn">Cancel</button>
+</div>

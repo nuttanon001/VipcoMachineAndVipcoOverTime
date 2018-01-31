@@ -1,0 +1,119 @@
+<nav class="navbar navbar-expand navbar-dark bg-bar">
+    <!--<a class="navbar-brand" href="#">Always expand</a>-->
+    <a class="navbar-brand" [routerLink]="['/home']">
+        <img src="/images/logoVIPCO.png" alt="Vipco" width="36" height="36" class="d-inline-block align-top">
+        Vipco Machine System
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#Mynavbars"
+            aria-controls="Mynavbars" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse pl-4" id="Mynavbars" style="z-index:1500;">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" [routerLink]="['/task-machine/task-machine-chart']" routerLinkActive="active">
+                    <i class="fa fa-bar-chart-o" aria-hidden="true"></i>
+                    <span>Machine Chart</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" [routerLink]="['/task-machine/task-machine-schedule','1']" routerLinkActive="active">
+                    <i class="fa fa-calendar-o" aria-hidden="true"></i>
+                    <span>Machine Schedule</span>
+                </a>
+            </li>
+            <li class="nav-item" *ngIf="GetLevel1">
+                <a #mainMenu="matMenuTrigger" [matMenuTriggerFor]="menu1"
+                   (onMenuOpen)="menuOnCloseMenu1()" (mouseover)="menuOnOpenMenu1()"
+                   class="nav-link" [routerLink]="['/jobcard']" routerLinkActive="active">
+                    <i class="fa fa-flag" aria-hidden="true"></i>
+                    Require Machine
+                </a>
+                <mat-menu #menu1="matMenu" [overlapTrigger]="false">
+                    <button mat-menu-item [routerLink]="['/jobcard']" routerLinkActive="active">
+                        <i class="fa fa-flag" aria-hidden="true"></i>
+                        <span>Require Machine</span>
+                    </button>
+                </mat-menu>
+            </li>
+            <li class="nav-item" *ngIf="GetLevel2">
+                <a #subMenu="matMenuTrigger" [matMenuTriggerFor]="menu2"
+                   (onMenuOpen)="menuOnCloseMenu2()" (mouseover)="menuOnOpenMenu2()"
+                   class="nav-link" [routerLink]="['/jobcard/jobcard-waiting']" routerLinkActive="active">
+                    <i class="fa fa-comments-o" aria-hidden="true"></i>
+                    For Machine
+                </a>
+                <mat-menu #menu2="matMenu" [overlapTrigger]="false">
+                    <div>
+                        <button mat-menu-item [routerLink]="['/jobcard/jobcard-waiting']" routerLinkActive="active">
+                            <i class="fa fa-history" aria-hidden="true"></i>
+                            <span>Require Machine Waiting</span>
+                        </button>
+
+                        <button mat-menu-item [routerLink]="['/task-machine/task-machine-schedule','2']" routerLinkActive="active">
+                            <i class="fa fa-tasks" aria-hidden="true"></i>
+                            <span>Progress Machine</span>
+                        </button>
+                        <hr />
+                        <button mat-menu-item [routerLink]="['/task-machine']" routerLinkActive="active">
+                            <i class="fa fa-tachometer" aria-hidden="true"></i>
+                            <span>Task Machine</span>
+                        </button>
+                        <button mat-menu-item [routerLink]="['/notask-machine']" routerLinkActive="active">
+                            <i class="fa fa-adjust" aria-hidden="true"></i>
+                            <span>Other Work Machine</span>
+                        </button>
+
+                        <button mat-menu-item [routerLink]="['/machine']" routerLinkActive="active">
+                            <i class="fa fa-plug" aria-hidden="true"></i>
+                            <span>Machine</span>
+                        </button>
+                        <button mat-menu-item [routerLink]="['/project']" routerLinkActive="active">
+                            <i class="fa fa-product-hunt" aria-hidden="true"></i>
+                            <span>Job Master</span>
+                        </button>
+                        <button mat-menu-item [routerLink]="['/cutting-plan']" routerLinkActive="active">
+                            <i class="fa fa-cube" aria-hidden="true"></i>
+                            <span>Cutting Plan</span>
+                        </button>
+                        <button mat-menu-item [routerLink]="['/standard-time']" routerLinkActive="active">
+                            <i class="fa fa-hourglass-end" aria-hidden="true"></i>
+                            <span>StandardTime</span>
+                        </button>
+                        <hr/>
+                        <button mat-menu-item [routerLink]="['/cutting-plan/import-csv']" routerLinkActive="active">
+                            <i class="fa fa-inbox" aria-hidden="true"></i>
+                            <span>Cutting Plan Import</span>
+                        </button>
+                        <!--<button mat-menu-item [routerLink]="['/developer']" routerLinkActive="active">
+                            <i class="fa fa-university" aria-hidden="true"></i>
+                            <span>Developer</span>
+                        </button>-->
+                    </div>
+                </mat-menu>
+            </li>
+        </ul>
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a *ngIf="showLogin; else elseBlock" [routerLink]="['/login']">
+                    <i class="fa fa-sign-in" aria-hidden="true"></i>
+                    Login
+                </a>
+                <ng-template #elseBlock>
+                    <!--unmark this if authService is complete
+                        <a class="username">
+                            Welcome <i>{{authService.userName}}</i>
+                        </a>-->
+                    <a class="mx-1"  [routerLink]="['/register','1']" routerLinkActive="active">
+                        Welcome <i>{{userName}}</i>
+                    </a>
+                    <a (click)="onLogOut()">
+                        <i class="fa fa-sign-out" aria-hidden="true"></i>
+                        Logout
+                    </a>
+                </ng-template>
+            </li>
+        </ul>
+    </div>
+</nav>

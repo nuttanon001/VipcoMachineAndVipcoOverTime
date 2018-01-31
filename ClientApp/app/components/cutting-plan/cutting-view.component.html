@@ -1,0 +1,72 @@
+﻿<div *ngIf="displayValue,else elseBlock">
+    <mat-tab-group>
+        <mat-tab>
+            <ng-template mat-tab-label>
+                <b>Cutting Plan</b>
+            </ng-template>
+            <div class="view-container">
+                <div class="row my-1">
+                    <div class="my-label">
+                        CuttingPlan :
+                    </div>
+                    <div class="my-value">
+                        {{displayValue.CuttingPlanNo || "-"}}
+                    </div>
+
+                    <div class="my-label">
+                        Description :
+                    </div>
+                    <div class="my-value">
+                        {{displayValue.Description || "-"}}
+                    </div>
+                </div>
+
+                <div class="row my-1">
+                    <div class="my-label">
+                        Type :
+                    </div>
+                    <div class="my-value">
+                        {{displayValue.TypeCuttingPlanString || "-"}}
+                    </div>
+
+                    <div class="my-label">
+                        Job Lv2/3 :
+                    </div>
+                    <div class="my-value">
+                        {{displayValue.ProjectCodeString || "-"}}
+                    </div>
+                </div>
+
+                <div class="row my-1">
+                    <div class="my-label">
+                        MaterialSize :
+                    </div>
+                    <div class="my-value">
+                        {{displayValue.MaterialSize || "-"}}
+                    </div>
+
+                    <div class="my-label">
+                        MaterialGrade :
+                    </div>
+                    <div class="my-value">
+                        {{displayValue.MaterialGrade || "-"}}
+                    </div>
+                </div>
+
+                <div class="row my-1">
+                    <div class="my-label">
+                        Quantity :
+                    </div>
+                    <div class="my-value">
+                        {{displayValue.Quantity || "-"}}
+                    </div>
+                </div>
+            </div>
+        </mat-tab>
+    </mat-tab-group>
+</div>
+
+<ng-template #elseBlock>
+    <mat-progress-bar mode="indeterminate" style="margin-top:50px;"></mat-progress-bar>
+    Waiting... for loading
+</ng-template>

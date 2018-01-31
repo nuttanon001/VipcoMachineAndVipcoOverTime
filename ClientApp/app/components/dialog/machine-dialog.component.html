@@ -1,0 +1,38 @@
+﻿<div class="master-dialog-vh">
+    <div class="child-container">
+        <div class="center-content">
+            <div class="master-form-content">
+                <search-box (search)="onFilter($event)" style="margin-right:5px;">
+                </search-box>
+                <p-dropdown class="my-input-combobox"
+                            [options]="typeMachines"
+                            [style]="{'width':'300px'}"
+                            (onChange)="onSelectedTypeMachine($event)">
+                </p-dropdown>
+            </div>
+            <ngx-datatable class="material"
+                            #table
+                            [rows]="machines"
+                            [columns]="columns"
+                            [columnMode]="'flex'"
+                            [headerHeight]="50"
+                            [footerHeight]="0"
+                            [rowHeight]="50"
+                            [scrollbarV]="true"
+                            [style.height]="'55vh'"
+                            [selectionType]="'single'"
+                            (select)="onSelectedMachine($event)">
+            </ngx-datatable>
+        </div>
+        <div class="right-content">
+            <button type="button" mat-icon-button color="primary" (click)="onSelectedClick()"
+                    [disabled]="!CanSelected" matTooltip="Selected" matTooltipPosition="left">
+                <i class="fa fa-2x fa-hand-pointer-o" aria-hidden="true"></i>
+            </button>
+            <button type="button" mat-icon-button color="warn" (click)="onCancelClick()"
+                    matTooltip="Cancel" matTooltipPosition="left">
+                <i class="fa fa-2x fa-minus" aria-hidden="true"></i>
+            </button>
+        </div>
+    </div>
+</div>

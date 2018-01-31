@@ -1,0 +1,78 @@
+﻿
+<div class="master-dialog-vh">
+    <H5 style="color:cadetblue">Cutting-Plan</H5>
+    <div class="child-container">
+        <div class="center-content">
+            <div *ngIf="showNewModel; else detailEdit" class="w-100">
+                <data-table (selected)="onSelectedValue($event)"
+                            [columns]="columns"
+                            [height]="'55vh'">
+                </data-table>
+            </div>
+            <ng-template #detailEdit>
+                <div class="edit-container" style="height:55vh;">
+                    <form [formGroup]="editValueForm">
+                        <div class="my-form">
+                            <label for="CuttingPlanNo" class="my-label">CuttingPlanNo:</label>
+                            <div class="col-sm-4">
+                                <textarea class="my-input" placeholder="Insert cutting plan no here."
+                                          id="CuttingPlanNo" formControlName="CuttingPlanNo" rows="4" required>
+                                </textarea>
+                                <validation-messages [control]="editValueForm.controls.CuttingPlanNo"></validation-messages>
+                            </div>
+
+                            <label for="Description" class="my-label">Description:</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="my-input" placeholder="Insert description of cutting plan here"
+                                       id="Description" formControlName="Description">
+                                <validation-messages [control]="editValueForm.controls.Description"></validation-messages>
+                            </div>
+                        </div>
+
+                        <div class="my-form">
+                            <label for="TypeCuttingPlan" class="my-label">Type:</label>
+                            <div class="col-sm-4">
+                                <p-dropdown class="my-input-combobox" [options]="cuttingTypes" filter="filter" [style]="{'width':'100%'}"
+                                            id="TypeCuttingPlan" formControlName="TypeCuttingPlan" required>
+                                </p-dropdown>
+                                <validation-messages [control]="editValueForm.controls.TypeCuttingPlan"></validation-messages>
+                            </div>
+
+                            <label for="ProjectCodeDetailId" class="my-label">Job Lv2/3:</label>
+                            <div class="col-sm-4">
+                                <p-dropdown class="my-input-combobox" [options]="projectDetails" filter="filter" [style]="{'width':'100%'}"
+                                            id="ProjectCodeDetailId" formControlName="ProjectCodeDetailId" required>
+                                </p-dropdown>
+                                <validation-messages [control]="editValueForm.controls.ProjectCodeDetailId"></validation-messages>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </ng-template>
+        </div>
+
+        <div class="right-content">
+            <button type="button" mat-icon-button color="accent" (click)="onNewModel()"
+                    [disabled]="!showNewModel" matTooltip="Create new" matTooltipPosition="left">
+                <i class="fa fa-2x fa-plus" aria-hidden="true"></i>
+            </button>
+            <button type="button" mat-icon-button color="warn" (click)="onCancelNewModel()"
+                    [disabled]="showNewModel" matTooltip="Cancel" matTooltipPosition="left">
+                <i class="fa fa-2x fa-times" aria-hidden="true"></i>
+            </button>
+            <button type="button" mat-icon-button color="accent" (click)="onValueSave()"
+                    [disabled]="!CanSaveAndSelected" matTooltip="SaveAndSelected" matTooltipPosition="left">
+                <i class="fa fa-2x fa-save" aria-hidden="true"></i>
+            </button>
+            <hr class="w-100"/>
+            <button type="button" mat-icon-button color="primary" (click)="onSelectedClick()"
+                    [disabled]="!CanSelected" matTooltip="Selected" matTooltipPosition="left">
+                <i class="fa fa-2x fa-hand-pointer-o" aria-hidden="true"></i>
+            </button>
+            <button type="button" mat-icon-button color="warn" (click)="onCancelClick()"
+                    matTooltip="Cancel" matTooltipPosition="left">
+                <i class="fa fa-2x fa-minus" aria-hidden="true"></i>
+            </button>
+        </div>
+    </div>
+</div>

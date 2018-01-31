@@ -1,0 +1,10 @@
+﻿export { DeveloperMachineComponent } from "./developer-machine.component";
+export { DeveloperMasterComponent } from "./developer-master.component";
+export { DeveloperCenterComponent } from "./developer-center.component";
+export { DeveloperJobCardComponent } from "./developer-jobcard.component";
+export { DeveloperMachineTypeComponent } from "./developer-machine-type.component";
+export { MaterialComponent } from "./material.component";
+export { ProjectcodeComponent } from "./projectcode.component";
+export { StandardTimeComponent } from "./standard-time.component";
+export { TaskMachineComponent } from "./task-machine.component";
+export { OvertimeMasterComponent } from "./overtime-master.component";

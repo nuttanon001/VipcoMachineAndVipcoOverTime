@@ -1,0 +1,51 @@
+﻿<div class="master-dialog-vh">
+    <H5 style="color:cadetblue">Selected Job Level2/3</H5>
+    <div class="child-container">
+        <div class="center-content">
+            <split direction="horizontal"
+                   [gutterSize]="4"
+                   [visibleTransition]="true">
+                <split-area [size]="40" [order]="1">
+                    <div class="child-left-container">
+                        <data-table (selected)="onSelectedMaster($event)"
+                                    [columns]="columns"
+                                    [height]="'55vh'">
+                        </data-table>
+                    </div>
+                </split-area>
+                <split-area [size]="60" [order]="2" *ngIf="mode === 0">
+                    <div class="child-container">
+                        <div class="center-content">
+                            <search-box (search)="onFilter($event)"
+                                        class="w-100 mx-1"></search-box>
+                            <ngx-datatable class="material"
+                                           #table
+                                           [rows]="details"
+                                           [columns]="columnsDetail"
+                                           [columnMode]="'flex'"
+                                           [headerHeight]="50"
+                                           [footerHeight]="0"
+                                           [rowHeight]="50"
+                                           [selectionType]="'single'"
+                                           (select)="onSelectedDetail($event)"
+                                           [scrollbarV]="true"
+                                           [style.height]="'55vh'">
+                            </ngx-datatable>
+                        </div>
+                    </div>
+                </split-area>
+            </split>
+        </div>
+        <div class="right-content">
+            <button type="button" mat-icon-button color="primary" (click)="onSelectedClick()"
+                    [disabled]="!CanSelected" matTooltip="Selected" matTooltipPosition="left">
+                <i class="fa fa-2x fa-hand-pointer-o" aria-hidden="true"></i>
+            </button>
+            <button type="button" mat-icon-button color="warn" (click)="onCancelClick()"
+                    matTooltip="Cancel" matTooltipPosition="left">
+                <i class="fa fa-2x fa-minus" aria-hidden="true"></i>
+            </button>
+        </div>
+    </div>
+
+</div>

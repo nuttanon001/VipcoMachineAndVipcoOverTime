@@ -1,0 +1,78 @@
+﻿<div *ngIf="editValue; else elseBlock">
+    <mat-tab-group>
+        <mat-tab>
+            <ng-template mat-tab-label>
+                <b>Cutting Plan</b>
+            </ng-template>
+            <div class="edit-container">
+                <form [formGroup]="editValueForm">
+                    <div class="my-form">
+                        <label for="CuttingPlanNo" class="my-label">CuttingPlanNo:</label>
+                        <div class="col-sm-4">
+                            <textarea class="my-input" placeholder="Insert cutting plan no here."
+                                      id="CuttingPlanNo" formControlName="CuttingPlanNo" rows="4" required>
+                            </textarea>
+                            <validation-messages [control]="editValueForm.controls.CuttingPlanNo"></validation-messages>
+                        </div>
+
+                        <label for="Description" class="my-label">Description:</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="my-input" placeholder="Insert description of cutting plan here"
+                                   id="Description" formControlName="Description">
+                            <validation-messages [control]="editValueForm.controls.Description"></validation-messages>
+                        </div>
+                    </div>
+
+                    <div class="my-form">
+                        <label for="TypeCuttingPlan" class="my-label">Type:</label>
+                        <div class="col-sm-4">
+                            <p-dropdown class="my-input-combobox" [options]="cuttingTypes" filter="filter" [style]="{'width':'100%'}"
+                                        appendTo="body"
+                                        id="TypeCuttingPlan" formControlName="TypeCuttingPlan" required>
+                            </p-dropdown>
+                            <validation-messages [control]="editValueForm.controls.TypeCuttingPlan"></validation-messages>
+                        </div>
+
+                        <label for="ProjectCodeString" class="my-label">Job Lv2/3:</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="my-input" placeholder="Click select job level 2/3 here"
+                                   (click)="onNewDetail()" style="cursor:pointer;"
+                                   id="ProjectCodeString" formControlName="ProjectCodeString" required readonly>
+                            <validation-messages [control]="editValueForm.controls.ProjectCodeString"></validation-messages>
+                        </div>
+                    </div>
+
+                    <div class="my-form">
+                        <label for="MaterialSize" class="my-label">MaterialSize:</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="my-input" placeholder="Insert material size here"
+                                   id="MaterialSize" formControlName="MaterialSize">
+                            <validation-messages [control]="editValueForm.controls.MaterialSize"></validation-messages>
+                        </div>
+
+                        <label for="MaterialGrade" class="my-label">MaterialGrade:</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="my-input" placeholder="Insert material grade here"
+                                   id="MaterialGrade" formControlName="MaterialGrade">
+                            <validation-messages [control]="editValueForm.controls.MaterialGrade"></validation-messages>
+                        </div>
+                    </div>
+
+                    <div class="my-form">
+                        <label for="Quantity" class="my-label">Quantity:</label>
+                        <div class="col-sm-4">
+                            <input type="number" class="my-input" placeholder="Insert quantity of material here"
+                                   id="Quantity" formControlName="Quantity">
+                            <validation-messages [control]="editValueForm.controls.Quantity"></validation-messages>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </mat-tab>
+    </mat-tab-group>
+</div>
+
+<ng-template #elseBlock>
+    <mat-progress-bar mode="indeterminate" style="margin-top:50px;"></mat-progress-bar>
+    Waiting... for loading
+</ng-template>

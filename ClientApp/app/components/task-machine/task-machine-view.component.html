@@ -1,0 +1,205 @@
+﻿<div *ngIf="displayValue,else elseBlock">
+    <mat-tab-group>
+        <mat-tab>
+            <ng-template mat-tab-label>
+                <b>Task Machine</b>
+            </ng-template>
+            <div class="view-container">
+                <div class="row my-1">
+                    <div class="my-label">
+                        R/M No :
+                    </div>
+                    <div class="my-value">
+                        {{jobCardDetail?.JobMasterNoString || "-"}}
+                    </div>
+
+                    <div class="my-label">
+                        Type Machine :
+                    </div>
+                    <div class="my-value">
+                        {{jobCardDetail?.TypeMachineString || "-"}}
+                    </div>
+                </div>
+                <div class="row my-1">
+                    <div class="my-label">
+                        Job Level2/3 :
+                    </div>
+                    <div class="my-value">
+                        {{jobCardDetail?.FullNameString || "-"}}
+                    </div>
+
+                    <div class="my-label">
+                        CuttingPlan/SD :
+                    </div>
+                    <div class="my-value">
+                        {{jobCardDetail?.CuttingPlanString || "-"}}
+                    </div>
+                </div>
+                <div class="row my-1">
+                    <div class="my-label">
+                        StandardTime :
+                    </div>
+                    <div class="my-value">
+                        {{jobCardDetail?.StandardTimeString || "-"}}
+                    </div>
+
+                    <div class="my-label">
+                        Material :
+                    </div>
+                    <div class="my-value">
+                        {{jobCardDetail?.Material || "-"}}
+                    </div>
+                </div>
+                <div class="row my-1">
+                    <div class="my-label">
+                        Quantity :
+                    </div>
+                    <div class="my-value">
+                        {{jobCardDetail?.Quality || "-"}}
+                    </div>
+
+                    <div class="my-label">
+                        Uom :
+                    </div>
+                    <div class="my-value">
+                        {{jobCardDetail?.UnitsMeasureString || "-"}}
+                    </div>
+                </div>
+
+                <hr />
+
+                <div class="row my-1">
+                    <div class="my-label">
+                        Task Code :
+                    </div>
+                    <div class="my-value">
+                        {{displayValue.TaskMachineName || "-"}}
+                    </div>
+
+                    <div class="my-label">
+                        Description :
+                    </div>
+                    <div class="my-value">
+                        {{displayValue.Description || "-"}}
+                    </div>
+                </div>
+
+                <div class="row my-1">
+                    <div class="my-label">
+                        Quantity :
+                    </div>
+                    <div class="my-value">
+                        {{displayValue.TotalQuantity || "-"}}
+                    </div>
+
+                    <div class="my-label">
+                        Production :
+                    </div>
+                    <div class="my-value">
+                        {{displayValue.CurrentQuantity || "-"}}
+                    </div>
+                </div>
+
+                <div class="row my-1">
+                    <div class="my-label">
+                        PlannedStart :
+                    </div>
+                    <div class="my-value">
+                        {{(displayValue.PlannedStartDate | date:'dd/MM/yyyy') || "-"}}
+                    </div>
+
+                    <div class="my-label">
+                        PlannedEnd :
+                    </div>
+                    <div class="my-value">
+                        {{(displayValue.PlannedEndDate | date:'dd/MM/yyyy') || "-"}}
+                    </div>
+                </div>
+
+                <div class="row my-1">
+                    <div class="my-label">
+                        ActualStart :
+                    </div>
+                    <div class="my-value">
+                        {{(displayValue.ActualStartDate | date:'dd/MM/yyyy') || "-"}}
+                    </div>
+
+                    <div class="my-label">
+                        ActualEnd :
+                    </div>
+                    <div class="my-value">
+                        {{(displayValue.ActualEndDate | date:'dd/MM/yyyy') || "-"}}
+                    </div>
+                </div>
+
+                <div class="row my-1">
+                    <div class="my-label">
+                        AssignedBy :
+                    </div>
+                    <div class="my-value">
+                        {{displayValue.AssignedByString || "-"}}
+                    </div>
+
+                    <div class="my-label">
+                        MachineNo :
+                    </div>
+                    <div class="my-value">
+                        {{displayValue.MachineString || "-"}}
+                    </div>
+                </div>
+
+                <div class="row my-1">
+                    <div class="my-label">
+                        ManHours :
+                    </div>
+                    <div class="my-value">
+                        {{displayValue.ActualManHours || "-"}}
+                    </div>
+                </div>
+            </div>
+        </mat-tab>
+        <mat-tab>
+            <ng-template mat-tab-label>
+                <b>Over-Time</b>
+            </ng-template>
+            <div class="view-container">
+                <reuse-table [rows]="overtimes" [columns]="columns">
+                </reuse-table>
+            </div>
+        </mat-tab>
+        <mat-tab>
+            <ng-template mat-tab-label>
+                <b>Attach File</b>
+            </ng-template>
+            <div class="view-container">
+                <div *ngIf="attachFiles.length > 0,else elseAttact">
+                    <table class="table table-hover table-sm small">
+                        <colgroup>
+                            <col span="1" style="width: 80%;">
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th>File Name</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let file of attachFiles;let num = index">
+                                <td (click)="onOpenNewLink(file.FileAddress)" style="cursor:pointer;">
+                                    {{num + 1}}. {{file.FileName}}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <ng-template #elseAttact>
+                    <p>No attach file !</p>
+                </ng-template>
+            </div>
+        </mat-tab>
+    </mat-tab-group>
+</div>
+
+<ng-template #elseBlock>
+    <mat-progress-bar mode="indeterminate" style="margin-top:50px;"></mat-progress-bar>
+    Waiting... for loading
+</ng-template>

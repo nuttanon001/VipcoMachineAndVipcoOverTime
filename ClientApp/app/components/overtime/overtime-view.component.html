@@ -1,0 +1,107 @@
+﻿<div *ngIf="displayValue,else elseBlock">
+    <mat-tab-group>
+        <mat-tab>
+            <ng-template mat-tab-label>
+                <b>Require OverTime</b>
+            </ng-template>
+            <div class="view-container">
+                <div class="row my-1">
+                    <div class="my-label">
+                        Date-OverTime
+                    </div>
+                    <div class="my-value">
+                        {{(displayValue?.OverTimeDate | date:'dd/MM/yyyy') || "-"}}
+                    </div>
+
+                    <div class="my-label">
+                        Require By
+                    </div>
+                    <div class="my-value">
+                        {{displayValue?.RequireString || "-"}}
+                    </div>
+                </div>
+
+                <div class="row my-1">
+                    <div class="my-label">
+                        GroupMisName
+                    </div>
+                    <div class="my-value">
+                        {{displayValue?.GroupMisString || "-"}}
+                    </div>
+                    <div class="my-label">
+                        JobNumber
+                    </div>
+                    <div class="my-value">
+                        {{displayValue?.ProjectMasterString || "-"}}
+                    </div>
+                </div>
+
+                <div class="row my-1">
+                    <div class="my-label">
+                        Last OT/Date
+                    </div>
+                    <div class="my-value" *ngIf="lastOverTimeMaster?.OverTimeMasterId">
+                        {{(lastOverTimeMaster?.OverTimeDate | date:'dd/MM/yyyy') || '-'}}
+                    </div>
+                </div>
+
+                <div class="row my-1">
+                    <div class="my-label">
+                        Last-Plan
+                    </div>
+                    <div class="my-value" [innerHTML]="(lastOverTimeMaster?.InfoPlan || '-')">
+                    </div>
+
+                    <div class="my-label">
+                        Plan
+                    </div>
+                    <div class="my-value" [innerHTML]="displayValue?.InfoPlan">
+                    </div>
+                </div>
+
+                <div class="row my-1">
+                    <div class="my-label">
+                        Last-Actual
+                    </div>
+                    <div class="my-value" [innerHTML]="(lastOverTimeMaster?.InfoActual || '-')">
+                    </div>
+
+                    <div class="my-label">
+                        Actual
+                    </div>
+                    <div class="my-value" [innerHTML]="(displayValue?.InfoActual || '-')">
+                    </div>
+                </div>
+
+                <div class="row my-1">
+                    <div class="my-label">
+                        Approve By
+                    </div>
+                    <div class="my-value">
+                        {{displayValue?.ApproveString || "-"}}
+                    </div>
+
+                    <div class="my-label">
+                        Status
+                    </div>
+                    <div class="my-value">
+                        {{(displayValue?.StatusString) || "-"}}
+                    </div>
+                </div>
+            </div>
+        </mat-tab>
+        <mat-tab>
+            <ng-template mat-tab-label>
+                <b>List of Employee</b>
+            </ng-template>
+            <div class="view-container">
+                <reuse-table [columns]="columns" [rows]="details" [height]="height"></reuse-table>
+            </div>
+        </mat-tab>
+    </mat-tab-group>
+</div>
+
+<ng-template #elseBlock>
+    <mat-progress-bar mode="indeterminate" style="margin-top:50px;"></mat-progress-bar>
+    Waiting... for loading
+</ng-template>

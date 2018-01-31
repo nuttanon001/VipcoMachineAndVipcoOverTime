@@ -1,0 +1,86 @@
+﻿<nav class="navbar navbar-expand navbar-dark bg-bar">
+    <!--<a class="navbar-brand" href="#">Always expand</a>-->
+    <a class="navbar-brand" [routerLink]="['/home']">
+        <img src="/images/logoVIPCO.png" alt="Vipco" width="36" height="36" class="d-inline-block align-top">
+        Vipco OverTime System
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#Mynavbars"
+            aria-controls="Mynavbars" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse pl-4" id="Mynavbars" style="z-index:1500;">
+        <ul class="navbar-nav mr-auto">
+           <li class="nav-item" *ngIf="GetLevel1">
+                <a #mainMenu="matMenuTrigger" [matMenuTriggerFor]="menu1"
+                   (onMenuOpen)="menuOnCloseMenu1()" (mouseover)="menuOnOpenMenu1()"
+                   class="nav-link" [routerLink]="['/overtime']" routerLinkActive="active">
+                    <i class="fa fa-flag" aria-hidden="true"></i>
+                    Require OverTime
+                </a>
+                <mat-menu #menu1="matMenu" [overlapTrigger]="false">
+                    <button mat-menu-item [routerLink]="['/overtime']" routerLinkActive="active">
+                        <i class="fa fa-flag" aria-hidden="true"></i>
+                        <span>Require OverTime</span>
+                    </button>
+                </mat-menu>
+            </li>
+            <li class="nav-item" *ngIf="GetLevel1">
+                <a #subMenu="matMenuTrigger" [matMenuTriggerFor]="menu2"
+                   (onMenuOpen)="menuOnCloseMenu2()" (mouseover)="menuOnOpenMenu2()"
+                   class="nav-link" [routerLink]="['/overtime/approve-overtime']" routerLinkActive="active">
+                    <i class="fa fa-comments-o" aria-hidden="true"></i>
+                    Approve OverTime
+                </a>
+                <mat-menu #menu2="matMenu" [overlapTrigger]="false">
+                    <div>
+                        <button mat-menu-item [routerLink]="['/overtime/approve-overtime']" routerLinkActive="active">
+                            <i class="fa fa-history" aria-hidden="true"></i>
+                            <span>Approve OverTime</span>
+                        </button>
+                        <hr />
+                        <button mat-menu-item [routerLink]="['/holiday']" routerLinkActive="active">
+                            <i class="fa fa-calendar-plus-o" aria-hidden="true"></i>
+                            <span>Holiday</span>
+                        </button>
+                        <button mat-menu-item [routerLink]="['/employee']" routerLinkActive="active">
+                            <i class="fa fa-user-secret" aria-hidden="true"></i>
+                            <span>Subcontractor</span>
+                        </button>
+                        <hr/>
+                        <button mat-menu-item [routerLink]="['/overtime/chart-overtime']" routerLinkActive="active">
+                            <i class="fa fa-pie-chart" aria-hidden="true"></i>
+                            <span>ChartReport</span>
+                        </button>
+                        <button mat-menu-item [routerLink]="['/overtime/summary-overtime']" routerLinkActive="active">
+                            <i class="fa fa-times-circle-o" aria-hidden="true"></i>
+                            <span>SummaryByDate</span>
+                        </button>
+                    </div>
+                </mat-menu>
+            </li>
+        </ul>
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a *ngIf="showLogin; else elseBlock" [routerLink]="['/login']">
+                    <i class="fa fa-sign-in" aria-hidden="true"></i>
+                    Login
+                </a>
+                <ng-template #elseBlock>
+                    <!--unmark this if authService is complete
+                        <a class="username">
+                            Welcome <i>{{authService.userName}}</i>
+                        </a>-->
+                    <!-- [routerLink]="['/overtime']" routerLinkActive="active" -->
+                    <a class="mx-1" >
+                        Welcome <i>{{userName}}</i>
+                    </a>
+                    <a (click)="onLogOut()">
+                        <i class="fa fa-sign-out" aria-hidden="true"></i>
+                        Logout
+                    </a>
+                </ng-template>
+            </li>
+        </ul>
+    </div>
+</nav>

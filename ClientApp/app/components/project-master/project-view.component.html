@@ -1,0 +1,57 @@
+﻿<div *ngIf="displayValue,else elseBlock">
+    <mat-tab-group>
+        <mat-tab>
+            <ng-template mat-tab-label>
+                <b>Job Master</b>
+            </ng-template>
+            <div class="view-container">
+                <div class="row my-1">
+                    <div class="my-label">
+                        Job No :
+                    </div>
+                    <div class="my-value">
+                        {{displayValue.ProjectCode || "-"}}
+                    </div>
+
+                    <div class="my-label">
+                        ProjectName :
+                    </div>
+                    <div class="my-value">
+                        {{displayValue.ProjectName || "-"}}
+                    </div>
+
+                </div>
+
+                <div class="row my-1">
+                    <div class="my-label">
+                        OpenDate :
+                    </div>
+                    <div class="my-value">
+                        {{(displayValue.StartDate | date:'dd/MM/yyyy') || "-"}}
+                    </div>
+
+                    <div class="my-label">
+                        CloseDate :
+                    </div>
+                    <div class="my-value">
+                        {{(displayValue.EndDate | date:'dd/MM/yyyy') || "-"}}
+                    </div>
+                </div>
+            </div>
+        </mat-tab>
+        <mat-tab>
+            <ng-template mat-tab-label>
+                <b>Job Detail Level2/3</b>
+            </ng-template>
+            <div class="view-container">
+                <reuse-table [rows]="details" [columns]="columns">
+                </reuse-table>
+            </div>
+        </mat-tab>
+    </mat-tab-group>
+</div>
+
+<ng-template #elseBlock>
+    <mat-progress-bar mode="indeterminate" style="margin-top:50px;"></mat-progress-bar>
+    Waiting... for loading
+</ng-template>

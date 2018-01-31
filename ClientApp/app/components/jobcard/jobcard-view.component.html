@@ -1,0 +1,184 @@
+﻿<div *ngIf="displayValue,else elseBlock">
+    <mat-tab-group>
+        <mat-tab>
+            <ng-template mat-tab-label>
+                <b>Require Machine Master</b>
+            </ng-template>
+            <div class="view-container">
+                <div class="row my-1">
+                    <div class="my-label">
+                        Require/McNo
+                    </div>
+                    <div class="my-value">
+                        {{displayValue.JobCardMasterNo || "-"}}
+                    </div>
+
+                    <div class="my-label">
+                        Description
+                    </div>
+                    <div class="my-value">
+                        {{displayValue.Description || "-"}}
+                    </div>
+                </div>
+
+                <div class="row my-1">
+                    <div class="my-label">
+                        Date
+                    </div>
+                    <div class="my-value">
+                        {{(displayValue.JobCardDate | date:'dd/MM/yyyy') || "-"}}
+                    </div>
+
+                    <div class="my-label">
+                        DueDate
+                    </div>
+                    <div class="my-value">
+                        {{(displayValue.DueDate | date:'dd/MM/yyyy') || "-"}}
+                    </div>
+                </div>
+
+                <div class="row my-1">
+                    <div class="my-label">
+                        Group Machine
+                    </div>
+                    <div class="my-value">
+                        {{displayValue?.TypeMachineString || "-"}}
+                    </div>
+
+                    <div class="my-label">
+                        Job Lv2/3
+                    </div>
+                    <div class="my-value">
+                        {{displayValue?.ProjectDetailString || "-"}}
+                    </div>
+                </div>
+
+                <div class="row my-1">
+                    <div class="my-label">
+                        Creator
+                    </div>
+                    <div class="my-value">
+                        {{displayValue?.EmployeeWriteString || "-"}}
+                    </div>
+
+                    <div class="my-label">
+                        Require
+                    </div>
+                    <div class="my-value">
+                        {{displayValue?.EmployeeRequireString || "-"}}
+                    </div>
+                </div>
+
+                <div class="row my-1">
+                    <div class="my-label">
+                        Remark
+                    </div>
+                    <div class="my-value">
+                        {{displayValue.Remark || "-"}}
+                    </div>
+                </div>
+
+                <div class="row my-1">
+                    <div class="my-label">
+                        Status
+                    </div>
+                    <div class="my-value">
+                        {{(displayValue.StatusString) || "-"}}
+                    </div>
+                </div>
+
+                <fieldset>AttachFile</fieldset>
+                <div *ngIf="attachFiles.length > 0,else elseAttact">
+                    <table class="table table-hover table-sm small">
+                        <colgroup>
+                            <col span="1" style="width: 80%;">
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th>File Name</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let file of attachFiles;let num = index">
+                                <!--<td (click)="onOpenNewLink(file.FileAddress)" style="cursor:pointer;">-->
+                                <td>
+                                    <a [href]="file.FileAddress" arget="_self" download>
+                                        <i class="fa fa-download text-primary" aria-hidden="true"></i>
+                                        {{num + 1}}. {{file.FileName}}
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <ng-template #elseAttact>
+                    <p>No attach file !</p>
+                </ng-template>
+            </div>
+        </mat-tab>
+        <!--<mat-tab>
+            <ng-template mat-tab-label>
+                <b>Attach File</b>
+            </ng-template>
+            <div class="view-container">
+                <div *ngIf="attachFiles.length > 0,else elseAttact">
+                    <table class="table table-hover table-sm small">
+                        <colgroup>
+                            <col span="1" style="width: 80%;">
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th>File Name</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let file of attachFiles;let num = index">
+                                <td (click)="onOpenNewLink(file.FileAddress)" style="cursor:pointer;">
+                                    {{num + 1}}. {{file.FileName}}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <ng-template #elseAttact>
+                    <p>No attach file !</p>
+                </ng-template>
+            </div>
+        </mat-tab>-->
+        <mat-tab>
+            <ng-template mat-tab-label>
+                <b>Require Machine Detail</b>
+            </ng-template>
+            <div class="view-container">
+                <div *ngIf="!mode,else elseTable" class="chlid-center-content">
+                    <reuse-table [rows]="details" [columns]="columns">
+                    </reuse-table>
+                </div>
+                <ng-template #elseTable>
+                    <ngx-datatable class="material"
+                                   [rows]="details"
+                                   [columnMode]="'flex'"
+                                   [headerHeight]="50"
+                                   [footerHeight]="0"
+                                   [rowHeight]="50"
+                                   [selectionType]="'single'"
+                                   (select)="onSelect($event)"
+                                   [scrollbarV]="true"
+                                   [style.height]="'55vh'">
+                        <ngx-datatable-column name="CuttingPlan" prop="CuttingPlanString" [flexGrow]="3"></ngx-datatable-column>
+                        <ngx-datatable-column name="StandardTime" prop="StandardTimeString" [flexGrow]="1"></ngx-datatable-column>
+                        <ngx-datatable-column name="Material" prop="Material" [flexGrow]="2"></ngx-datatable-column>
+                        <ngx-datatable-column name="Quality" prop="Quality" [flexGrow]="1"></ngx-datatable-column>
+                        <!--<ngx-datatable-column name="Uom" prop="UnitsMeasureString" [flexGrow]="1"></ngx-datatable-column>-->
+                        <ngx-datatable-column name="Status" prop="StatusString" [flexGrow]="1" [cellClass]="getCellClass"></ngx-datatable-column>
+                    </ngx-datatable>
+                </ng-template>
+            </div>
+        </mat-tab>
+    </mat-tab-group>
+</div>
+
+<ng-template #elseBlock>
+    <mat-progress-bar mode="indeterminate" style="margin-top:50px;"></mat-progress-bar>
+    Waiting... for loading
+</ng-template>

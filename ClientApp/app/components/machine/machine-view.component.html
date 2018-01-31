@@ -1,0 +1,91 @@
+﻿<div *ngIf="displayValue,else elseBlock">
+    <mat-tab-group>
+        <mat-tab>
+            <ng-template mat-tab-label>
+                <b>Machine</b>
+            </ng-template>
+            <div class="view-container">
+                <div class="row my-1">
+                    <div class="my-label">
+                        Code :
+                    </div>
+                    <div class="my-value">
+                        {{displayValue.MachineCode || "-"}}
+                    </div>
+
+                    <div class="my-label">
+                        Name :
+                    </div>
+                    <div class="my-value">
+                        {{displayValue.MachineName || "-"}}
+                    </div>
+
+                </div>
+
+                <div class="row my-1">
+                    <div class="my-label">
+                        Installed :
+                    </div>
+                    <div class="my-value">
+                        {{(displayValue.InstalledDate | date:'dd/MM/yyyy') || "-"}}
+                    </div>
+
+                    <div class="my-label">
+                        Remark :
+                    </div>
+                    <div class="my-value">
+                        {{displayValue.Remark || "-"}}
+                    </div>
+                </div>
+
+                <div class="row my-1">
+                    <div class="my-label">
+                        Model :
+                    </div>
+                    <div class="my-value">
+                        {{displayValue.Model || "-"}}
+                    </div>
+
+                    <div class="my-label">
+                        Brand :
+                    </div>
+                    <div class="my-value">
+                        {{displayValue.Brand || "-"}}
+                    </div>
+                </div>
+
+                <div class="row my-1">
+                    <div class="my-label">
+                        Group :
+                    </div>
+                    <div class="my-value">
+                        {{displayValue.TypeMachineString || "-"}}
+                    </div>
+                </div>
+
+                <div class="row my-1">
+                    <div class="my-label">
+                        Image :
+                    </div>
+                    <div>
+                        <img [src]="displayValue.MachineImageString" class="size-img" />
+                    </div>
+                </div>
+            </div>
+        </mat-tab>
+        <mat-tab>
+            <ng-template mat-tab-label>
+                <b>Operators</b>
+            </ng-template>
+            <div class="view-container">
+                <reuse-table [rows]="details" [columns]="columns">
+                </reuse-table>
+            </div>
+        </mat-tab>
+    </mat-tab-group>
+</div>
+
+<ng-template #elseBlock>
+    <mat-progress-bar mode="indeterminate" style="margin-top:50px;"></mat-progress-bar>
+    Waiting... for loading
+</ng-template>

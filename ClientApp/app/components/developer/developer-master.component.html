@@ -1,0 +1,72 @@
+﻿<div class="master-container">
+    <split direction="horizontal" [gutterSize]="7" [visibleTransition]="true">
+        <split-area [size]="35" [visible]="hideleft" [order]="1">
+            <div class="child-container">
+                <ngx-datatable class="material w-100" [rows]="rows" [columns]="columns"
+                               [columnMode]="'standard'" [headerHeight]="50" [rowHeight]="'auto'"
+                               [selectionType]="'single'" (select)='onSelect($event)'>
+                        <!--(activate)="onActivate($event)"-->
+                    </ngx-datatable>
+            </div>
+        </split-area>
+        <split-area [size]="65" [order]="2">
+            <div class="child-container">
+                <!--Left-->
+                <div class="left-content">
+                    <div class="hide-table my-2" (click)="hideleft = !hideleft" matTooltip="Hide/Show Table" matTooltipPosition="right">
+                    </div>
+                </div>
+                <!--Center-->
+                <div class="center-content">
+                    <div class="card-body">
+                        <!--Title-->
+                        <h4 class="card-title">{{row.MyName}}</h4>
+                        <hr />
+                        <!--Component-->
+                        <div [ngSwitch]="row.MyValue" class="small">
+                            <div  *ngSwitchCase="'developer-machine'">
+                                <developer-machine></developer-machine>
+                            </div>
+                            <div *ngSwitchCase="'developer-jobcard'">
+                                <developer-jobcard></developer-jobcard>
+                            </div>
+                            <div *ngSwitchCase="'developer-machine-type'">
+                                <developer-machine-type></developer-machine-type>
+                            </div>
+                            <div *ngSwitchCase="'material'">
+                                <material></material>
+                            </div>
+                            <div *ngSwitchCase="'projectcode'">
+                                <projectcode></projectcode>
+                            </div>
+                            <div *ngSwitchCase="'standard-time'">
+                                <standard-time></standard-time>
+                            </div>
+                            <div *ngSwitchCase="'task-machine'">
+                                <task-machine></task-machine>
+                            </div>
+                            <div *ngSwitchDefault>
+                                ...
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--Right-->
+                <div class="right-content">
+                    <button type="button" (click)="onBackWard()" mat-icon-button color="accent"
+                            matTooltip="Hide/Show" matTooltipPosition="left">
+                        <i class="fa fa-3x fa-arrow-circle-o-right mx-auto" aria-hidden="true"></i>
+                    </button>
+                    <button type="button" (click)="onBackWard()" mat-icon-button color="accent"
+                            matTooltip="Hide/Show" matTooltipPosition="left">
+                        <i class="fa fa-3x fa-arrow-circle-o-left" aria-hidden="true"></i>
+                    </button>
+                    <button type="button" (click)="onBackWard()" mat-icon-button color="accent"
+                            matTooltip="Hide/Show" matTooltipPosition="left">
+                        <i class="fa fa-3x fa-arrow-circle-o-down" aria-hidden="true"></i>
+                    </button>
+                </div>
+            </div>
+        </split-area>
+    </split>
+</div>

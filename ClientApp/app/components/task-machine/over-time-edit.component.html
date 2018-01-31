@@ -1,0 +1,58 @@
+﻿<div class="edit-container mx-3 my-2">
+    <div style="border-bottom:1px solid #32a8cc;">
+        <h5>
+            New/Edit OverTime.
+        </h5>
+    </div>
+    <form [formGroup]="editValueForm">
+
+        <div class="my-form">
+            <label for="EmpCode" class="my-label">Employee:</label>
+            <div class="col-sm-4">
+                <p-dropdown class="my-input-combobox" [options]="operators" filter="filter" [style]="{'width':'100%'}"
+                            id="EmpCode" formControlName="EmpCode" required>
+                </p-dropdown>
+                <validation-messages [control]="editValueForm.controls.EmpCode"></validation-messages>
+            </div>
+
+            <label for="Description" class="my-label">Description:</label>
+            <div class="col-sm-4">
+                <input type="text" class="my-input" placeholder="insert description here."
+                       id="Description" formControlName="Description">
+                <validation-messages [control]="editValueForm.controls.Description"></validation-messages>
+            </div>
+        </div>
+
+        <div class="my-form">
+            <label class="my-label">Only between date :</label>
+            <div class="col-sm-4 text-danger">
+                {{minDate | date:'dd/MM/yyyy'}} - {{maxDate | date:'dd/MM/yyyy'}}
+            </div>
+        </div>
+
+        <div class="my-form">
+            <label for="OverTimeDate" class="my-label">OverTimeDate:</label>
+            <div class="col-sm-4">
+                <p-calendar formControlName="OverTimeDate" [showIcon]="true"
+                            id="OverTimeDate" dateFormat="dd/mm/yy" placeholder="  Choose a date"
+                            [minDate]="minDate" [maxDate]="maxDate"
+                            appendTo="body">
+                </p-calendar>
+                <span class="is-request-date">**</span>
+                <validation-messages [control]="editValueForm.controls.OverTimeDate"></validation-messages>
+            </div>
+
+            <label for="OverTimePerDate" class="my-label">Hour:</label>
+            <div class="col-sm-4">
+                <input type="number" min="0" class="my-input" placeholder="Add hour here"
+                       id="OverTimePerDate" formControlName="OverTimePerDate" required>
+                <validation-messages [control]="editValueForm.controls.OverTimePerDate"></validation-messages>
+            </div>
+        </div>
+
+    </form>
+    <div style="border-top:1px solid #32a8cc;">
+        <button mat-raised-button (click)="onNewOrUpdateClick()" [disabled]="!editValueForm.valid" color="primary" class="my-1">New/Update</button>
+        <button mat-raised-button (click)="onCancelClick()" color="warn" class="my-1">Cancel</button>
+    </div>
+</div>

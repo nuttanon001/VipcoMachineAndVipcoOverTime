@@ -1,0 +1,144 @@
+﻿<!--<form>
+    <div class="form-group row">
+        <label for="AssignedBy" class="col-sm-2 col-form-label">AssignedBy:</label>
+        <div class="col-sm-4">
+            <input type="text" class="form-control text-danger" id="AssignedBy" placeholder="AssignedBy">
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label for="TaskMachineName" class="col-sm-2 col-form-label">TaskMachineName:</label>
+        <div class="col-sm-4">
+            <input type="text" class="form-control" id="TaskMachineName" placeholder="TaskMachineName">
+        </div>
+
+        <label for="Description" class="col-sm-2 col-form-label">Description:</label>
+        <div class="col-sm-4">
+            <input type="text" class="form-control" id="Description" placeholder="Description">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="Priority" class="col-sm-2 col-form-label">Priority:</label>
+        <div class="col-sm-4">
+            <input type="number" class="form-control" id="Priority" placeholder="Priority">
+        </div>
+
+        <label for="TaskPercent" class="col-sm-2 col-form-label">TaskPercent:</label>
+        <div class="col-sm-4">
+            <input type="number" class="form-control" id="TaskPercent" placeholder="TaskPercent">
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label for="PlannedStartDate" class="col-sm-2 col-form-label">PlannedStartDate:</label>
+        <div class="col-sm-4">
+            <input type="datetime" class="form-control" id="PlannedStartDate" placeholder="PlannedStartDate">
+        </div>
+
+        <label for="PlannedEndDate" class="col-sm-2 col-form-label">PlannedEndDate:</label>
+        <div class="col-sm-4">
+            <input type="datetime" class="form-control" id="PlannedEndDate" placeholder="PlannedEndDate">
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label for="ActualStartDate" class="col-sm-2 col-form-label">ActualStartDate:</label>
+        <div class="col-sm-4">
+            <input type="datetime" class="form-control" id="ActualStartDate" placeholder="ActualStartDate">
+        </div>
+
+        <label for="ActualEndDate" class="col-sm-2 col-form-label">ActualEndDate:</label>
+        <div class="col-sm-4">
+            <input type="datetime" class="form-control" id="ActualEndDate" placeholder="ActualEndDate">
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label for="ActualManHours" class="col-sm-2 col-form-label">ActualManHours:</label>
+        <div class="col-sm-4">
+            <input type="number" class="form-control" id="ActualManHours" placeholder="ActualManHours">
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label for="MachineId" class="col-sm-2 col-form-label">Machine:</label>
+        <div class="col-sm-4">
+            <select class="form-control text-danger" id="MachineId">
+                <option *ngFor="let item of machines">{{item}}</option>
+            </select>
+        </div>
+
+        <label for="JobCardDetailId" class="col-sm-2 col-form-label">CuttingPlan:</label>
+        <div class="col-sm-4">
+            <select class="form-control text-danger" id="JobCardDetailId">
+                <option *ngFor="let item of jobCardDetails">{{item}}</option>
+            </select>
+        </div>
+    </div>
+</form>-->
+
+<div class="row m-2">
+    <div class="col-1" style="background-color:steelblue;color:steelblue">|</div>
+    <div class="col-1">
+        Plan
+    </div>
+    <div class="col-1 ml-2"  style="background-color:maroon;color:maroon">|</div>
+    <div class="col-1">
+        Actual
+    </div>
+</div>
+
+<div class="small">
+    <p-dataTable [value]="taskMachine" [scrollHeight]="'65vh'" [scrollWidth]="'91vw'"
+                 [scrollable]="true" sortField="MachineNo" rowGroupMode="rowspan" >
+        <p-headerColumnGroup>
+            <p-row>
+                <p-column header="MachineNo" rowspan="2" [style]="{'width':'10%'}"></p-column>
+                <p-column header="JobNo" rowspan="2"  [style]="{'width':'15%'}"></p-column>
+                <p-column header="CuttingPlan" rowspan="2"></p-column>
+                <p-column header="Qty" rowspan="2"  [style]="{'width':'5%'}"></p-column>
+                <p-column header="Pro" rowspan="2"  [style]="{'width':'5%'}"></p-column>
+                <p-column header="Percent" rowspan="2"  [style]="{'width':'5%'}"></p-column>
+                <p-column header="September" colspan="12" [style]="{'width':'300px'}"></p-column>
+                <p-column header="October" colspan="5" [style]="{'width':'125px'}"></p-column>
+            </p-row>
+            <p-row>
+                <p-column header="19" [style]="{'width':'25px'}"></p-column>
+                <p-column header="20" [style]="{'width':'25px'}"></p-column>
+                <p-column header="21" [style]="{'width':'25px'}"></p-column>
+                <p-column header="22" [style]="{'width':'25px'}"></p-column>
+                <p-column header="23" [style]="{'width':'25px'}"></p-column>
+                <p-column header="24" [style]="{'width':'25px'}"></p-column>
+                <p-column header="25" [style]="{'width':'25px'}"></p-column>
+                <p-column header="26" [style]="{'width':'25px'}"></p-column>
+                <p-column header="27" [style]="{'width':'25px'}"></p-column>
+                <p-column header="28" [style]="{'width':'25px'}"></p-column>
+                <p-column header="29" [style]="{'width':'25px'}"></p-column>
+                <p-column header="30" [style]="{'width':'25px'}"></p-column>
+                <p-column header="1" [style]="{'width':'25px'}"></p-column>
+                <p-column header="2" [style]="{'width':'25px'}"></p-column>
+                <p-column header="3" [style]="{'width':'25px'}"></p-column>
+                <p-column header="4" [style]="{'width':'25px'}"></p-column>
+                <p-column header="5" [style]="{'width':'25px'}"></p-column>
+            </p-row>
+        </p-headerColumnGroup>
+        <p-column *ngFor="let column of columns" [field]="column.field" [header]="column.header"
+                  [style]="column.style" [sortable]="true"  [styleClass]="column.styleclass">
+            <ng-template *ngIf="column.isCol" let-col let-data1="rowData" pTemplate="body">
+                <div *ngIf="data1[col.field]; else detailEdit" >
+                    <div *ngIf="data1[col.field] === '1'; else elseBlock" style="background-color:steelblue;color:steelblue">
+                        |
+                    </div>
+                    <ng-template #elseBlock >
+                        <div style="background-color:maroon;color:maroon">
+                            |
+                        </div>
+                    </ng-template>
+                </div>
+                <ng-template #detailEdit>
+                    -
+                </ng-template>
+            </ng-template>
+        </p-column>
+    </p-dataTable>
+</div>
