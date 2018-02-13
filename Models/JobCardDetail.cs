@@ -49,6 +49,7 @@ namespace VipcoMachine.Models
     {
         Wait = 1,
         Task = 2,
+        Complate = 4,
         Cancel = 3
     }
 }

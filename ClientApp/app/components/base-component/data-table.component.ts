@@ -301,18 +301,40 @@ export class DataTableComponent implements OnInit,OnDestroy {
         if (row) {
             // debug 
             // console.log("On row");
-
-            if (row.OverTimeStatus === 1) {
-                return { "is-require": true };
-            } else if (row.OverTimeStatus === 2) {
-                return { "is-wait": true };
-            } else if (row.OverTimeStatus === 3) {
-                return { "is-complate": true };
-            } else if (row.OverTimeStatus === 4) {
-                return { "is-cancel": true };
-            } else {
-                return { "is-all": true };
+            if (row["OverTimeStatus"]) {
+                if (row.OverTimeStatus === 1) {
+                    return { "is-require": true };
+                } else if (row.OverTimeStatus === 2) {
+                    return { "is-wait": true };
+                } else if (row.OverTimeStatus === 3) {
+                    return { "is-complate": true };
+                } else if (row.OverTimeStatus === 4) {
+                    return { "is-cancel": true };
+                } else {
+                    return { "is-all": true };
+                }
+            } else if (row["JobCardMasterStatus"]) {
+                if (row.JobCardMasterStatus === 1) {
+                    return { "is-wait": true };
+                } else if (row.JobCardMasterStatus === 2) {
+                    return { "is-complate": true };
+                } else if (row.JobCardMasterStatus === 3) {
+                    return { "is-cancel": true };
+                } else {
+                    return { "is-all": true };
+                }
             }
+            // if (row.OverTimeStatus === 1) {
+            //    return { "is-require": true };
+            // } else if (row.OverTimeStatus === 2) {
+            //    return { "is-wait": true };
+            // } else if (row.OverTimeStatus === 3) {
+            //    return { "is-complate": true };
+            // } else if (row.OverTimeStatus === 4) {
+            //    return { "is-cancel": true };
+            // } else {
+            //    return { "is-all": true };
+            // }
         }
     }
 }

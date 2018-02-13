@@ -34,7 +34,7 @@ namespace VipcoMachine.Helpers
             CreateMap<JobCardMaster, JobCardMasterViewModel>()
                 // JobCardMasterStatus
                 .ForMember(x => x.StatusString,
-                           o => o.MapFrom(s => s.JobCardMasterStatus == null ? "-" : s.JobCardMasterStatus == JobCardMasterStatus.Wait ? "Wait" :
+                           o => o.MapFrom(s => s.JobCardMasterStatus == null ? "-" : s.JobCardMasterStatus == JobCardMasterStatus.Wait ? "In-Process" :
                                                                                     (s.JobCardMasterStatus == JobCardMasterStatus.Complete ? "Complete" : "Cancel")))
                 // TypeMachine
                 .ForMember(x => x.TypeMachineString,
@@ -56,29 +56,6 @@ namespace VipcoMachine.Helpers
             CreateMap<JobCardMasterViewModel, JobCardMaster>();
 
             #endregion JobCardMaster
-
-            #region Operator
-
-            //Operator
-            CreateMap<MachineHasOperator, OperatorViewModel>()
-                .ForMember(x => x.EmployeeName,
-                           o => o.MapFrom(s => s.Employee == null ? "-" : $"{s.Employee.NameThai}"))
-                .ForMember(x => x.Employee, o => o.Ignore());
-            CreateMap<OperatorViewModel, MachineHasOperator>();
-
-            #endregion Operator
-
-            #region Machine
-
-            //Machine
-            CreateMap<Machine, MachineViewModel>()
-                //TypeMachine
-                .ForMember(x => x.TypeMachineString,
-                           o => o.MapFrom(s => s.TypeMachine == null ? "-" : $"{s.TypeMachine.TypeMachineCode} - {s.TypeMachine.Name}"))
-                .ForMember(x => x.TypeMachine, o => o.Ignore());
-            CreateMap<MachineViewModel, Machine>();
-
-            #endregion Machine
 
             #region JobCardDetail
 
@@ -110,6 +87,29 @@ namespace VipcoMachine.Helpers
             CreateMap<JobCardDetailViewModel, JobCardDetail>();
 
             #endregion JobCardDetail
+
+            #region Operator
+
+            //Operator
+            CreateMap<MachineHasOperator, OperatorViewModel>()
+                .ForMember(x => x.EmployeeName,
+                           o => o.MapFrom(s => s.Employee == null ? "-" : $"{s.Employee.NameThai}"))
+                .ForMember(x => x.Employee, o => o.Ignore());
+            CreateMap<OperatorViewModel, MachineHasOperator>();
+
+            #endregion Operator
+
+            #region Machine
+
+            //Machine
+            CreateMap<Machine, MachineViewModel>()
+                //TypeMachine
+                .ForMember(x => x.TypeMachineString,
+                           o => o.MapFrom(s => s.TypeMachine == null ? "-" : $"{s.TypeMachine.TypeMachineCode} - {s.TypeMachine.Name}"))
+                .ForMember(x => x.TypeMachine, o => o.Ignore());
+            CreateMap<MachineViewModel, Machine>();
+
+            #endregion Machine
 
             #region CuttingPlan
 
