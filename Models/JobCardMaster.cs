@@ -52,6 +52,7 @@ namespace VipcoMachine.Models
     {
         Wait = 1,
         Complete = 2,
-        Cancel = 3
+        Cancel = 3,
+        InProcess = 4,
     }
 }

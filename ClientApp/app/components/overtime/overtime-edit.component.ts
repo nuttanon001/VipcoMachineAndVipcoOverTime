@@ -577,7 +577,7 @@ export class OvertimeEditComponent
                 if (this.lastOverTimeMaster.OverTimeStatus) {
                     isValid = this.lastOverTimeMaster.OverTimeStatus === 3;
                 }
-            }
+            } 
         }
 
         if (isValid) {

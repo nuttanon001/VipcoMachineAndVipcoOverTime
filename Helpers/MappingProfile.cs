@@ -34,8 +34,9 @@ namespace VipcoMachine.Helpers
             CreateMap<JobCardMaster, JobCardMasterViewModel>()
                 // JobCardMasterStatus
                 .ForMember(x => x.StatusString,
-                           o => o.MapFrom(s => s.JobCardMasterStatus == null ? "-" : s.JobCardMasterStatus == JobCardMasterStatus.Wait ? "In-Process" :
-                                                                                    (s.JobCardMasterStatus == JobCardMasterStatus.Complete ? "Complete" : "Cancel")))
+                           o => o.MapFrom(s => s.JobCardMasterStatus == null ? "-" : s.JobCardMasterStatus == JobCardMasterStatus.Wait ? "Wait" :
+                                                                                    (s.JobCardMasterStatus == JobCardMasterStatus.Complete ? "Complete" : 
+                                                                                    (s.JobCardMasterStatus == JobCardMasterStatus.InProcess ? "InProcess": "Cancel"))))
                 // TypeMachine
                 .ForMember(x => x.TypeMachineString,
                            o => o.MapFrom(s => s.TypeMachine == null ? "-" : $"{s.TypeMachine.TypeMachineCode}/{s.TypeMachine.Name}"))

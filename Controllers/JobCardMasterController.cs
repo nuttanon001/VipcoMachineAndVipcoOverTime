@@ -133,6 +133,7 @@ namespace VipcoMachine.Controllers
                this.DefaultJsonSettings);
         }
 
+        // GET: api/JobCardMaster/JobCardCanCancel/5
         [HttpGet("JobCardCanCancel/{key}")]
         public async Task<IActionResult> GetJobCardCanCancel(int key)
         {
@@ -152,6 +153,7 @@ namespace VipcoMachine.Controllers
             return new JsonResult(new { Result = CanCancel } , this.DefaultJsonSettings);
         }
 
+        // GET: api/JobCardMaster/JobCardCanComplate/5
         [HttpGet("JobCardCanComplate/{key}")]
         public async Task<IActionResult> GetJobCardCanComplate(int key)
         {
@@ -171,6 +173,7 @@ namespace VipcoMachine.Controllers
             return new JsonResult(new { Result = CanComplate }, this.DefaultJsonSettings);
         }
 
+        // GET: api/JobCardMaster/JobCardHasWait
         [HttpGet("JobCardHasWait")]
         public async Task<IActionResult> GetJobCardHasWait()
         {
@@ -251,6 +254,7 @@ namespace VipcoMachine.Controllers
             return NotFound(new { Error = Message });
         }
 
+        // GET: api/JobCardMaster/JobCardChangeStatus/5/1
         [HttpGet("JobCardChangeStatus/{key}/{status}")]
         public async Task<IActionResult> GetCancelJobCard(int key,int status)
         {
@@ -281,6 +285,7 @@ namespace VipcoMachine.Controllers
             return NotFound(new { Error = "Not found key." });
         }
 
+        // GET: api/JobCardMaster/GetCuttingPlanToJobCardDetail/5
         [HttpGet("GetCuttingPlanToJobCardDetail/{key}")]
         public async Task<IActionResult> GetCuttingPlanToJobCardDetail(int key)
         {
@@ -305,14 +310,9 @@ namespace VipcoMachine.Controllers
                                                     .AsQueryable();
 
                         if (JobMaster.TypeMachine.TypeMachineCode.ToLower().Contains("gm"))
-                        {
                             CuttingPlans = CuttingPlans.Where(x => x.CuttingPlanNo.ToLower().Contains("pl"));
-                        }
                         else
-                        {
                             CuttingPlans = CuttingPlans.Where(x => !x.CuttingPlanNo.ToLower().Contains("pl"));
-
-                        }
 
                         var ListCutting = await CuttingPlans.ToListAsync();
                         foreach (var Cutting in ListCutting)
@@ -339,6 +339,70 @@ namespace VipcoMachine.Controllers
             {
                 Message = $"Has error {ex.ToString()}";
             }
+            return NotFound(new { Error = Message });
+        }
+
+        // GET: api/JobCardMaster/CheckCuttingPlanWaiting
+        [HttpGet("CheckCuttingPlanWaiting")]
+        public async Task<IActionResult> CheckCuttingPlanWaiting()
+        {
+            var Message = "Not found Cutting plan waiting.";
+
+            try
+            {
+                var hasCuttingPlanWaiting = await this.repositoryCut.GetAllAsQueryable()
+                                                      .Where(x => !x.JobCardDetails.Any() && x.TypeCuttingPlan == 1)
+                                                      .AsNoTracking()
+                                                      .ToListAsync();
+
+                if (hasCuttingPlanWaiting.Any())
+                {
+                    foreach(var cutting in hasCuttingPlanWaiting)
+                    {
+                        var QueryData =  this.repository.GetAllAsQueryable()
+                                                        .Where(x => x.ProjectCodeDetailId == cutting.ProjectCodeDetailId &&
+                                                                    x.JobCardMasterStatus != JobCardMasterStatus.Cancel)
+                                                        .OrderByDescending(x => x.JobCardMasterId)
+                                                        .AsNoTracking();
+                        // New JobMaster
+                        JobCardMaster HasJobMaster = null;
+
+                        if (cutting.CuttingPlanNo.ToLower().Contains("pl"))
+                            HasJobMaster = await QueryData.FirstOrDefaultAsync(x => x.TypeMachine.TypeMachineCode.ToLower().Contains("gm"));
+                        else
+                            HasJobMaster = await QueryData.FirstOrDefaultAsync(x => x.TypeMachine.TypeMachineCode.ToLower().Contains("cm"));
+
+                        if (HasJobMaster != null)
+                        {
+                            // add JobCardDetail
+                            await this.repositoryDetail.AddAsync(
+                               new JobCardDetail()
+                               {
+                                   JobCardMasterId = HasJobMaster.JobCardMasterId,
+                                   CuttingPlanId = cutting.CuttingPlanId,
+                                   JobCardDetailStatus = JobCardDetailStatus.Wait,
+                                   Material = $"{cutting.MaterialSize ?? ""} {cutting.MaterialGrade ?? ""}",
+                                   Quality = cutting.Quantity == null ? 1 : (cutting.Quantity < 1 ? 1 : cutting.Quantity),
+                                   Remark = "Add by system",
+                                   CreateDate = DateTime.Now,
+                                   Creator = "System"
+                               });
+
+                            //check JobCardMaster status
+                            if (HasJobMaster.JobCardMasterStatus != JobCardMasterStatus.InProcess)
+                            {
+                                HasJobMaster.JobCardMasterStatus = JobCardMasterStatus.InProcess;
+                                await this.repository.UpdateAsync(HasJobMaster, HasJobMaster.JobCardMasterId);
+                            }
+                        }
+                    }
+                }
+            }
+            catch(Exception ex)
+            {
+                Message = $"Has error {ex.ToString()}";
+            }
+
             return NotFound(new { Error = Message });
         }
 
@@ -530,6 +594,12 @@ namespace VipcoMachine.Controllers
                     uJobCardMaster.ModifyDate = DateTime.Now;
                     uJobCardMaster.Modifyer = uJobCardMaster.Modifyer ?? "Someone";
 
+                    if (uJobCardMaster.JobCardMasterStatus != JobCardMasterStatus.Complete)
+                    {
+                        uJobCardMaster.JobCardMasterStatus = uJobCardMaster.JobCardDetails.Any(x => x.JobCardDetailStatus == JobCardDetailStatus.Wait)
+                            ? JobCardMasterStatus.Wait : JobCardMasterStatus.InProcess;
+                    }
+
                     if (uJobCardMaster.JobCardDetails != null)
                     {
                         foreach (var uDetail in uJobCardMaster.JobCardDetails)
@@ -680,7 +750,7 @@ namespace VipcoMachine.Controllers
 
                     var returnData = await this.repositoryAtt.AddAsync(new AttachFile()
                     {
-                        FileAddress = $"/files/{FileNameForRef}",
+                        FileAddress = $"/machine/files/{FileNameForRef}",
                         FileName = FileName,
                         CreateDate = DateTime.Now,
                         Creator = CreateBy ?? "Someone"

@@ -320,6 +320,8 @@ export class DataTableComponent implements OnInit,OnDestroy {
                     return { "is-complate": true };
                 } else if (row.JobCardMasterStatus === 3) {
                     return { "is-cancel": true };
+                } else if (row.JobCardMasterStatus === 4) {
+                    return { "is-require": true };
                 } else {
                     return { "is-all": true };
                 }

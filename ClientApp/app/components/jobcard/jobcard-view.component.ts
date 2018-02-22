@@ -52,7 +52,7 @@ export class JobCardViewComponent extends BaseViewComponent<JobCardMaster>
     // open attact file
     onOpenNewLink(link: string): void {
         if (link) {
-            window.open(link, "_blank");
+            window.open("machine/" + link, "_blank");
             //this.serviceMaster.getDownloadFilePaper(link)
             //    .subscribe(data => {
             //        let link: any = document.createElement("a");

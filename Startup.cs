@@ -57,6 +57,13 @@ namespace VipcoMachine
                 app.UseExceptionHandler("/Home/Error");
             }
 
+            string pathBase = Configuration.GetSection("Hosting")["PathBase"];
+
+            if (string.IsNullOrEmpty(pathBase) == false)
+            {
+                app.UsePathBase(pathBase);
+            }
+
             app.UseStaticFiles();
 
             app.UseMvc(routes =>

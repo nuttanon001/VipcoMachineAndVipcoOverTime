@@ -41,7 +41,7 @@ export class OverTimeMasterService extends BaseRestService<OverTimeMaster> {
     // get last OverTimeMaster V3
     getlastOverTimeMasterV3(Option: OptionOverTimeLast): Observable<OverTimeMaster> {
         let url: string = `${this.actionUrl}GetLastOverTimeV3/`;
-        return this.http.post(url, JSON.stringify(Option), this.getRequestOption())
+        return this.http.post(url, JSON.stringify(Option), this.getRequestOption()).retry(2)
             .map(this.extractData).catch(this.handleError);
     }
     // get change status

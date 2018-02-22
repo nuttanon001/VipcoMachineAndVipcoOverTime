@@ -42,9 +42,9 @@ export class AppComponent implements OnInit {
             this.option = option;
             let documentAddress: string;
             if (this.option === "machine") {
-                documentAddress = "/files/machine_doc.pdf";
+                documentAddress = "machine/files/machine_doc.pdf";
             } else {
-                documentAddress = "/files/overtime_doc.pdf";
+                documentAddress = "machine/files/overtime_doc.pdf";
             }
             // set locatStorage
             localStorage.setItem("document", JSON.stringify(documentAddress));

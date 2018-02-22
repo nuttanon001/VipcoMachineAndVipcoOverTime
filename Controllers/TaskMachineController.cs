@@ -68,6 +68,21 @@ namespace VipcoMachine.Controllers
                 jobCardDetail.Modifyer = Create;
                 if (await this.repositoryJobDetail.UpdateAsync(jobCardDetail,jobCardDetail.JobCardDetailId) != null)
                 {
+                    // Check JobCardMaster Status
+                    if (jobCardDetail.JobCardMasterId != null)
+                    {
+                        var checkStatus = await this.repositoryJobMaster.GetAllAsQueryable()
+                                                                          .AnyAsync(x => x.JobCardDetails.Any(z => z.JobCardDetailStatus == JobCardDetailStatus.Wait));
+                        var jobCardMaster = await this.repositoryJobMaster.GetAsync(jobCardDetail.JobCardMasterId.Value);
+                        if (jobCardMaster != null)
+                        {
+                            jobCardMaster.JobCardMasterStatus = checkStatus ? JobCardMasterStatus.Wait : JobCardMasterStatus.InProcess;
+                            jobCardMaster.ModifyDate = DateTime.Now;
+                            jobCardMaster.Modifyer = Create;
+                            await this.repositoryJobMaster.UpdateAsync(jobCardMaster, jobCardMaster.JobCardMasterId);
+                        }
+                    }
+
                     return jobCardDetail;
                     #region Mark
                         // JobCardMaster status will change manual

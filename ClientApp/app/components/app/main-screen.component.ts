@@ -20,15 +20,15 @@ export class MainScreenComponent implements OnInit {
 
     // called by Angular after main-screen component initialized */
     ngOnInit(): void {
-        this.iconRegistry.addSvgIcon("machine", this.sanitizer.bypassSecurityTrustResourceUrl("/images/machine.svg"));
-        this.iconRegistry.addSvgIcon("overtime", this.sanitizer.bypassSecurityTrustResourceUrl("/images/overtime.svg"));
-        this.iconRegistry.addSvgIcon("paint", this.sanitizer.bypassSecurityTrustResourceUrl("/images/paint.svg"));
+        this.iconRegistry.addSvgIcon("machine", this.sanitizer.bypassSecurityTrustResourceUrl("/machine/images/machine.svg"));
+        this.iconRegistry.addSvgIcon("overtime", this.sanitizer.bypassSecurityTrustResourceUrl("/machine/images/overtime.svg"));
+        this.iconRegistry.addSvgIcon("paint", this.sanitizer.bypassSecurityTrustResourceUrl("/machine/images/paint.svg"));
     }
 
     onClickOption(option: string): void {
         if (option) {
             if (option.indexOf("paint") !== -1) {
-                window.location.href = "http://192.168.2.31:8009";
+                window.location.href = "http://192.168.2.31/paint/";
             } else {
                 this.SelectApp.emit(option);
             }
