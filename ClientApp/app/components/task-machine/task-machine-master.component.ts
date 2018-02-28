@@ -1,5 +1,6 @@
 ﻿import { Component, ViewContainerRef } from "@angular/core";
-import { Router, ActivatedRoute ,ParamMap} from "@angular/router";
+import { Router, ActivatedRoute, ParamMap } from "@angular/router";
+import { Location } from "@angular/common";
 // components
 import { BaseMasterComponent } from "../base-component/base-master.component";
 // models
@@ -29,16 +30,6 @@ import { DateOnlyPipe } from "../../pipes/date-only.pipe";
 // task-machine-master component*/
 export class TaskMachineMasterComponent
     extends BaseMasterComponent<TaskMachine, TaskMachineService> {
-    onlyUser: boolean;
-    // parameter
-    datePipe: DateOnlyPipe = new DateOnlyPipe("it");
-    hasOverTime: boolean = false;
-    columns: Array<TableColumn> = [
-        { prop: "TaskMachineName", name: "Code", flexGrow :1 },
-        { prop: "MachineString", name: "Machine", flexGrow: 2 },
-        { prop: "CuttingPlanNo", name: "CuttingPlan", flexGrow: 2 },
-        // { prop: "ActualStartDate", name: "ActualDate", pipe: this.datePipe , flexGrow: 1 },
-    ];
 
     // task-machine-master ctor */
     constructor(
@@ -47,6 +38,7 @@ export class TaskMachineMasterComponent
         serviceComDataTable: DataTableServiceCommunicate<TaskMachine>,
         dialogsService: DialogsService,
         viewContainerRef: ViewContainerRef,
+        private location: Location,
         private router: Router,
         private route: ActivatedRoute,
         private serverAuth: AuthService,
@@ -61,15 +53,28 @@ export class TaskMachineMasterComponent
         );
     }
 
+    // parameter
+    onlyUser: boolean;
+    datePipe: DateOnlyPipe = new DateOnlyPipe("it");
+    hasOverTime: boolean = false;
+    goToSchedule: boolean;
+    columns: Array<TableColumn> = [
+        { prop: "TaskMachineName", name: "Code", flexGrow: 1 },
+        { prop: "MachineString", name: "Machine", flexGrow: 2 },
+        { prop: "CuttingPlanNo", name: "CuttingPlan", flexGrow: 2 },
+        // { prop: "ActualStartDate", name: "ActualDate", pipe: this.datePipe , flexGrow: 1 },
+    ];
+
     // on inti override
     ngOnInit(): void {
         this.onlyUser = true;
+        this.goToSchedule = false;
         // override class
         super.ngOnInit();
 
         this.route.paramMap.subscribe((param: ParamMap) => {
             let key: number = Number(param.get("condition") || 0);
-
+            this.goToSchedule = true;
             if (key) {
                 let newTaskMachine: TaskMachine = {
                     TaskMachineId: 0,
@@ -221,8 +226,28 @@ export class TaskMachineMasterComponent
         );
     }
 
+    // onSaveComplate OverRide
+    onSaveComplete(): void {
+        this.dialogsService
+            .context("System message", "Save completed.", this.viewContainerRef)
+            .subscribe(result => {
+                this.canSave = false;
+                this.ShowEdit = false;
+                this.editValue = undefined;
+                this.onDetailView(undefined);
+
+                if (this.goToSchedule) {
+                    // this.router.navigate(["/jobcard/require-jobcard-detail-schedule/"]);
+                    this.location.back();
+                }
+                setTimeout(() => {
+                    this.dataTableServiceCom.toReload(true);
+                }, 150);
+            });
+    }
+
     // on detail view
-    onDetailView(value: TaskMachine): void {
+    onDetailView(value?: TaskMachine): void {
         if (this.ShowEdit) {
             return;
         }

@@ -1,7 +1,11 @@
 ﻿import { Injectable } from "@angular/core";
 import { Http, ResponseContentType } from "@angular/http";
 // model
-import { TaskMachine, OptionSchedule, EmployeeGroup, NoTaskMachine, Scroll, ScrollData } from "../../models/model.index";
+import {
+    TaskMachine, OptionSchedule, EmployeeGroup,
+    NoTaskMachine, Scroll, ScrollData,
+    OptionChart
+} from "../../models/model.index";
 // base-service
 import { BaseRestService, BaseCommunicateService } from "../service.index";
 // rx/js
@@ -12,6 +16,13 @@ export class TaskMachineService extends BaseRestService<TaskMachine> {
     constructor(http: Http) {
         super(http, "api/TaskMachine/");
     }
+    // ===================== Task Machine Chart ===========================\\
+    // get task machine chart data
+    postTaskMachineChartData(option: OptionChart): Observable<any> {
+        return this.http.post(`${this.actionUrl}TaskMachineChartData/`, JSON.stringify(option), this.getRequestOption())
+            .map(this.extractData).catch(this.handleError);
+    }
+
 
     // get TaskMachine Has OverTime
     getTaskMachineHasOverTime(taskMachineId:number): Observable<any> {
@@ -29,8 +40,8 @@ export class TaskMachineService extends BaseRestService<TaskMachine> {
     }
 
     // get TaskMachine WaitAndProcess
-    getTaskMachineWaitAndProcess(option: OptionSchedule): Observable<any> {
-        let url: string = `${this.actionUrl}TaskMachineWaitAndProcess/`;
+    getTaskMachineWaitAndProcess(option: OptionSchedule, subAction: string = "TaskMachineWaitAndProcess/"): Observable<any> {
+        let url: string = `${this.actionUrl}${subAction}`;
         return this.http.post(url, JSON.stringify(option), this.getRequestOption())
             .map(this.extractData).catch(this.handleError);
     }
@@ -83,11 +94,13 @@ export class TaskMachineService extends BaseRestService<TaskMachine> {
         return this.http.get(this.actionUrl + "NoTaskMachine/" + key + "/")
             .map(this.extractData).catch(this.handleError);
     }
+
     // post NoTaskMachine
     postNoTaskMachine(nObject: NoTaskMachine): Observable<NoTaskMachine> {
         return this.http.post(this.actionUrl + "NoTaskMachine/", JSON.stringify(nObject), this.getRequestOption())
             .map(this.extractData).catch(this.handleError);
     }
+
     // put NoTaskMachine
     putNoTaskMachineKeyNumber(uObject: NoTaskMachine, key: number): Observable<NoTaskMachine> {
         return this.http.put(this.actionUrl + "NoTaskMachine/" + key + "/", JSON.stringify(uObject), this.getRequestOption())

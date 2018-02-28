@@ -140,7 +140,7 @@ export class JobCardMasterComponent
     // on detail edit override
     onDetailEdit(value?: JobCardMaster): void {
         if (value) {
-            if (value.JobCardMasterStatus !== 1) {
+            if (value.JobCardMasterStatus !== 1 && value.JobCardMasterStatus !== 4) {
                 this.dialogsService.error("Access Denied", "Status war not waited. you can't edit it.", this.viewContainerRef);
                 return;
             }
@@ -201,12 +201,19 @@ export class JobCardMasterComponent
         }
         // change timezone
         value = this.changeTimezone(value);
+
+        // debug here
+        //console.log("value", JSON.stringify(value));
         // update data
         this.service.putKeyNumber(value, value.JobCardMasterId).subscribe(
             (complete: any) => {
                 if (complete && attachs) {
                     this.onAttactFileToDataBase(complete.JobCardMasterId, attachs);
                 }
+
+                // debug here
+                //console.log("putKeyNumber complate.");
+
                 this.displayValue = complete;
                 this.onSaveComplete();
             },

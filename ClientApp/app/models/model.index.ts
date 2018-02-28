@@ -38,3 +38,4 @@ export { OverTimeDetail } from "./overtime-detail/overtime-detail.model";
 export { EmployeeGroup } from "./employee-group/employee-group.model";
 export { EmployeeGroupMis } from "./employee-group/employee-group-mis.model";
 export { MessageDialog } from "./message/message.model";
+export { ChartData } from "./task-machine/chart-data.model";

@@ -1,0 +1,62 @@
+﻿<div class="master-container">
+    <div *ngIf="!onloadReport;else LoadBlock">
+        <div class="child-col-container">
+            <h4>Request machine workitem schedule. </h4>
+
+            <form [formGroup]="reportForm" class="form-content">
+                <div>
+                    <i class="fa fa-search" aria-hidden="true"></i>
+                    <input type="text" formControlName="Filter" placeholder="Insert filter here"
+                           style="width:250px;" matTooltip="Filter">
+                </div>
+
+                <div>
+                    <i class="fa fa-chain" aria-hidden="true"></i>
+                    <input type="text" class="my-input-click" placeholder="Choose job-no here"
+                           (click)="openDialog('Project')" style="width:250px;"
+                           id="ProjectString" formControlName="ProjectString" readonly>
+                </div>
+
+                <div>
+                    <i class="fa fa-chain" aria-hidden="true"></i>
+                    <p-dropdown [options]="typeMachine" formControlName="TypeMachineId" [filter]="true" matTooltip="Selected group of machine"
+                                [style]="{'width':'200px'}" placeholder="Filter by machine type">
+                    </p-dropdown>
+                </div>
+
+                <div>
+                    <button type="button" mat-mini-fab color="warn" (click)="resetFilter()"
+                            matTooltip="Reset all filter" style="margin:4px;">
+                        <i class="fa fa-2x fa-minus" aria-hidden="true" style="margin:0px;"></i>
+                    </button>
+                </div>
+            </form>
+
+            Reload data in {{message}} sec.
+            <div style="width:98%;">
+                <mat-progress-bar color="primary" [value]="count" mode="determinate">
+                </mat-progress-bar>
+            </div>
+        </div>
+        <div class="bottom-container my-2">
+            <p-dataTable [value]="requireJobCardDetail" sortField="JobNumber" rowGroupMode="rowspan"
+                         [lazy]="true" [rows]="10" [paginator]="true" [rowsPerPageOptions]="[5,10,20]"
+                         [totalRecords]="totalRecords" (onLazyLoad)="loadDataLazy($event)"
+                         scrollable="true" scrollWidth="94vw">
+                <p-column *ngFor="let column of columns" [field]="column.field" [styleClass]="column.styleclass"
+                          [header]="column.header" [style]="column.style" [sortable]="true">
+                    <ng-template *ngIf="column.isCol" let-col let-data1="rowData" pTemplate="body">
+                        <ol type="I">
+                            <li *ngFor="let detail of data1[col.field];index as i;">
+                                <i class="fa fa-search text-info" (click)="onSelectJobCardDetail(detail)"
+                                   style="cursor:pointer;">
+                                    <span>{{detail.CuttingPlanString}}</span> 
+                                </i>
+                            </li>
+                        </ol>
+                    </ng-template>
+                </p-column>
+            </p-dataTable>
+        </div>
+    </div>
+</div>

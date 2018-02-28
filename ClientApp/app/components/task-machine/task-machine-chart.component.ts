@@ -4,9 +4,11 @@ import { FormBuilder, FormGroup, FormControl, Validators } from "@angular/forms"
 import { TaskMachineService } from "../../services/task-machine/task-machine.service";
 import { TypeMachineService } from "../../services/type-machine/type-machine.service";
 // model
-import { OptionChart } from "../../models/model.index";
+import { OptionChart, ChartData } from "../../models/model.index";
 // 3rd patry
 import { SelectItem } from "primeng/primeng";
+import * as moment from "moment-timezone";
+
 @Component({
     selector: "task-machine-chart",
     templateUrl: "./task-machine-chart.component.html",
@@ -19,38 +21,27 @@ export class TaskMachineChartComponent implements OnInit {
     // form
     reportForm: FormGroup;
     // chart
-    public chartLabels: Array<string>;
-    public chartData: Array<number>;
+    public chartLabel: Array<string>;
+    public chartData: any;
     chartType: string;
     chartOption: any;
     // array
     typeMachines: Array<SelectItem>;
-    machines: Array<SelectItem>;
     // task-machine-chart ctor */
     constructor(
         private service: TaskMachineService,
         private serviceTypeMachine: TypeMachineService,
         private fb: FormBuilder,
     ) { }
-
+    // On Init
     ngOnInit(): void {
-        if (!this.chartLabels) {
-            this.chartLabels = new Array;
+        if (!this.chartLabel) {
+            this.chartLabel = new Array;
         }
-
-        this.chartLabels = ["Download Sales", "In-Store Sales", "Mail-Order Sales"];
-
         if (!this.chartData) {
             this.chartData = new Array;
         }
-        this.chartData = [35, 45, 10, 15, 35, 45, 10, 15,35, 45, 10,15];
-        this.chartType = "doughnut";
-
-        this.chartOption = {
-            scaleShowVerticalLines: false,
-            responsive: true,
-            maintainAspectRatio: false
-        };
+        this.chartType = "bar";
 
         this.buildForm();
         this.getTypeMachineArray();
@@ -60,8 +51,11 @@ export class TaskMachineChartComponent implements OnInit {
     buildForm(): void {
         this.chart = {
             EndDate: new Date,
-            StartDate: new Date,
+            StartDate: new Date
         };
+        if (this.chart.StartDate) {
+            this.chart.StartDate.setMonth(this.chart.StartDate.getMonth() - 1);
+        }
 
         this.reportForm = this.fb.group({
             TypeMachineId: [this.chart.TypeMachineId],
@@ -71,6 +65,7 @@ export class TaskMachineChartComponent implements OnInit {
         });
 
         this.reportForm.valueChanges.subscribe((data: any) => this.onValueChanged(data));
+        this.onValueChanged();
     }
 
     // on value change
@@ -82,7 +77,53 @@ export class TaskMachineChartComponent implements OnInit {
 
     // get chart data
     onGetChartData(): void {
+        if (!this.reportForm) { return; }
+        let option: OptionChart = this.reportForm.value;
 
+        let zone: string = "Asia/Bangkok";
+        if (option.StartDate !== null) {
+            option.StartDate = moment.tz(option.StartDate, zone).toDate();
+        }
+        if (option.EndDate !== null) {
+            option.EndDate = moment.tz(option.EndDate, zone).toDate();
+        }
+
+        this.service.postTaskMachineChartData(option)
+            .subscribe(ChartData => {
+                // debug here
+                // console.log("ChartData:", JSON.stringify(ChartData));
+
+                this.chartLabel = ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"];
+                this.chartData = new Array;
+                ChartData.Datas.forEach((item: any) => {
+                    if (item) {
+                        let chartData:ChartData =
+                            {
+                                data: item.DataChart,
+                                label: item.Label
+                            };
+                        this.chartData.push(chartData);
+                    }
+                });
+
+                let data: any[] = [
+                    {
+                        label: '# of Votes_1',
+                        data: [12, 19, 3, 5, 2, 3],
+                    },
+                    {
+                        label: '# of Votes_2',
+                        data: [5, 8, 13, 2, 7, 9],
+                    }
+                ];
+
+                this.chartData = data;
+
+                // debug here
+                // console.log("ChartData:", JSON.stringify(this.chartData));
+            }, error => {
+                this.setChartData();
+            });
     }
 
     // get type machine array
@@ -99,9 +140,16 @@ export class TaskMachineChartComponent implements OnInit {
 
     // reset
     resetFilter(): void {
-        this.chartLabels = new Array;
+        this.chartLabel = new Array;
         this.chartData = new Array;
         this.buildForm();
         this.onGetChartData();
+    }
+
+    // set chart data
+    setChartData(): void {
+        // remove old label
+        this.chartLabel = new Array;
+        this.chartData = new Array;
     }
 }

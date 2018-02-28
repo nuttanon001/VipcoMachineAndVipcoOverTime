@@ -4,16 +4,16 @@ export interface CuttingPlan {
     CuttingPlanId: number;
     CuttingPlanNo?: string;
     Description?: string;
-    TypeCuttingPlan?: number;
     Quantity?: number;
     MaterialSize?: string;
     MaterialGrade?: string;
+    TypeCuttingPlan?: number;
     Creator?: string;
     CreateDate?: Date;
     Modifyer?: string;
     ModifyDate?: Date;
-    ProjectCodeDetailId?: number;
     //FK
+    ProjectCodeDetailId?: number;
     ProjectCodeDetail?: ProjectCodeDetail;
     //ViewModel
     ProjectCodeString?: string;

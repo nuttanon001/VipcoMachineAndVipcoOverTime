@@ -29,16 +29,8 @@ import { DateOnlyPipe } from "../../pipes/date-only.pipe";
 // notask-machine-master component*/
 export class NoTaskMachineMasterComponent 
     extends BaseMasterComponent<NoTaskMachine, TaskMachineService> {
-    onlyUser: boolean;
-    // parameter
-    datePipe: DateOnlyPipe = new DateOnlyPipe("it");
-    hasOverTime: boolean = false;
-    columns: Array<TableColumn> = [
-        { prop: "NoTaskMachineCode", name: "Code", flexGrow: 1 },
-        { prop: "GroupMisString", name: "Group", flexGrow: 2 },
-        { prop: "CuttingPlanNo", name: "CuttingPlan", flexGrow: 2 },
-        { prop: "Date", name: "Date", pipe: this.datePipe , flexGrow: 1 },
-    ];
+
+  
     /** notask-machine-master ctor */
     constructor(
         service: TaskMachineService,
@@ -60,14 +52,29 @@ export class NoTaskMachineMasterComponent
         );
     }
 
+    // parameter
+    onlyUser: boolean;
+    goToSchedule: boolean;
+    datePipe: DateOnlyPipe = new DateOnlyPipe("it");
+    hasOverTime: boolean = false;
+    columns: Array<TableColumn> = [
+        { prop: "NoTaskMachineCode", name: "Code", flexGrow: 1 },
+        { prop: "GroupMisString", name: "Group", flexGrow: 2 },
+        { prop: "CuttingPlanNo", name: "CuttingPlan", flexGrow: 2 },
+        { prop: "Date", name: "Date", pipe: this.datePipe, flexGrow: 1 },
+    ];
+
     // on inti override
     ngOnInit(): void {
         this.onlyUser = true;
+        this.goToSchedule = false;
+
         // override class
         super.ngOnInit();
 
         this.route.paramMap.subscribe((param: ParamMap) => {
             let key: number = Number(param.get("condition") || 0);
+            this.goToSchedule = true;
 
             if (key) {
                 let newTaskMachine: NoTaskMachine = {
@@ -176,7 +183,7 @@ export class NoTaskMachineMasterComponent
     }
 
     // on detail view
-    onDetailView(value: NoTaskMachine): void {
+    onDetailView(value?: NoTaskMachine): void {
         if (this.ShowEdit) {
             return;
         }
@@ -189,5 +196,24 @@ export class NoTaskMachineMasterComponent
         } else {
             this.displayValue = undefined;
         }
+    }
+
+    // onSaveComplate OverRide
+    onSaveComplete(): void {
+        this.dialogsService
+            .context("System message", "Save completed.", this.viewContainerRef)
+            .subscribe(result => {
+                this.canSave = false;
+                this.ShowEdit = false;
+                this.editValue = undefined;
+                this.onDetailView(undefined);
+
+                if (this.goToSchedule) {
+                    this.router.navigate(["/jobcard/require-jobcard-detail-schedule/"]);
+                }
+                setTimeout(() => {
+                    this.dataTableServiceCom.toReload(true);
+                }, 150);
+            });
     }
 }

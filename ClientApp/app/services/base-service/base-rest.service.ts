@@ -57,8 +57,8 @@ export abstract class BaseRestService<Model>{
             .map(this.extractData).catch(this.handleError);
     }
     // get one with key number
-    getOneKeyNumber(key: number): Observable<Model> {
-        return this.http.get(this.actionUrl + key + "/")
+    getOneKeyNumber(key: number,subAction:string = ""): Observable<Model> {
+        return this.http.get(this.actionUrl + subAction + key + "/")
             .map(this.extractData).catch(this.handleError);
     }
     // get one with key string

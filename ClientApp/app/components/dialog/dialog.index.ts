@@ -21,6 +21,9 @@ export { EmpoyeeGroupmisDialogComponent } from "./employee/empoyee-groupmis-dial
 // jobcard
 export { JobcardDialogComponent } from "./jobcard/jobcard-dialog.component";
 export { JobCardWatingDialogComponent } from "./jobcard/jobcard-wating-dialog.component";
+export { JobCardDetailAssignDialogComponent } from "./jobcard/jobcard-detail-assign-dialog.component";
 // standard
 export { StandardTimeDialogComponent } from "./standard/standard-time-dialog.component";
 export { StdtimeSelectDialogComponent } from "./standard/stdtime-select-dialog.component";
+// macine
+export { MachineScheduleDialogComponent } from "./task-machine/machine-schedule-dialog.component";

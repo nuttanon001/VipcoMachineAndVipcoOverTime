@@ -19,7 +19,8 @@ import {
     JobCardWatingDialogComponent, TaskMachineDialogComponent,
     EmployeeGroupDialogComponent, EmployeeByGroupDialogComponent,
     OvertimeDialogComponent, MessageDialogComponent, EmployeeByGroupMisDialogComponent,
-    EmpoyeeGroupmisDialogComponent
+    EmpoyeeGroupmisDialogComponent, JobCardDetailAssignDialogComponent,
+    MachineScheduleDialogComponent
 } from "../../components/dialog/dialog.index";
 import { JobCardViewWaitingComponent } from "../../components/jobcard/jobcard-view-waiting.component";
 import { OvertimeViewWaitingComponent } from "../../components/overtime/overtime-view-waiting.component";
@@ -61,6 +62,8 @@ import { JobCardModule } from "../jobcard/jobcard.module";
         MessageDialogComponent,
         EmployeeByGroupMisDialogComponent,
         EmpoyeeGroupmisDialogComponent,
+        JobCardDetailAssignDialogComponent,
+        MachineScheduleDialogComponent
     ],
     declarations: [
         ErrorDialog,
@@ -86,11 +89,14 @@ import { JobCardModule } from "../jobcard/jobcard.module";
         // view Component
         JobCardViewWaitingComponent,
         OvertimeViewWaitingComponent,
+        JobCardDetailAssignDialogComponent,
+        MachineScheduleDialogComponent
     ],
     providers: [
         DialogsService,
         JobCardMasterService,
         JobCardDetailService,
+
     ],
     // a list of components that are not referenced in a reachable component template.
     // doc url is :https://angular.io/guide/ngmodule-faq
@@ -116,6 +122,8 @@ import { JobCardModule } from "../jobcard/jobcard.module";
         MessageDialogComponent,
         EmployeeByGroupMisDialogComponent,
         EmpoyeeGroupmisDialogComponent,
+        JobCardDetailAssignDialogComponent,
+        MachineScheduleDialogComponent
     ],
 })
 export class DialogsModule { }

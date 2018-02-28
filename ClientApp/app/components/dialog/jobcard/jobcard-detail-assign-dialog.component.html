@@ -1,0 +1,28 @@
+﻿<div class="master-dialog-vh">
+    <H5 style="color:cadetblue">Information of request machine</H5>
+    <div class="child-container">
+        <div class="center-content">
+            <div class="child-container">
+                <button type="button" mat-raised-button color="primary" matTooltip="Go to other work group got this workitem"
+                        (click)="onComfirmClick('other')">
+                    หน่วยอื่นๆดำเนินการ
+                </button>
+                <span>&nbsp;&nbsp;&nbsp;</span>
+                <button type="button" mat-raised-button color="warn" matTooltip="Go to plan this workitem"
+                        (click)="onComfirmClick('machine')">
+                    แมชชีนดำเนินการวางแผน
+                </button>
+                <span class="mr-auto"></span>
+                <button type="button" mat-raised-button color="accent" (click)="onComfirmClick()"
+                        matTooltip="Go Back">
+                    ปิดหน้าต่าง
+                </button>
+            </div>
+            <hr class="w-75 mt-1" />
+            <div *ngIf="jobCardMaster">
+                <jobcard-view-waiting [displayValue]="jobCardMaster" [jobCardDetail]="jobCardDetail" [mode]="true">
+                </jobcard-view-waiting>
+            </div>
+        </div>
+    </div>
+</div>

@@ -40,7 +40,7 @@ export class JobCardViewComponent extends BaseViewComponent<JobCardMaster>
     }
     // load more data
     onLoadMoreData(value: JobCardMaster) {
-        this.service.getByMasterId(value.JobCardMasterId)
+        this.service.getByMasterId(value.JobCardMasterId,"GetByMasterV2/")
             .subscribe(dbDetail => {
                 this.details = dbDetail.slice();
             });

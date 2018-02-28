@@ -14,7 +14,7 @@ namespace VipcoMachine.Services.Interfaces
 
         TEntity Get(string TEntityId);
         TEntity Get(int id);
-        IQueryable<TEntity> GetAllAsQueryable();
+        IQueryable<TEntity> GetAllAsQueryable(Expression<Func<TEntity, string>> order = null);
         Task<ICollection<TEntity>> GetAllAsync();
         Task<ICollection<TEntity>> GetAllWithRelateAsync(Expression<Func<TEntity, bool>> match = null);
         Task<ICollection<TEntity>> GetAllWithConditionAndIncludeAsync(

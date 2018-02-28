@@ -4,172 +4,181 @@
             <ng-template mat-tab-label>
                 <b>Require Machine Master</b>
             </ng-template>
-            <div class="edit-container mx-3">
-                <div *ngIf="jobCardDetail">
-                    <div class="my-form">
-                        <label for="JobMasterNoString" class="my-label">Require/McNo :</label>
-                        <div class="col-sm-4">
-                            <input type="text" class="my-input-click" [value]="jobCardDetail.JobMasterNoString"
-                                   (click)="onSelectJobCardDetail()" placeholder="Click to selected require machine"
-                                   id="JobMasterNoString" readonly>
-                        </div>
-                        <label for="TypeMachineString" class="my-label">Type Machine:</label>
-                        <div class="col-sm-4">
-                            <input type="text" class="my-input-click" [value]="jobCardDetail.TypeMachineString"
-                                   (click)="onSelectJobCardDetail()" placeholder="Click to selected require machine"
-                                   id="TypeMachineString" readonly>
-                        </div>
-                    </div>
-
-                    <div class="my-form">
-                        <label for="FullNameString" class="my-label">Job Level2/3 :</label>
-                        <div class="col-sm-4">
-                            <input type="text" class="my-input-click" [value]="jobCardDetail.FullNameString"
-                                   (click)="onSelectJobCardDetail()" placeholder="Click to selected require machine"
-                                   id="FullNameString" readonly>
-                        </div>
-                        <label for="CuttingPlanString" class="my-label">CuttingPlan/ShopDrawing:</label>
-                        <div class="col-sm-4">
-                            <input type="text" class="my-input-click" [value]="jobCardDetail.CuttingPlanString"
-                                   (click)="onSelectJobCardDetail()" placeholder="Click to selected require machine"
-                                   id="CuttingPlanString" readonly>
-                        </div>
-                    </div>
-
-                    <div class="my-form">
-                        <label for="StandardTimeString" class="my-label">StandardTime :</label>
-                        <div class="col-sm-4">
-                            <input type="text" class="my-input-click" [value]="jobCardDetail.StandardTimeString"
-                                   (click)="onStandardTimeClick()" placeholder="Click to selected require machine"
-                                   id="StandardTimeString" readonly>
-                        </div>
-                        <label for="Material" class="my-label">Material :</label>
-                        <div class="col-sm-4">
-                            <input type="text" class="my-input-click" [value]="jobCardDetail.Material"
-                                   (click)="onSelectJobCardDetail()" placeholder="Click to selected require machine"
-                                   id="Material" readonly>
-                        </div>
-                    </div>
-
-                    <div class="my-form">
-                        <label for="Quality" class="my-label">Quantity :</label>
-                        <div class="col-sm-4">
-                            <input type="text" class="my-input-click" [value]="jobCardDetail.Quality"
-                                   (click)="onSelectJobCardDetail()" placeholder="Click to selected require machine"
-                                   id="Quality" readonly>
-                        </div>
-                        <label for="UnitsMeasureString" class="my-label">Uom :</label>
-                        <div class="col-sm-4">
-                            <input type="text" class="my-input-click" [value]="jobCardDetail.UnitsMeasureString"
-                                   (click)="onSelectJobCardDetail()" placeholder="Click to selected require machine"
-                                   id="UnitsMeasureString" readonly>
-                        </div>
-                    </div>
+            <div class="edit-container-row">
+                <div class="edit-left-content-column">
+                    <button type="button" mat-icon-button color="primary" (click)="onShowMachineSchedule()"
+                            style="margin:4px;" matTooltip="Show machine schedule"
+                            [disabled]="!(jobCardDetail.JobCardMaster && editValueForm.controls.PlannedStartDate.value)">
+                        <i class="fa fa-2x fa-calendar-o" aria-hidden="true" style="margin:0px;"></i>
+                    </button>
                 </div>
-                <hr class="w-100"/>
-                <form [formGroup]="editValueForm">
-                    <div class="my-form">
-                        <label for="TaskMachineName" class="my-label">Task Code:</label>
-                        <div class="col-sm-4">
-                            <input type="text" class="my-input" placeholder="Code will automatically generated."
-                                   id="TaskMachineName" formControlName="TaskMachineName"
-                                   readonly>
-                            <validation-messages [control]="editValueForm.controls.TaskMachineName"></validation-messages>
+                <div class="edit-center-content">
+                    <div *ngIf="jobCardDetail">
+                        <div class="my-form">
+                            <label for="JobMasterNoString" class="my-label">Require/McNo :</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="my-input-click" [value]="jobCardDetail.JobMasterNoString"
+                                       (click)="onSelectJobCardDetail()" placeholder="Click to selected require machine"
+                                       id="JobMasterNoString" readonly>
+                            </div>
+                            <label for="TypeMachineString" class="my-label">Type Machine:</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="my-input-click" [value]="jobCardDetail.TypeMachineString"
+                                       (click)="onSelectJobCardDetail()" placeholder="Click to selected require machine"
+                                       id="TypeMachineString" readonly>
+                            </div>
                         </div>
 
-                        <label for="Description" class="my-label">Description:</label>
-                        <div class="col-sm-4">
-                            <input type="text" class="my-input" placeholder="Insert code for description here"
-                                   id="Description" formControlName="Description">
-                            <validation-messages [control]="editValueForm.controls.Description"></validation-messages>
+                        <div class="my-form">
+                            <label for="FullNameString" class="my-label">Job Level2/3 :</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="my-input-click" [value]="jobCardDetail.FullNameString"
+                                       (click)="onSelectJobCardDetail()" placeholder="Click to selected require machine"
+                                       id="FullNameString" readonly>
+                            </div>
+                            <label for="CuttingPlanString" class="my-label">CuttingPlan/ShopDrawing:</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="my-input-click" [value]="jobCardDetail.CuttingPlanString"
+                                       (click)="onSelectJobCardDetail()" placeholder="Click to selected require machine"
+                                       id="CuttingPlanString" readonly>
+                            </div>
+                        </div>
+
+                        <div class="my-form">
+                            <label for="StandardTimeString" class="my-label">StandardTime :</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="my-input-click" [value]="jobCardDetail.StandardTimeString"
+                                       (click)="onStandardTimeClick()" placeholder="Click to selected require machine"
+                                       id="StandardTimeString" readonly>
+                            </div>
+                            <label for="Material" class="my-label">Material :</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="my-input-click" [value]="jobCardDetail.Material"
+                                       (click)="onSelectJobCardDetail()" placeholder="Click to selected require machine"
+                                       id="Material" readonly>
+                            </div>
+                        </div>
+
+                        <div class="my-form">
+                            <label for="Quality" class="my-label">Quantity :</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="my-input-click" [value]="jobCardDetail.Quality"
+                                       (click)="onSelectJobCardDetail()" placeholder="Click to selected require machine"
+                                       id="Quality" readonly>
+                            </div>
+                            <label for="UnitsMeasureString" class="my-label">Uom :</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="my-input-click" [value]="jobCardDetail.UnitsMeasureString"
+                                       (click)="onSelectJobCardDetail()" placeholder="Click to selected require machine"
+                                       id="UnitsMeasureString" readonly>
+                            </div>
                         </div>
                     </div>
+                    <hr class="w-100" />
+                    <form [formGroup]="editValueForm">
+                        <div class="my-form">
+                            <label for="TaskMachineName" class="my-label">Task Code:</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="my-input" placeholder="Code will automatically generated."
+                                       id="TaskMachineName" formControlName="TaskMachineName"
+                                       readonly>
+                                <validation-messages [control]="editValueForm.controls.TaskMachineName"></validation-messages>
+                            </div>
 
-                    <div class="my-form">
-                        <label for="TotalQuantity" class="my-label">Quantity:</label>
-                        <div class="col-sm-4">
-                            <input type="number" class="my-input" min="0"
-                                   id="TotalQuantity" formControlName="TotalQuantity" readonly>
-                            <validation-messages [control]="editValueForm.controls.TotalQuantity"></validation-messages>
+                            <label for="Description" class="my-label">Description:</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="my-input" placeholder="Insert code for description here"
+                                       id="Description" formControlName="Description">
+                                <validation-messages [control]="editValueForm.controls.Description"></validation-messages>
+                            </div>
                         </div>
 
-                        <label for="CurrentQuantity" class="my-label">Production:</label>
-                        <div class="col-sm-4">
-                            <input type="number" class="my-input" min="0" placeholder="Insert production number here"
-                                   id="CurrentQuantity" formControlName="CurrentQuantity" >
-                            <validation-messages [control]="editValueForm.controls.CurrentQuantity"></validation-messages>
-                        </div>
-                    </div>
+                        <div class="my-form">
+                            <label for="TotalQuantity" class="my-label">Quantity:</label>
+                            <div class="col-sm-4">
+                                <input type="number" class="my-input" min="0"
+                                       id="TotalQuantity" formControlName="TotalQuantity" readonly>
+                                <validation-messages [control]="editValueForm.controls.TotalQuantity"></validation-messages>
+                            </div>
 
-                    <div class="my-form">
-                        <label for="PlannedStartDate" class="my-label">PlannedStart:</label>
-                        <div class="col-sm-4">
-                            <p-calendar formControlName="PlannedStartDate" [showIcon]="true"
-                                        id="PlannedStartDate" dateFormat="dd/mm/yy" placeholder="  Choose a date"
-                                        appendTo="body"
-                                        [maxDate]="editValueForm.controls.PlannedEndDate.value">
-                            </p-calendar>
-                            <span class="is-request-date">**</span>
-                            <validation-messages [control]="editValueForm.controls.PlannedStartDate"></validation-messages>
+                            <label for="CurrentQuantity" class="my-label">Production:</label>
+                            <div class="col-sm-4">
+                                <input type="number" class="my-input" min="0" placeholder="Insert production number here"
+                                       id="CurrentQuantity" formControlName="CurrentQuantity">
+                                <validation-messages [control]="editValueForm.controls.CurrentQuantity"></validation-messages>
+                            </div>
                         </div>
 
-                        <label for="PlannedEndDate" class="my-label">PlannedEnd:</label>
-                        <div class="col-sm-4">
-                            <p-calendar formControlName="PlannedEndDate" [showIcon]="true"
-                                        id="PlannedEndDate" dateFormat="dd/mm/yy" placeholder="  Choose a date"
-                                        appendTo="body"
-                                        [minDate]="editValueForm.controls.PlannedStartDate.value">
-                            </p-calendar>
-                            <span class="is-request-date">**</span>
-                            <validation-messages [control]="editValueForm.controls.PlannedEndDate"></validation-messages>
-                        </div>
-                    </div>
+                        <div class="my-form">
+                            <label for="PlannedStartDate" class="my-label">PlannedStart:</label>
+                            <div class="col-sm-4">
+                                <p-calendar formControlName="PlannedStartDate" [showIcon]="true"
+                                            id="PlannedStartDate" dateFormat="dd/mm/yy" placeholder="  Choose a date"
+                                            appendTo="body"
+                                            [maxDate]="editValueForm.controls.PlannedEndDate.value">
+                                </p-calendar>
+                                <span class="is-request-date">**</span>
+                                <validation-messages [control]="editValueForm.controls.PlannedStartDate"></validation-messages>
+                            </div>
 
-                    <div class="my-form">
-                        <label for="ActualStartDate" class="my-label">ActualStart:</label>
-                        <div class="col-sm-4">
-                            <p-calendar formControlName="ActualStartDate" [showIcon]="true"
-                                        id="ActualStartDate" dateFormat="dd/mm/yy" placeholder="  Choose a date"
-                                        appendTo="body"
-                                        [minDate]="editValueForm.controls.PlannedStartDate.value"
-                                        [maxDate]="editValueForm.controls.ActualEndDate.value">
-                            </p-calendar>
-                            <validation-messages [control]="editValueForm.controls.ActualStartDate"></validation-messages>
-                        </div>
-
-                        <label for="ActualEndDate" class="my-label">ActualEnd:</label>
-                        <div class="col-sm-4">
-                            <p-calendar formControlName="ActualEndDate" [showIcon]="true"
-                                        id="ActualEndDate" dateFormat="dd/mm/yy" placeholder="  Choose a date"
-                                        appendTo="body"
-                                        [minDate]="editValueForm.controls.ActualStartDate.value">
-                            </p-calendar>
-                            <validation-messages [control]="editValueForm.controls.ActualEndDate"></validation-messages>
-                        </div>
-                    </div>
-
-                    <div class="my-form">
-                        <label for="AssignedByString" class="my-label">AssignedBy:</label>
-                        <div class="col-sm-4">
-                            <input type="text" class="my-input-click" placeholder="Choose employee assigned here"
-                                   (click)="onSelectedAssignedBy()"
-                                   id="AssignedByString" formControlName="AssignedByString" readonly>
-                            <validation-messages [control]="editValueForm.controls.AssignedByString"></validation-messages>
+                            <label for="PlannedEndDate" class="my-label">PlannedEnd:</label>
+                            <div class="col-sm-4">
+                                <p-calendar formControlName="PlannedEndDate" [showIcon]="true"
+                                            id="PlannedEndDate" dateFormat="dd/mm/yy" placeholder="  Choose a date"
+                                            appendTo="body"
+                                            [minDate]="editValueForm.controls.PlannedStartDate.value">
+                                </p-calendar>
+                                <span class="is-request-date">**</span>
+                                <validation-messages [control]="editValueForm.controls.PlannedEndDate"></validation-messages>
+                            </div>
                         </div>
 
-                        <label for="MachineString" class="my-label">MachineNo:</label>
-                        <div class="col-sm-4">
-                            <input type="text" class="my-input-click" placeholder="Choose machine here"
-                                   (click)="onSelectedMachine()"
-                                   id="MachineString" formControlName="MachineString" required readonly>
-                            <validation-messages [control]="editValueForm.controls.MachineString"></validation-messages>
-                            <span class="text-danger" [innerHTML]="messageMachine"></span>
+                        <div class="my-form">
+                            <label for="ActualStartDate" class="my-label">ActualStart:</label>
+                            <div class="col-sm-4">
+                                <p-calendar formControlName="ActualStartDate" [showIcon]="true"
+                                            id="ActualStartDate" dateFormat="dd/mm/yy" placeholder="  Choose a date"
+                                            appendTo="body"
+                                            [minDate]="editValueForm.controls.PlannedStartDate.value"
+                                            [maxDate]="editValueForm.controls.ActualEndDate.value">
+                                </p-calendar>
+                                <validation-messages [control]="editValueForm.controls.ActualStartDate"></validation-messages>
+                            </div>
+
+                            <label for="ActualEndDate" class="my-label">ActualEnd:</label>
+                            <div class="col-sm-4">
+                                <p-calendar formControlName="ActualEndDate" [showIcon]="true"
+                                            id="ActualEndDate" dateFormat="dd/mm/yy" placeholder="  Choose a date"
+                                            appendTo="body"
+                                            [minDate]="editValueForm.controls.ActualStartDate.value">
+                                </p-calendar>
+                                <validation-messages [control]="editValueForm.controls.ActualEndDate"></validation-messages>
+                            </div>
                         </div>
-                    </div>
-                </form>
+
+                        <div class="my-form">
+                            <label for="AssignedByString" class="my-label">AssignedBy:</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="my-input-click" placeholder="Choose employee assigned here"
+                                       (click)="onSelectedAssignedBy()"
+                                       id="AssignedByString" formControlName="AssignedByString" readonly>
+                                <validation-messages [control]="editValueForm.controls.AssignedByString"></validation-messages>
+                            </div>
+
+                            <label for="MachineString" class="my-label">MachineNo:</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="my-input-click" placeholder="Choose machine here"
+                                       (click)="onSelectedMachine()"
+                                       id="MachineString" formControlName="MachineString" required readonly>
+                                <validation-messages [control]="editValueForm.controls.MachineString"></validation-messages>
+                                <span class="text-danger" [innerHTML]="messageMachine"></span>
+                            </div>
+                        </div>
+                    </form>
+                </div>
             </div>
         </mat-tab>
-        <mat-tab>
+        <!--<mat-tab>
             <ng-template mat-tab-label>
                 <b>Over-Time</b>
             </ng-template>
@@ -213,8 +222,8 @@
                     </over-time-edit>
                 </div>
             </ng-template>
-        </mat-tab>
-        <mat-tab>
+        </mat-tab>-->
+        <mat-tab *ngIf="attachFiles">
             <ng-template mat-tab-label>
                 <b>Attach File</b>
             </ng-template>

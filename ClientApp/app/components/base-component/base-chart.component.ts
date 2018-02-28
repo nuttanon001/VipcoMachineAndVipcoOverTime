@@ -48,7 +48,7 @@ export class BaseChartComponent implements OnInit {
     get chartData(): Array<number> { return this._chartData; }
     // chart color
     chartColors: Array<any>;
-    chartType: string;
+    @Input() chartType: string = "doughnut";
     chartOption: any;
     /** base-chart ctor */
     constructor() {
@@ -66,7 +66,7 @@ export class BaseChartComponent implements OnInit {
             this.chartData = [1, 1, 1];
 
         }
-        this.chartType = "doughnut";
+
         this.chartOption = {
             scaleShowVerticalLines: false,
             responsive: true,

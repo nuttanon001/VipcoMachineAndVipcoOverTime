@@ -10,6 +10,36 @@
     @extend .mx-3;
 }
 
+.edit-container-row {
+    @extend .edit-container;
+    flex-direction: row;
+}
+
+.edit-left-content {
+    display: flex;
+    flex-grow: 0;
+    order: 1;
+    //align-content: flex-start | flex-end | center | space-between | space-around | stretch;
+    align-content: flex-start;
+}
+
+.edit-left-content-column {
+    @extend .edit-left-content;
+    flex-flow: column;
+}
+
+.edit-right-content {
+    /* We first create a flex layout context */
+    display: flex;
+    /* flex direction */
+    flex-direction: column;
+    /* flex grow 0 is upper item have container size */
+    flex-grow: 0;
+    /* flex order of position container */
+    order: 3;
+    margin-top: 15px;
+}
+
 .chlid-edit-container {
     display: flex;
     flex-direction: row;

@@ -86,9 +86,16 @@ namespace VipcoMachine.Services.Classes
             return this.entities.AsNoTracking().ToList();
         }
 
-        public IQueryable<TEntity> GetAllAsQueryable()
+        public IQueryable<TEntity> GetAllAsQueryable(Expression<Func<TEntity, string>> orderBy = null)
         {
-            return this.entities.AsQueryable();
+            var Query = this.Context.Set<TEntity>().AsQueryable();
+            if (orderBy != null)
+            {
+                Query = Query.OrderBy(orderBy);
+            }
+            return Query;
+
+            // return this.entities.OrderBy(orderBy).AsQueryable();
         }
         /// <summary>
         /// Gets a collection of all objects in the database

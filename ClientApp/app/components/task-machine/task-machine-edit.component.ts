@@ -5,7 +5,7 @@ import { FormBuilder, FormControl, Validators, AbstractControl, FormGroup } from
 import {
     TaskMachine, TaskMachineHasOverTime,
     Employee, JobCardDetail, AttachFile,
-    PlanViewModel
+    PlanViewModel, OptionSchedule
 } from "../../models/model.index";
 // components
 import { BaseEditComponent } from "../base-component/base-edit.component";
@@ -111,17 +111,23 @@ export class TaskMachineEditComponent
                         }
                         // jobCardDetail
                         if (this.editValue.JobCardDetailId) {
-                            this.serviceJobCardDetail.getOneKeyNumber(this.editValue.JobCardDetailId)
+                            this.serviceJobCardDetail.getOneKeyNumber(this.editValue.JobCardDetailId,"GetByKey2/")
                                 .subscribe(dbJobCardDetail => {
                                     this.jobCardDetail = dbJobCardDetail;
                                     if (this.jobCardDetail.StandardTimeString === "-") {
                                         this.jobCardDetail.StandardTimeString = "Click to selected StandardTime here.";
                                     }
-                                    // get attach file
-                                    this.getAttach();
+
+                                    if (dbJobCardDetail.JobCardMasterId) {
+                                        this.serviceJobCardMaster.getOneKeyNumber(dbJobCardDetail.JobCardMasterId)
+                                            .subscribe(dbData => {
+                                                this.jobCardDetail.JobCardMaster = dbData;
+                                                // get attach file
+                                                this.getAttach();
+                                            })
+                                    }
                                 });
                         }
-
                     }, error => console.error(error), () => this.defineData());
             } else {
                 // debug here
@@ -143,7 +149,7 @@ export class TaskMachineEditComponent
                     this.defineData();
                     // get jobcard-detail
                     if (this.editValue.JobCardDetailId) {
-                        this.serviceJobCardDetail.getOneKeyNumber(this.editValue.JobCardDetailId)
+                        this.serviceJobCardDetail.getOneKeyNumber(this.editValue.JobCardDetailId, "GetByKey2/")
                             .subscribe(dbJobCardDetail => {
                                 this.jobCardDetail = dbJobCardDetail;
                                 if (this.jobCardDetail.StandardTimeString === "-") {
@@ -155,8 +161,15 @@ export class TaskMachineEditComponent
                                         TotalQuantity: dbJobCardDetail.Quality,
                                     });
                                 }
-                                // get attach file
-                                this.getAttach();
+
+                                if (dbJobCardDetail.JobCardMasterId) {
+                                    this.serviceJobCardMaster.getOneKeyNumber(dbJobCardDetail.JobCardMasterId)
+                                        .subscribe(dbData => {
+                                            this.jobCardDetail.JobCardMaster = dbData;
+                                            // get attach file
+                                            this.getAttach();
+                                        })
+                                }
                             }, error => console.error(error), () => {
                                 this.onUpdatePlanStartAndEndDate();
                             });
@@ -502,6 +515,20 @@ export class TaskMachineEditComponent
                     });
                 }
             });
+    }
+
+    // show machine schedule
+    onShowMachineSchedule(): void {
+        if (this.editValueForm && this.jobCardDetail.JobCardMaster) {
+            let taskMachine: TaskMachine = this.editValueForm.value;
+
+            let optionSchedule: OptionSchedule = {
+                PickDate: taskMachine.PlannedStartDate,
+                TypeMachineId: this.jobCardDetail.JobCardMaster.TypeMachineId
+            };
+            // Dialogs
+            this.serviceDialogs.dialogMachineSchedule(this.viewContainerRef, optionSchedule);
+        }
     }
 
     // update PlanDate

@@ -39,6 +39,7 @@ import { SearchBoxComponent } from "../../components/base-component/search-box.c
 import { AttactFileComponent } from "../../components/base-component/attact-file.component";
 import { ReuseTableComponent } from "../../components/base-component/reuse-table.component";
 import { BaseChartComponent } from "../../components/base-component/base-chart.component";
+import { BaseChartComponent2 } from "../../components/base-component/base-chart2.component";
 import { DateOnlyPipe } from "../../pipes/date-only.pipe";
 
 @NgModule({
@@ -49,6 +50,7 @@ import { DateOnlyPipe } from "../../pipes/date-only.pipe";
         AttactFileComponent,
         ReuseTableComponent,
         BaseChartComponent,
+        BaseChartComponent2,
         // pipe
         DateOnlyPipe,
     ],
@@ -119,6 +121,7 @@ import { DateOnlyPipe } from "../../pipes/date-only.pipe";
         AttactFileComponent,
         ReuseTableComponent,
         BaseChartComponent,
+        BaseChartComponent2,
         // pipe
         DateOnlyPipe,
         // chart
@@ -130,6 +133,7 @@ import { DateOnlyPipe } from "../../pipes/date-only.pipe";
         AttactFileComponent,
         ReuseTableComponent,
         BaseChartComponent,
+        BaseChartComponent2,
     ]
 })
 export class CustomMaterialModule { }

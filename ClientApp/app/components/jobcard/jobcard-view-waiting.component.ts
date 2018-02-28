@@ -16,9 +16,19 @@ import { TableColumn } from "@swimlane/ngx-datatable";
 
 // jobcard-view component*/
 export class JobCardViewWaitingComponent extends BaseViewComponent<JobCardMaster> {
+
+    /** jobcard-view ctor */
+    constructor(
+        private serviceMaster: JobCardMasterService,
+        private service: JobCardDetailService
+    ) {
+        super();
+    }
+
+    // Parameter
     @Output("selected") selected: EventEmitter<JobCardDetail> = new EventEmitter<JobCardDetail>();
     @Input("mode") mode: boolean = false;
-
+    @Input() jobCardDetail: JobCardDetail;
 
     details: Array<JobCardDetail>;
     attachFiles: Array<AttachFile> = new Array;
@@ -28,22 +38,25 @@ export class JobCardViewWaitingComponent extends BaseViewComponent<JobCardMaster
         { prop: "Material", name: "Material", flexGrow: 1 },
         { prop: "Quality", name: "Quality", flexGrow: 1 },
         { prop: "UnitsMeasureString", name: "Uom", flexGrow: 1 },
-        { prop: "StatusString", name: "Status", flexGrow: 1, cellClass: this.getCellClass}
+        { prop: "StatusString", name: "Status", flexGrow: 1, cellClass: this.getCellClass }
     ];
 
-    /** jobcard-view ctor */
-    constructor(
-        private serviceMaster: JobCardMasterService,
-        private service: JobCardDetailService
-    ) {
-        super();
-    }
+
     // load more data
-    onLoadMoreData(value: JobCardMaster):void {
-        this.service.getByMasterId(value.JobCardMasterId)
-            .subscribe(dbDetail => {
-                this.details = dbDetail.filter(item => item.JobCardDetailStatus === 1).slice();
-            });
+    onLoadMoreData(value: JobCardMaster): void {
+        if (!this.jobCardDetail) {
+            this.service.getByMasterId(value.JobCardMasterId)
+                .subscribe(dbDetail => {
+                    this.details = dbDetail.filter(item => item.JobCardDetailStatus === 1).slice();
+                });
+        } else {
+            if (!this.details) {
+                this.details = new Array;
+            }
+
+            this.details.push(this.jobCardDetail);
+        }
+        
 
         this.serviceMaster.getAttachFile(value.JobCardMasterId)
             .subscribe(dbAttach => this.attachFiles = dbAttach.slice());

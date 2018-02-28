@@ -1,0 +1,72 @@
+﻿<div class="master-dialog-vh">
+    <H5 style="color:cadetblue">Machine Schedule</H5>
+    <div class="child-container">
+        <div class="center-content">
+            <div class="child-col-container">
+                <div class="child-row-container my-1">
+                    <div class="plan-col" style="border-bottom:none; margin-right:5px;">|||||</div> Plan-1
+                    <div class="ml-1 actual-col" style="margin-right:5px;">|||||</div> Actual
+                </div>
+            </div>
+            <div class="bottom-container my-2">
+                <p-dataTable [value]="taskMachines" rowGroupMode="rowspan"
+                             [lazy]="true" [rows]="10" [paginator]="true" [rowsPerPageOptions]="[10,20,30]"
+                             [totalRecords]="totalRecords" (onLazyLoad)="loadDataLazy($event)"
+                             scrollable="true" scrollWidth="67vw" scrollHeight="40vh">
+                    <p-headerColumnGroup>
+                        <p-row>
+                            <p-column *ngFor="let colup of columnsUpper" [header]="colup.header"
+                                      [rowspan]="colup.rowspan" [style]="colup.style" [colspan]="colup.colspan">
+                            </p-column>
+                        </p-row>
+                        <p-row>
+                            <p-column *ngFor="let collow of columnsLower" [header]="collow.header"
+                                      [style]="{'width':'35px'}">
+                            </p-column>
+                        </p-row>
+                    </p-headerColumnGroup>
+                    <p-column *ngFor="let column of columns" [field]="column.field" [styleClass]="column.styleclass"
+                              [header]="column.header" [style]="column.style" [sortable]="true">
+                        <ng-template *ngIf="column.isCol" let-col let-data1="rowData" pTemplate="body">
+                            <div [ngSwitch]="data1[col.field]" class="child-col-container">
+                                <div *ngSwitchCase="1">
+                                    <div class="plan-col">
+                                        |
+                                    </div>
+                                    <div class="empty-col">
+                                        |
+                                    </div>
+                                </div>
+                                <div *ngSwitchCase="2">
+                                    <div class="empty-col">
+                                        |
+                                    </div>
+                                    <div class="actual-col">
+                                        |
+                                    </div>
+                                </div>
+                                <div *ngSwitchCase="3">
+                                    <div class="plan-col">
+                                        |
+                                    </div>
+                                    <div class="actual-col">
+                                        |
+                                    </div>
+                                </div>
+                                <div *ngSwitchDefault>
+                                    -
+                                </div>
+                            </div>
+                        </ng-template>
+                    </p-column>
+                </p-dataTable>
+            </div>
+        </div>
+        <div class="right-content">
+            <button type="button" mat-icon-button color="warn" (click)="onCancelClick()"
+                    matTooltip="Go Back" matTooltipPosition="left">
+                <i class="fa fa-2x fa-close" aria-hidden="true"></i>
+            </button>
+        </div>
+    </div>
+</div>

@@ -6058,9 +6058,10 @@
       "integrity": "sha1-gV7R9uvGWSb4ZbMQwHE7yzMVzks="
     },
     "primeng": {
-      "version": "4.2.0",
-      "resolved": "https://registry.npmjs.org/primeng/-/primeng-4.2.0.tgz",
-      "integrity": "sha1-ScjJneJtJU9B0/u4dZIn/h0ml3I="
+      "version": "4.3.0",
+      "resolved": "https://registry.npmjs.org/primeng/-/primeng-4.3.0.tgz",
+      "integrity": "sha1-aH7NHhoVjPDodC78fam5M4zUcMM=",
+      "dev": true
     },
     "private": {
       "version": "0.1.7",

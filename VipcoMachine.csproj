@@ -83,6 +83,7 @@
     <None Remove="ClientApp\app\models\projectcode-master\projectcode-master.model.ts" />
     <None Remove="ClientApp\app\models\property-machine\prooerty-machine.model.ts" />
     <None Remove="ClientApp\app\models\standard-time\standard-time.model.ts" />
+    <None Remove="ClientApp\app\models\task-machine\chart-data.model.ts" />
     <None Remove="ClientApp\app\models\task-machine\no-task-machine.model.ts" />
     <None Remove="ClientApp\app\models\task-machine\option-chart.model.ts" />
     <None Remove="ClientApp\app\models\task-machine\option-schedule.model.ts" />
@@ -195,6 +196,7 @@
     <TypeScriptCompile Include="ClientApp\app\models\projectcode-master\projectcode-master.model.ts" />
     <TypeScriptCompile Include="ClientApp\app\models\property-machine\prooerty-machine.model.ts" />
     <TypeScriptCompile Include="ClientApp\app\models\standard-time\standard-time.model.ts" />
+    <TypeScriptCompile Include="ClientApp\app\models\task-machine\chart-data.model.ts" />
     <TypeScriptCompile Include="ClientApp\app\models\task-machine\no-task-machine.model.ts" />
     <TypeScriptCompile Include="ClientApp\app\models\task-machine\option-chart.model.ts" />
     <TypeScriptCompile Include="ClientApp\app\models\task-machine\option-schedule.model.ts" />

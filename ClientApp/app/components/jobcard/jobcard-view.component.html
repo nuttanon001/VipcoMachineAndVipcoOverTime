@@ -157,7 +157,7 @@
                 <ng-template #elseTable>
                     <ngx-datatable class="material"
                                    [rows]="details"
-                                   [columnMode]="'flex'"
+                                   [columnMode]="'force'"
                                    [headerHeight]="50"
                                    [footerHeight]="0"
                                    [rowHeight]="50"
@@ -165,12 +165,12 @@
                                    (select)="onSelect($event)"
                                    [scrollbarV]="true"
                                    [style.height]="'55vh'">
-                        <ngx-datatable-column name="CuttingPlan" prop="CuttingPlanString" [flexGrow]="3"></ngx-datatable-column>
-                        <ngx-datatable-column name="StandardTime" prop="StandardTimeString" [flexGrow]="1"></ngx-datatable-column>
-                        <ngx-datatable-column name="Material" prop="Material" [flexGrow]="2"></ngx-datatable-column>
-                        <ngx-datatable-column name="Quality" prop="Quality" [flexGrow]="1"></ngx-datatable-column>
+                        <ngx-datatable-column name="CuttingPlan" prop="CuttingPlanString" [width]="250"></ngx-datatable-column>
+                        <ngx-datatable-column name="StandardTime" prop="StandardTimeString" [width]="100"></ngx-datatable-column>
+                        <ngx-datatable-column name="Material" prop="Material" [width]="150"></ngx-datatable-column>
+                        <ngx-datatable-column name="Quality" prop="Quality" [width]="75"></ngx-datatable-column>
                         <!--<ngx-datatable-column name="Uom" prop="UnitsMeasureString" [flexGrow]="1"></ngx-datatable-column>-->
-                        <ngx-datatable-column name="Status" prop="StatusString" [flexGrow]="1" [cellClass]="getCellClass"></ngx-datatable-column>
+                        <ngx-datatable-column name="Status" prop="StatusString" [width]="75" [cellClass]="getCellClass"></ngx-datatable-column>
                     </ngx-datatable>
                 </ng-template>
             </div>

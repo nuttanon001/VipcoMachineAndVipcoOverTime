@@ -40,16 +40,30 @@
             <li class="nav-item" *ngIf="GetLevel2">
                 <a #subMenu="matMenuTrigger" [matMenuTriggerFor]="menu2"
                    (onMenuOpen)="menuOnCloseMenu2()" (mouseover)="menuOnOpenMenu2()"
-                   class="nav-link" [routerLink]="['/jobcard/jobcard-waiting']" routerLinkActive="active">
+                   class="nav-link" [routerLink]="['/jobcard/require-jobcard-detail-schedule']" routerLinkActive="active">
                     <i class="fa fa-comments-o" aria-hidden="true"></i>
                     For Machine
                 </a>
                 <mat-menu #menu2="matMenu" [overlapTrigger]="false">
                     <div>
+                        <button mat-menu-item [routerLink]="['/jobcard/require-jobcard-detail-schedule']" routerLinkActive="active">
+                            <i class="fa fa-history" aria-hidden="true"></i>
+                            <span>Request Machine(Cm/Gm) </span>
+                        </button>
                         <button mat-menu-item [routerLink]="['/jobcard/jobcard-waiting']" routerLinkActive="active">
                             <i class="fa fa-history" aria-hidden="true"></i>
-                            <span>Require Machine Waiting</span>
+                            <span>Request Machine(Lm/Sm) </span>
                         </button>
+                        <button mat-menu-item [routerLink]="['/task-machine/machine-schedule','1']" routerLinkActive="active">
+                            <i class="fa fa-calendar-times-o" aria-hidden="true"></i>
+                            <span>Schedule Plan Machine </span>
+                        </button>
+    <!--
+    <button mat-menu-item [routerLink]="['/jobcard/jobcard-waiting']" routerLinkActive="active">
+        <i class="fa fa-history" aria-hidden="true"></i>
+        <span>Request Machine Waiting</span>
+    </button>
+    -->
 
                         <button mat-menu-item [routerLink]="['/task-machine/task-machine-schedule','2']" routerLinkActive="active">
                             <i class="fa fa-tasks" aria-hidden="true"></i>
@@ -81,15 +95,15 @@
                             <i class="fa fa-hourglass-end" aria-hidden="true"></i>
                             <span>StandardTime</span>
                         </button>
-                        <hr/>
+                        <hr />
                         <button mat-menu-item [routerLink]="['/cutting-plan/import-csv']" routerLinkActive="active">
                             <i class="fa fa-inbox" aria-hidden="true"></i>
                             <span>Cutting Plan Import</span>
                         </button>
                         <!--<button mat-menu-item [routerLink]="['/developer']" routerLinkActive="active">
-                            <i class="fa fa-university" aria-hidden="true"></i>
-                            <span>Developer</span>
-                        </button>-->
+        <i class="fa fa-university" aria-hidden="true"></i>
+        <span>Developer</span>
+    </button>-->
                     </div>
                 </mat-menu>
             </li>
@@ -105,7 +119,7 @@
                         <a class="username">
                             Welcome <i>{{authService.userName}}</i>
                         </a>-->
-                    <a class="mx-1"  [routerLink]="['/register','1']" routerLinkActive="active">
+                    <a class="mx-1" [routerLink]="['/register','1']" routerLinkActive="active">
                         Welcome <i>{{userName}}</i>
                     </a>
                     <a (click)="onLogOut()">

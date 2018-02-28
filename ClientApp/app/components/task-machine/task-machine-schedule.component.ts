@@ -42,7 +42,9 @@ export class TaskMachineScheduleComponent implements OnInit, OnDestroy {
     mode: number | undefined;
     schedule: OptionSchedule;
     taskMachineId: number | undefined;
+    machineCode: string;
     showForm: boolean;
+    take:number = 10;
     // array
     proMasters: Array<SelectItem>;
     proDetails: Array<SelectItem>;
@@ -50,13 +52,13 @@ export class TaskMachineScheduleComponent implements OnInit, OnDestroy {
     workGroup: Array<SelectItem>;
     //  task-machine-schedule ctor */
     constructor(
-        private service: TaskMachineService,
-        private serviceDialogs: DialogsService,
+        public service: TaskMachineService,
+        public serviceDialogs: DialogsService,
         private serviceProMaster: ProjectCodeMasterService,
         private serviceProDetail: ProjectCodeDetailEditService,
         private serviceTypeMachine: TypeMachineService,
         private serviceAuth: AuthService,
-        private viewContainerRef: ViewContainerRef,
+        public viewContainerRef: ViewContainerRef,
         private fb: FormBuilder,
         private router: Router,
         public route: ActivatedRoute,
@@ -65,11 +67,11 @@ export class TaskMachineScheduleComponent implements OnInit, OnDestroy {
     // angular hook
     ngOnInit(): void {
         if(window.innerWidth >= 1600) {
-            this.scrollHeight = 75 + "vh";
-        } else if (window.innerWidth > 1360 && window.innerWidth < 1600) {
-            this.scrollHeight = 68 + "vh";
-        } else {
             this.scrollHeight = 65 + "vh";
+        } else if (window.innerWidth > 1360 && window.innerWidth < 1600) {
+            this.scrollHeight = 55 + "vh";
+        } else {
+            this.scrollHeight = 52 + "vh";
         }
 
         this.taskMachines = new Array;
@@ -100,19 +102,6 @@ export class TaskMachineScheduleComponent implements OnInit, OnDestroy {
                 this.proDetails.push({ label: "Selected level2/3", value: undefined });
             }
         }, error => console.error(error));
-
-        // this.route.params.subscribe((params: any) => {
-        //    let key: number = params["condition"];
-        //    // console.log("key is",key);
-        //    if (key) {
-        //        this.mode = key;
-        //        this.buildForm();
-        //        this.getProjectMasterArray();
-        //        this.getTypeMachineArray();
-        //        this.proDetails = new Array;
-        //        this.proDetails.push({ label: "Selected level2/3", value: undefined });
-        //    }
-        // }, error => console.error(error));
     }
 
     // destroy
@@ -128,6 +117,7 @@ export class TaskMachineScheduleComponent implements OnInit, OnDestroy {
         if (!schedule) {
             schedule = {
                 Mode: this.mode || 2,
+                PickDate: new Date
             };
         }
         this.schedule = schedule;
@@ -140,20 +130,24 @@ export class TaskMachineScheduleComponent implements OnInit, OnDestroy {
             Skip: [this.schedule.Skip],
             Take: [this.schedule.Take],
             TypeMachineId: [this.schedule.TypeMachineId],
+            MachineId: [this.schedule.MachineId],
+            MachineCode: [this.machineCode],
             Creator: [this.schedule.Creator],
             Require: [this.schedule.Require],
+            PickDate: [this.schedule.PickDate],
             // template
             CreatorName: [this.schedule.CreatorName],
             RequireName: [this.schedule.RequireName],
         });
 
         this.reportForm.valueChanges.subscribe((data: any) => this.onValueChanged(data));
-        this.onValueChanged();
+        // this.onValueChanged();
     }
 
     // on value change
     onValueChanged(data?: any): void {
         if (!this.reportForm) { return; }
+        // console.log("onValueChanged");
 
         this.schedule = this.reportForm.value;
         if (this.schedule.JobNo) {
@@ -226,106 +220,106 @@ export class TaskMachineScheduleComponent implements OnInit, OnDestroy {
 
     // get request data
     onGetTaskMachineWaitAndProcessData(schedule: OptionSchedule): void {
-        if (this.taskMachineId) {
-            schedule.TaskMachineId = this.taskMachineId;
-        }
 
         this.service.getTaskMachineWaitAndProcess(schedule)
-            .subscribe(dbDataSchedule => {
-                this.totalRecords = dbDataSchedule.TotalRow;
-
-                this.columns = new Array;
-                this.columnsUpper = new Array;
-
-                let McNoWidth:string = "100px";
-                let JbNoWidth: string = "170px";
-                let CtNoWidth: string = "350px";
-                let NumWidth: string = "55px";
-
-                // column Row1
-                this.columnsUpper.push({ header: "MachineNo", rowspan: 2, style: { "width": McNoWidth, }});
-                this.columnsUpper.push({ header: "JobNo", rowspan: 2, style: { "width": JbNoWidth, } });
-                this.columnsUpper.push({ header: "CuttingPlan/ShopDrawing | Mat'l | UnitNo", rowspan: 2, style: { "width": CtNoWidth, } });
-                this.columnsUpper.push({ header: "Qty", rowspan: 2, style: { "width": NumWidth, } });
-                this.columnsUpper.push({ header: "Pro", rowspan: 2, style: { "width": NumWidth, } });
-                this.columnsUpper.push({ header: "Per", rowspan: 2, style: { "width": NumWidth, } });
-
-                for (let month of dbDataSchedule.ColumnsTop) {
-                        this.columnsUpper.push({
-                            header: month.Name,
-                            colspan: month.Value,
-                            style: { "width": (month.Value*35).toString() +"px", }
-                         });
-                }
-                // column Row 2
-                this.columnsLower = new Array;
-
-                for (let name of dbDataSchedule.ColumnsLow) {
-                    this.columnsLower.push({
-                        header: name,
-                       // style: { "width": "25px" }
-                    });
-                }
-
-                // column Main
-                this.columns = new Array;
-
-                this.columns.push({
-                    header: "MachineNo", field: "MachineNo",
-                    style: { "width": McNoWidth }, styleclass: "time-col"
-                });
-                this.columns.push({ header: "JobNo", field: "JobNo", style: { "width": JbNoWidth, } });
-
-                // debug here
-                // console.log("Mode is:", this.mode);
-
-                if (this.mode) {
-                    if (this.mode > 1) {
-                        // debug here
-                        // console.log("Mode is 2:", this.mode);
-                        this.columns.push({
-                            header: "CT/SD", field: "CT/SD",
-                            style: { "width": CtNoWidth, }, isLink: true
-                        });
-                    } else {
-                        // debug here
-                        // console.log("Mode is 3:", this.mode);
-                        this.columns.push({ header: "CT/SD", field: "CT/SD", style: { "width": CtNoWidth, } });
-                    }
-                } else {
-                    // debug here
-                    // console.log("Mode is 4:", this.mode);
-                    this.columns.push({ header: "CT/SD", field: "CT/SD", style: { "width": CtNoWidth, } });
-                }
-                this.columns.push({ header: "Qty", field: "Qty", style: { "width": NumWidth, } });
-                this.columns.push({ header: "Pro", field: "Pro", style: { "width": NumWidth, } });
-                this.columns.push({ header: "Per", field: "Progess", style: { "width": NumWidth, } });
-
-                // debug here
-                // console.log(JSON.stringify(this.columnsLower));
-
-                let i: number = 0;
-                for (let name of dbDataSchedule.ColumnsAll) {
-                    if (name.indexOf("Col") >= -1) {
-                        this.columns.push({
-                            header: this.columnsLower[i] ,field: name, style: { "width": "35px" }, isCol: true ,
-                        });
-                        i++;
-                    }
-                }
-                // debug here
-                // console.log(JSON.stringify(this.columns));
-                // debug here
-                // console.log(JSON.stringify(dbDataSchedule.DataTable));
-
-                this.taskMachines = dbDataSchedule.DataTable.slice();
-
-                this.reloadData();
-            }, error => {
+            .subscribe(dbDataSchedule => this.onSetDataTable(dbDataSchedule), error => {
                 this.columns = new Array;
                 this.taskMachines = new Array;
                 this.reloadData();
             });
+    }
+
+    // set data table
+    onSetDataTable(dbDataSchedule: any): void {
+        this.totalRecords = dbDataSchedule.TotalRow;
+
+        this.columns = new Array;
+        this.columnsUpper = new Array;
+
+        let McNoWidth: string = "100px";
+        let JbNoWidth: string = "170px";
+        let CtNoWidth: string = "350px";
+        let NumWidth: string = "55px";
+
+        // column Row1
+        this.columnsUpper.push({ header: "MachineNo", rowspan: 2, style: { "width": McNoWidth, } });
+        this.columnsUpper.push({ header: "JobNo", rowspan: 2, style: { "width": JbNoWidth, } });
+        this.columnsUpper.push({ header: "CuttingPlan/ShopDrawing | Mat'l | UnitNo", rowspan: 2, style: { "width": CtNoWidth, } });
+        this.columnsUpper.push({ header: "Qty", rowspan: 2, style: { "width": NumWidth, } });
+        this.columnsUpper.push({ header: "Pro", rowspan: 2, style: { "width": NumWidth, } });
+        this.columnsUpper.push({ header: "Per", rowspan: 2, style: { "width": NumWidth, } });
+
+        for (let month of dbDataSchedule.ColumnsTop) {
+            this.columnsUpper.push({
+                header: month.Name,
+                colspan: month.Value,
+                style: { "width": (month.Value * 35).toString() + "px", }
+            });
+        }
+        // column Row 2
+        this.columnsLower = new Array;
+
+        for (let name of dbDataSchedule.ColumnsLow) {
+            this.columnsLower.push({
+                header: name,
+                // style: { "width": "25px" }
+            });
+        }
+
+        // column Main
+        this.columns = new Array;
+
+        this.columns.push({
+            header: "MachineNo", field: "MachineNo",
+            style: { "width": McNoWidth }, styleclass: "time-col"
+        });
+        this.columns.push({ header: "JobNo", field: "JobNo", style: { "width": JbNoWidth, } });
+
+        // debug here
+        // console.log("Mode is:", this.mode);
+
+        if (this.mode) {
+            if (this.mode > 1) {
+                // debug here
+                // console.log("Mode is 2:", this.mode);
+                this.columns.push({
+                    header: "CT/SD", field: "CT/SD",
+                    style: { "width": CtNoWidth, }, isLink: true
+                });
+            } else {
+                // debug here
+                // console.log("Mode is 3:", this.mode);
+                this.columns.push({ header: "CT/SD", field: "CT/SD", style: { "width": CtNoWidth, } });
+            }
+        } else {
+            // debug here
+            // console.log("Mode is 4:", this.mode);
+            this.columns.push({ header: "CT/SD", field: "CT/SD", style: { "width": CtNoWidth, } });
+        }
+        this.columns.push({ header: "Qty", field: "Qty", style: { "width": NumWidth, } });
+        this.columns.push({ header: "Pro", field: "Pro", style: { "width": NumWidth, } });
+        this.columns.push({ header: "Per", field: "Progess", style: { "width": NumWidth, } });
+
+        // debug here
+        // console.log(JSON.stringify(this.columnsLower));
+
+        let i: number = 0;
+        for (let name of dbDataSchedule.ColumnsAll) {
+            if (name.indexOf("Col") >= -1) {
+                this.columns.push({
+                    header: this.columnsLower[i], field: name, style: { "width": "35px" }, isCol: true,
+                });
+                i++;
+            }
+        }
+        // debug here
+        // console.log(JSON.stringify(this.columns));
+        // debug here
+        // console.log(JSON.stringify(dbDataSchedule.DataTable));
+
+        this.taskMachines = dbDataSchedule.DataTable.slice();
+
+        this.reloadData();
     }
 
     // reload data
@@ -340,7 +334,7 @@ export class TaskMachineScheduleComponent implements OnInit, OnDestroy {
                 this.count = (x / this.time) * 100;
                 if (x === this.time) {
                     if (this.reportForm.value) {
-                        console.log("reportForm :", this.reportForm.value);
+                        // console.log("reportForm :", this.reportForm.value);
                         this.onGetTaskMachineWaitAndProcessData(this.reportForm.value);
                     }
                 }
@@ -366,7 +360,14 @@ export class TaskMachineScheduleComponent implements OnInit, OnDestroy {
     resetFilter(): void {
         this.taskMachines = new Array;
         this.buildForm();
-        this.onGetTaskMachineWaitAndProcessData(this.schedule);
+
+        this.reportForm.patchValue({
+            Skip: 0,
+            Take: this.take,
+            PickDate:new Date
+        });
+
+        this.onGetTaskMachineWaitAndProcessData(this.reportForm.value);
     }
 
     // load Data Lazy
@@ -379,11 +380,11 @@ export class TaskMachineScheduleComponent implements OnInit, OnDestroy {
         // filters: FilterMetadata object having field as key and filter value, filter matchMode as value
 
         // imitate db connection over a network
-
+        // console.log("loadDataLazy");
         this.reportForm.patchValue({
             Skip: event.first,
             // mark Take: ((event.first || 0) + (event.rows || 4)),
-            Take: (event.rows || 5),
+            Take: (event.rows || this.take),
         });
     }
 

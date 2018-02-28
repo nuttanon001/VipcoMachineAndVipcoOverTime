@@ -76,6 +76,11 @@ export class MachineDialogComponent
                         });
                 } else {
                     dbTypeMachines = dbTypeMachines.slice();
+                    this.serviceMachine.getByMasterId(dbTypeMachines[0].TypeMachineId)
+                        .subscribe(dbMachine => {
+                            this.machines = dbMachine.slice();
+                            this.templates = dbMachine.slice();
+                        });
                 }
 
                 this.typeMachines = new Array;
@@ -95,14 +100,14 @@ export class MachineDialogComponent
 
     // Selected Type Machine
     onSelectedTypeMachine(selected?: any): void {
-        if (selected) {
+        if (selected.value) {
             // debug here
-            // console.log("selected :", selected);
-            //this.typeMachine = selected.selected[0];
-            //this.serviceMachine.getByMasterId(this.typeMachine.TypeMachineId)
-            //    .subscribe(dbMachine => {
-            //        this.machines = dbMachine.slice();
-            //    });
+            //console.log("selected :", selected);
+
+            this.serviceMachine.getByMasterId(selected.value)
+                .subscribe(dbMachine => {
+                    this.machines = dbMachine.slice();
+                });
         }
     }
 

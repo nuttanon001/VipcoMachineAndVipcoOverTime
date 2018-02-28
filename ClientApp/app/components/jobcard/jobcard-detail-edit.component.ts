@@ -3,7 +3,7 @@ import { Component, Input, Output } from "@angular/core";
 import { OnInit, ViewContainerRef, EventEmitter } from "@angular/core";
 import { FormBuilder, FormGroup, FormControl, Validators } from "@angular/forms";
 // model
-import { JobCardDetail } from "../../models/model.index";
+import { JobCardDetail, CuttingPlan } from "../../models/model.index";
 // service
 import { DialogsService } from "../../services/dialog/dialogs.service";
 import { MaterialService } from "../../services/material/material.service";
@@ -136,11 +136,23 @@ export class JobcardDetailEditComponent implements OnInit {
         this.serviceDialogs.dialogSelectCuttingPlan(this.viewContainerRef, this.ProjectDetailId)
             .subscribe(resultCutting => {
                 if (resultCutting) {
+                    let tempCutting: CuttingPlan | undefined;
+
+                    if (resultCutting.CuttingPlanId < 1 || resultCutting.CuttingPlanId === null) {
+                        tempCutting = {
+                            CuttingPlanId: 0,
+                            CuttingPlanNo: resultCutting.CuttingPlanNo,
+                            Description: resultCutting.Description,
+                            ProjectCodeDetailId: resultCutting.ProjectCodeDetailId,
+                            TypeCuttingPlan:resultCutting.TypeCuttingPlan
+                        }
+                    }
+
                     this.editValueForm.patchValue({
                         CuttingPlanId: resultCutting.CuttingPlanId,
                         CuttingPlanString: resultCutting.CuttingPlanNo,
                         // don't use CuttingPlan: Object.assign({}, resultCutting),
-                        CuttingPlan: Object.assign({}, resultCutting),
+                        CuttingPlan: tempCutting || undefined,//Object.assign({}, resultCutting),
                         Material: resultCutting.MaterialSize ? (resultCutting.MaterialSize || "") + " " + (resultCutting.MaterialGrade || "") : "",
                         Quality: resultCutting.Quantity || 1,
                     });

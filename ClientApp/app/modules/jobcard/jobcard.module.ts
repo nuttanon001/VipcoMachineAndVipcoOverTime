@@ -11,6 +11,7 @@ import { JobCardViewComponent } from "../../components/jobcard/jobcard-view.comp
 import { JobCardEditComponent } from "../../components/jobcard/jobcard-edit.component";
 import { JobCardWaitingComponent } from "../../components/jobcard/jobcard-waiting.component";
 import { JobcardDetailEditComponent } from "../../components/jobcard/jobcard-detail-edit.component";
+import { RequireJobCardDetailScheduleComponent } from "../../components/jobcard/require-jobcard-detail-schedule.component";
 // module
 import { JobCardRouters } from "./jobcard.routing";
 import {
@@ -28,7 +29,8 @@ import {
         JobCardViewComponent,
         JobCardEditComponent,
         JobCardWaitingComponent,
-        JobcardDetailEditComponent
+        JobcardDetailEditComponent,
+        RequireJobCardDetailScheduleComponent
     ],
     imports: [
         // angular

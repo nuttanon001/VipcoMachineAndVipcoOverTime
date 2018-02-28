@@ -1,7 +1,6 @@
 ﻿<div class="master-container">
     <div class="child-col-container">
         <h4>Machine Chart </h4>
-
         <form [formGroup]="reportForm" class="form-content">
             <div>
                 <i class="fa fa-calendar" aria-hidden="true"></i>
@@ -41,15 +40,9 @@
             </div>
         </form>
     </div>
-    <div class="bottom-container my-2">
-        <div class="chart">
-            <canvas baseChart
-                    [data]="chartData"
-                    [labels]="chartLabels"
-                    [options]="chartOption"
-                    [chartType]="chartType"></canvas>
-        </div>
+    <div class="bottom-container my-2" *ngIf="chartData">
+        <!--<base-chart2 ></base-chart2>-->
+        <base-chart2 [chartData]="chartData" [chartLabels]="chartLabel"></base-chart2>
     </div>
-
 </div>
 

@@ -94,15 +94,17 @@ export class JobCardEditComponent
                     }
 
                     if (this.editValue.JobCardMasterId) {
-                        this.serviceDetail.getByMasterId(this.editValue.JobCardMasterId)
+                        this.serviceDetail.getByMasterId(this.editValue.JobCardMasterId,"GetByMasterV2/")
                             .subscribe(dbDetail => {
+                                //debug here
+                                // console.log("JobCardDetail:", JSON.stringify(dbDetail));
 
                                 let level: number = 1;
                                 if (this.serviceAuth.getAuth) {
                                     level = this.serviceAuth.getAuth.LevelUser;
                                 }
                                 if (level < 2) {
-                                    if (dbDetail.find(item => item.JobCardDetailStatus === 2)) {
+                                    if (dbDetail.find(item => item.JobCardDetailStatus === 2 )) {
                                         this.serviceDialogs.context("Warning Message", "คุณไม่สามารถแก้ไขข้อมูล ที่ดำเนินการแล้วได้ !!!",
                                             this.viewContainerRef);
                                         this.lockSave = true;

@@ -9,7 +9,7 @@ import {
     StandardTime,UnitsMeasure,JobCardMaster,
     TaskMachine, ProjectCodeMaster,
     EmployeeGroup, OverTimeMaster,
-    MessageDialog, EmployeeGroupMis
+    MessageDialog, EmployeeGroupMis, OptionSchedule
 } from "../../models/model.index";
 
 // components
@@ -23,7 +23,8 @@ import {
     JobCardWatingDialogComponent, TaskMachineDialogComponent,
     EmployeeGroupDialogComponent, EmployeeByGroupDialogComponent,
     OvertimeDialogComponent, MessageDialogComponent,
-    EmployeeByGroupMisDialogComponent, EmpoyeeGroupmisDialogComponent
+    EmployeeByGroupMisDialogComponent, EmpoyeeGroupmisDialogComponent,
+    JobCardDetailAssignDialogComponent,MachineScheduleDialogComponent
  } from "../../components/dialog/dialog.index";
 
 @Injectable()
@@ -362,4 +363,31 @@ export class DialogsService {
         return dialogRef.afterClosed();
     }
 
+    public dialogJobCardDetailAssing(viewContainerRef: ViewContainerRef, jobCardDetailId: number): Observable<string> {
+        let dialogRef: MatDialogRef<JobCardDetailAssignDialogComponent>;
+        let config: MatDialogConfig = new MatDialogConfig();
+
+        // config
+        config.viewContainerRef = viewContainerRef;
+        config.data = jobCardDetailId;
+        config.hasBackdrop = true;
+
+        // open dialog
+        dialogRef = this.dialog.open(JobCardDetailAssignDialogComponent, config);
+        return dialogRef.afterClosed();
+    }
+
+    public dialogMachineSchedule(viewContainerRef: ViewContainerRef, optionSchedule: OptionSchedule): Observable<boolean> {
+        let dialogRef: MatDialogRef<MachineScheduleDialogComponent>;
+        let config: MatDialogConfig = new MatDialogConfig();
+
+        // config
+        config.viewContainerRef = viewContainerRef;
+        config.data = optionSchedule;
+        config.hasBackdrop = true;
+
+        // open dialog
+        dialogRef = this.dialog.open(MachineScheduleDialogComponent, config);
+        return dialogRef.afterClosed();
+    }
 }

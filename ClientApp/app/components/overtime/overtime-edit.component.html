@@ -157,6 +157,10 @@
                             <span>New Employee OverTime</span>
                         </button>
                     -->
+                    <div class="form-check col-3">
+                        <input class="form-check-input mx-0 p-0" type="checkbox" id="inlineCheckbox1" [(ngModel)]="showStartOT">
+                        <label class="form-check-label ml-3 p-0" for="inlineCheckbox1">เข้างานแบบ กะ</label>
+                    </div>
                 </div>
                 <ngx-datatable class="material"
                                [rows]="editValue.OverTimeDetails"
@@ -175,7 +179,7 @@
                             <input autofocus (blur)="updateValue($event, 'StartOverTime', rowIndex)"
                                    type="number" min="0" max="24"
                                    name="StartOverTime" class="my-input"
-                                   [value]="value" [disabled]="!showStartOT" />
+                                   [value]="value" [disabled]="!showStartOT" [readonly]="CanEditInRequiredOnly" />
                         </ng-template>
                     </ngx-datatable-column>
 

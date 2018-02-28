@@ -9,21 +9,20 @@
         </div>
 
         <form [formGroup]="reportForm" class="form-content" *ngIf="showForm">
-
             <div>
                 <i class="fa fa-search" aria-hidden="true"></i>
                 <input type="text" formControlName="Filter" placeholder="Insert require/machine"
-                       style="width:200px;" >
+                       style="width:200px;">
             </div>
 
-            <div>
+            <div *ngIf="!machineSchedule">
                 <i class="fa fa-chain" aria-hidden="true"></i>
                 <p-dropdown [options]="proMasters" formControlName="JobNo" [filter]="true" matTooltip="Selected location of employee"
                             [style]="{'width':'200px'}" placeholder="Filter by job number">
                 </p-dropdown>
             </div>
 
-            <div>
+            <div *ngIf="!machineSchedule">
                 <i class="fa fa-chain" aria-hidden="true"></i>
                 <p-dropdown [options]="proDetails" formControlName="Level2" [filter]="true" matTooltip="Selected location of employee"
                             [style]="{'width':'200px'}" placeholder="Filter by job level2/3">
@@ -37,24 +36,39 @@
                 </p-dropdown>
             </div>
 
-            <div>
+            <div *ngIf="machineSchedule">
+                <i class="fa fa-magnet" aria-hidden="true"></i>
+                <input type="text" formControlName="MachineCode" placeholder="Select machine for schedule."
+                       (click)="onSelectedMachine()" readonly
+                       style="width:200px;cursor:pointer;" matTooltip="Select machine for schedule.">
+            </div>
+
+            <div *ngIf="!machineSchedule">
                 <i class="fa fa-user-circle" aria-hidden="true"></i>
                 <input type="text" formControlName="CreatorName" placeholder="Select employee creator."
                        (click)="onShowDialog('e')" readonly
                        style="width:200px;cursor:pointer;" matTooltip="Select employee creator">
             </div>
 
-            <div>
+            <div *ngIf="!machineSchedule">
                 <i class="fa fa-group" aria-hidden="true"></i>
                 <p-dropdown [options]="workGroup" formControlName="Require" [filter]="true" matTooltip="Selected group of employee"
                             [style]="{'width':'200px'}" placeholder="Filter by work group of employee">
                 </p-dropdown>
                 <!--<input type="text" formControlName="RequireName" placeholder="Select group employee require."
-                       (click)="onShowDialog('r')" readonly
-                       style="width:200px;cursor:pointer;" matTooltip="Select group employee require">-->
+        (click)="onShowDialog('r')" readonly
+        style="width:200px;cursor:pointer;" matTooltip="Select group employee require">-->
             </div>
 
-            <div style="margin:0 0 10px 0;">
+            <div *ngIf="machineSchedule">
+                <i class="fa fa-calendar" aria-hidden="true"></i>
+                <p-calendar formControlName="PickDate" [showIcon]="true"
+                            id="PickDate" dateFormat="dd/mm/yy" placeholder="  Choose a date"
+                            appendTo="body">
+                </p-calendar>
+            </div>
+
+            <div class="ml-5" style="margin:0 0 10px 0;">
                 <button type="button" mat-mini-fab color="warn" (click)="resetFilter()"
                         matTooltip="Reset all filter" style="margin:4px;">
                     <i class="fa fa-2x fa-minus" aria-hidden="true" style="margin:0px;"></i>
@@ -71,7 +85,7 @@
     </div>
     <div class="bottom-container my-2">
         <p-dataTable [value]="taskMachines" rowGroupMode="rowspan"
-                     [lazy]="true" [rows]="5" [paginator]="true" [rowsPerPageOptions]="[5,10,20]"
+                     [lazy]="true" [rows]="take" [paginator]="true" [rowsPerPageOptions]="[5,10,20]"
                      [totalRecords]="totalRecords" (onLazyLoad)="loadDataLazy($event)"
                      scrollable="true" scrollWidth="94vw" scrollHeight="50vh">
             <p-headerColumnGroup>

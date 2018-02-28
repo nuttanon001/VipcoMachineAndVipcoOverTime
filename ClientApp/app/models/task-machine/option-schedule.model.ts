@@ -9,7 +9,9 @@
     Creator?: string;
     Require?: string;
     TaskMachineId?: number;
+    MachineId?: number;
     // template
     CreatorName?: string;
     RequireName?: string;
+    PickDate?: Date;
 }

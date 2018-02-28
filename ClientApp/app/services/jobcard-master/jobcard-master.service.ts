@@ -12,6 +12,12 @@ export class JobCardMasterService extends BaseRestService<JobCardMaster> {
         super(http, "api/JobCardMaster/");
     }
 
+    // Cutting Plan to JobCardDetail
+    getCheckCuttingPlanWaiting(): Observable<any> {
+        let url: string = `${this.actionUrl}CheckCuttingPlanWaiting/`;
+        return this.http.get(url).map(this.extractData).catch(this.handleError);
+    }
+
     // ===================== JobCard Waiting ===========================\\
 
     // get job card master with MultiKey

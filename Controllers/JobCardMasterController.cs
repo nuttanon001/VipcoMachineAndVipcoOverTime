@@ -178,7 +178,6 @@ namespace VipcoMachine.Controllers
         public async Task<IActionResult> GetJobCardHasWait()
         {
             string Message = "";
-
             try
             {
                 var QueryData = this.repository.GetAllAsQueryable()
@@ -190,7 +189,11 @@ namespace VipcoMachine.Controllers
                                                .Include(x => x.ProjectCodeDetail.ProjectCodeMaster)
                                                .AsQueryable();
 
-                QueryData = QueryData.Where(x => x.JobCardMasterStatus == JobCardMasterStatus.Wait);
+                List<string> Only = new List<string>() { "sm", "lm" };
+
+                QueryData = QueryData.Where(x => (x.JobCardMasterStatus == JobCardMasterStatus.Wait ||
+                                                 x.JobCardMasterStatus == JobCardMasterStatus.InProcess) &&
+                                                  Only.Contains(x.TypeMachine.TypeMachineCode.ToLower()));
 
                 var GetData = await QueryData.ToListAsync();
                 if (GetData.Any())
@@ -236,7 +239,6 @@ namespace VipcoMachine.Controllers
 
                     }
 
-
                     if (dataTable.Any())
                         return new JsonResult(new
                                     {
@@ -244,13 +246,88 @@ namespace VipcoMachine.Controllers
                                         DataTable = dataTable
                                     }, this.DefaultJsonSettings);
                 }
-
             }
             catch (Exception ex)
             {
                 Message = $"Has error {ex.ToString()}";
             }
+            return NotFound(new { Error = Message });
+        }
 
+        // GET: api/JobCardMaster/JobCardHasWaitV2
+        [HttpGet("JobCardHasWaitV2")]
+        public async Task<IActionResult> GetJobCardHasWaitV2()
+        {
+            string Message = "";
+            try
+            {
+                var QueryData = this.repository.GetAllAsQueryable()
+                                               .Include(x => x.JobCardDetails)
+                                               .Include(x => x.EmployeeRequire)
+                                               .Include(x => x.EmployeeWrite)
+                                               .Include(x => x.TypeMachine)
+                                               .Include(x => x.EmployeeGroup)
+                                               .Include(x => x.ProjectCodeDetail.ProjectCodeMaster)
+                                               .AsQueryable();
+
+                QueryData = QueryData.Where(x => x.JobCardMasterStatus == JobCardMasterStatus.Wait);
+
+                var GetData = await QueryData.ToListAsync();
+                if (GetData.Any())
+                {
+                    var dataTable = new List<IDictionary<String, Object>>();
+                    List<string> columns = new List<string>() { "GroupMachine", "Employee" };
+
+                    foreach (var item in GetData.Where(x => x.JobCardDate != null).OrderBy(x => x.JobCardDate).GroupBy(x => x.JobCardDate.Value.Date)
+                                                            .Select(x => x.Key))
+                    {
+                        columns.Add(item.ToString("dd/MM/yy"));
+                    }
+
+                    foreach (var groupMachine in GetData.GroupBy(x => x.TypeMachine))
+                    {
+                        foreach (var dataByEmp in groupMachine.GroupBy(x => x.EmployeeWrite))
+                        {
+                            if (dataByEmp == null)
+                                continue;
+                            else
+                            {
+                                IDictionary<String, Object> rowData = new ExpandoObject();
+                                var EmployeeReq = dataByEmp.Key != null ? $"{(dataByEmp?.Key.NameThai ?? "")}" : "No-Data";
+                                // add column time
+                                rowData.Add(columns[1], EmployeeReq);
+                                foreach (var item in dataByEmp)
+                                {
+                                    string TypeCode = item.TypeMachine == null ? "No-Data" : item.TypeMachine.TypeMachineCode;
+                                    // if don't have type add item to rowdata
+                                    if (!rowData.Keys.Any(x => x == "GroupMachine"))
+                                        rowData.Add(columns[0], TypeCode);
+
+                                    var key = columns.Where(y => y.Contains(item.JobCardDate.Value.ToString("dd/MM/yy"))).FirstOrDefault();
+                                    // if don't have data add it to rowData
+                                    if (!rowData.Keys.Any(x => x == key))
+                                        rowData.Add(key, $"คลิกที่ไอคอน เพื่อแสดงข้อมูล#{item.JobCardMasterId}");
+                                    else
+                                        rowData[key] += $"#{item.JobCardMasterId}";
+                                }
+                                dataTable.Add(rowData);
+                            }
+                        }
+
+                    }
+
+                    if (dataTable.Any())
+                        return new JsonResult(new
+                        {
+                            Columns = columns,
+                            DataTable = dataTable
+                        }, this.DefaultJsonSettings);
+                }
+            }
+            catch (Exception ex)
+            {
+                Message = $"Has error {ex.ToString()}";
+            }
             return NotFound(new { Error = Message });
         }
 
@@ -347,11 +424,11 @@ namespace VipcoMachine.Controllers
         public async Task<IActionResult> CheckCuttingPlanWaiting()
         {
             var Message = "Not found Cutting plan waiting.";
-
             try
             {
                 var hasCuttingPlanWaiting = await this.repositoryCut.GetAllAsQueryable()
                                                       .Where(x => !x.JobCardDetails.Any() && x.TypeCuttingPlan == 1)
+                                                      .Include(x => x.JobCardDetails)
                                                       .AsNoTracking()
                                                       .ToListAsync();
 
@@ -396,13 +473,14 @@ namespace VipcoMachine.Controllers
                             }
                         }
                     }
+
+                    return new JsonResult(new { Complate = true }, this.DefaultJsonSettings);
                 }
             }
             catch(Exception ex)
             {
                 Message = $"Has error {ex.ToString()}";
             }
-
             return NotFound(new { Error = Message });
         }
 
@@ -740,7 +818,7 @@ namespace VipcoMachine.Controllers
                     // create file name for file
                     string FileNameForRef = $"{DateTime.Now.ToString("ddMMyyhhmmssfff")}{ Path.GetExtension(FileName).ToLower()}";
                     // full path to file in temp location
-                    var filePath = Path.Combine(this.appEnvironment.WebRootPath + "\\files", FileNameForRef);
+                    var filePath = Path.Combine(this.appEnvironment.WebRootPath + "/files", FileNameForRef);
 
                     if (formFile.Length > 0)
                     {

@@ -160,6 +160,7 @@ namespace VipcoMachine.Controllers
         {
             var QueryData = this.repository.GetAllAsQueryable()
                                            .Include(x => x.ProjectCodeDetail.ProjectCodeMaster)
+                                           .AsNoTracking()
                                            .AsQueryable();
 
             // Where
