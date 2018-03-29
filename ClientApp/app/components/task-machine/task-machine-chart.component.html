@@ -2,10 +2,17 @@
     <div class="child-col-container">
         <h4>Machine Chart </h4>
         <form [formGroup]="reportForm" class="form-content">
+            <div style="margin-left:25px;">
+                <i class="fa fa-chain" aria-hidden="true"></i>
+                <p-dropdown [options]="chartMode" formControlName="ChartMode" [filter]="true" matTooltip="Selected chart mode"
+                            [style]="{'width':'250px'}" placeholder="Selected chart mode">
+                </p-dropdown>
+            </div>
+
             <div>
                 <i class="fa fa-calendar" aria-hidden="true"></i>
                 <p-calendar formControlName="StartDate" [showIcon]="true"
-                            id="StartDate" dateFormat="dd/mm/yy" placeholder="  Choose a date"
+                            id="StartDate" dateFormat="M/yy" placeholder="  Choose a date"
                             appendTo="body">
                     <!--[maxDate]="reportForm.controls.EndDate.value"-->
                 </p-calendar>
@@ -13,7 +20,7 @@
             <div style="margin-left:25px;">
                 <i class="fa fa-calendar" aria-hidden="true"></i>
                 <p-calendar formControlName="EndDate" [showIcon]="true"
-                            id="EndDate" dateFormat="dd/mm/yy" placeholder="  Choose a date"
+                            id="EndDate" dateFormat="M/yy" placeholder="  Choose a date"
                             appendTo="body">
                     <!--[minDate]="editValueForm.controls.StartDate.value"-->
                 </p-calendar>
@@ -26,11 +33,11 @@
             </div>
 
             <!--<div>
-                <i class="fa fa-chain" aria-hidden="true"></i>
-                <p-dropdown [options]="machines" formControlName="MachineId" [filter]="true" matTooltip="Selected machine"
-                            [style]="{'width':'250px'}" placeholder="Filter by machine">
-                </p-dropdown>
-            </div>-->
+        <i class="fa fa-chain" aria-hidden="true"></i>
+        <p-dropdown [options]="machines" formControlName="MachineId" [filter]="true" matTooltip="Selected machine"
+                    [style]="{'width':'250px'}" placeholder="Filter by machine">
+        </p-dropdown>
+    </div>-->
 
             <div>
                 <button type="button" mat-mini-fab color="warn" (click)="resetFilter()"
@@ -42,7 +49,8 @@
     </div>
     <div class="bottom-container my-2" *ngIf="chartData">
         <!--<base-chart2 ></base-chart2>-->
-        <base-chart2 [chartData]="chartData" [chartLabels]="chartLabel"></base-chart2>
+        <base-chart2 [newChartLabel]="chartLabel" [newChartData]="chartData" 
+                     [xAxesLabel]="xLabel" [yAxesLabel]="yLabel"></base-chart2>
     </div>
 </div>
 

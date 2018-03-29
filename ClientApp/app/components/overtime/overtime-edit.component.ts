@@ -94,16 +94,16 @@ export class OvertimeEditComponent
                         this.service.getOneKeyNumber(this.editValue.LastOverTimeId)
                             .subscribe(dbLastMaster => {
                                 this.lastOverTimeMaster = dbLastMaster;
-                                if (this.lastOverTimeMaster) {
-                                    if (this.lastOverTimeMaster.OverTimeStatus) {
-                                        if (this.lastOverTimeMaster.OverTimeStatus !== 3) {
-                                            this.canNotSave = "Last OverTime was Incompleted. This overtime can't save.";
-                                            this.serviceDialogs.error("Error Message",
-                                                "Last OverTime was Incompleted. This overtime can't save.",
-                                                this.viewContainerRef);
-                                        }
-                                    }
-                                }
+                                // if (this.lastOverTimeMaster) {
+                                //    if (this.lastOverTimeMaster.OverTimeStatus) {
+                                //        if (this.lastOverTimeMaster.OverTimeStatus !== 3) {
+                                //            this.canNotSave = "Last OverTime was Incompleted. This overtime can't save.";
+                                //            this.serviceDialogs.error("Error Message",
+                                //                "Last OverTime was Incompleted. This overtime can't save.",
+                                //                this.viewContainerRef);
+                                //        }
+                                //    }
+                                // }
                             });
                     }
                 }, error => console.error(error), () => this.defineData());
@@ -207,10 +207,10 @@ export class OvertimeEditComponent
         const controlDate: AbstractControl | null = form.get("OverTimeDate");
         const controlMis: AbstractControl | null = form.get("GroupMIS");
 
-        if (controlMis) {
-            let valueMis: string = controlMis.value;
-            this.showStartOT = valueMis.indexOf("000005") !== -1;
-        }
+        // if (controlMis) {
+        //    let valueMis: string = controlMis.value;
+        //    this.showStartOT = valueMis.indexOf("000005") !== -1;
+        // }
 
         if (this.editValue.OverTimeStatus === 1) {
             if (controlMaster && controlMis) {

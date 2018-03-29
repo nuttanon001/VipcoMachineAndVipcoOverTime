@@ -51,7 +51,7 @@ export class EmployeeMasterComponent
     changeTimezone(value: Employee): Employee {
         let zone: string = "Asia/Bangkok";
         if (value !== null) {
-            console.log("Employee:", value);
+            // console.log("Employee:", value);
         }
         return value;
     }
@@ -65,6 +65,12 @@ export class EmployeeMasterComponent
         }
         // only SubContractor employee
         scroll.Where = "SubContractor";
+
+        if (this.serverAuth.getAuth) {
+            if (this.serverAuth.getAuth.LevelUser > 2) {
+                scroll.Where = "";
+            }
+        }
 
         this.scroll = scroll;
         this.service.getAllWithScroll(scroll)

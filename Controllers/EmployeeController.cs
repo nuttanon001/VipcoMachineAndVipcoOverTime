@@ -24,6 +24,7 @@ namespace VipcoMachine.Controllers
     {
         #region PrivateMenbers
         private IRepository<Employee> repository;
+        private IRepository<EmployeeGroupMIS> repositoryMis;
         private IMapper mapper;
 
         private JsonSerializerSettings DefaultJsonSettings =>
@@ -44,9 +45,10 @@ namespace VipcoMachine.Controllers
 
         #region Constructor
 
-        public EmployeeController(IRepository<Employee> repo, IMapper map)
+        public EmployeeController(IRepository<Employee> repo, IRepository<EmployeeGroupMIS> repoMis, IMapper map)
         {
             this.repository = repo;
+            this.repositoryMis = repoMis;
             this.mapper = map;
         }
 
@@ -242,6 +244,9 @@ namespace VipcoMachine.Controllers
         {
             if (uEmployee != null)
             {
+                if (!string.IsNullOrEmpty(uEmployee.GroupMIS))
+                    uEmployee.GroupName = (await this.repositoryMis.GetAllAsQueryable().FirstOrDefaultAsync(x => x.GroupMIS == uEmployee.GroupMIS)).GroupDesc ?? "";
+
                 return new JsonResult(await this.repository.UpdateAsync(uEmployee, key), this.DefaultJsonSettings);
             }
             return NotFound(new { Error = "Not found employee." });

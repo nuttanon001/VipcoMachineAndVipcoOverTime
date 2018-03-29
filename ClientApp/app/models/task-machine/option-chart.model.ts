@@ -3,4 +3,5 @@
     EndDate?: Date;
     TypeMachineId?: number;
     MachineId?: number;
+    ChartMode?: number;
 }

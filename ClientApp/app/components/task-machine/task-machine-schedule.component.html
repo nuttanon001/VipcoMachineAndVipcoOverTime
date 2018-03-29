@@ -1,5 +1,5 @@
 ﻿<div class="master-container">
-    <div class="child-col-container">
+    <div class="no-print child-col-container">
         <h4>Machine Schedule </h4>
 
         <div class="child-row-container my-1">
@@ -85,7 +85,7 @@
     </div>
     <div class="bottom-container my-2">
         <p-dataTable [value]="taskMachines" rowGroupMode="rowspan"
-                     [lazy]="true" [rows]="take" [paginator]="true" [rowsPerPageOptions]="[5,10,20]"
+                     [lazy]="true" [rows]="take" [paginator]="true" [rowsPerPageOptions]="[5,10,20,50,100]"
                      [totalRecords]="totalRecords" (onLazyLoad)="loadDataLazy($event)"
                      scrollable="true" scrollWidth="94vw" scrollHeight="50vh">
             <p-headerColumnGroup>

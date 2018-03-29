@@ -513,11 +513,18 @@ namespace VipcoMachine.Controllers
                         else
                             QueryData = QueryData.OrderBy(e => e.ProjectCodeMaster.ProjectCode);
                         break;
-                    case "GroupString":
+                    case "GroupMisString":
                         if (Scroll.SortOrder == -1)
                             QueryData = QueryData.OrderByDescending(e => e.EmployeeGroupMIS.GroupDesc);
                         else
                             QueryData = QueryData.OrderBy(e => e.EmployeeGroupMIS.GroupDesc);
+                        break;
+
+                    case "OverTimeDate":
+                        if (Scroll.SortOrder == -1)
+                            QueryData = QueryData.OrderByDescending(e => e.OverTimeDate);
+                        else
+                            QueryData = QueryData.OrderBy(e => e.OverTimeDate);
                         break;
 
                     default:

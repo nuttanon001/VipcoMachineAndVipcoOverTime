@@ -1,27 +1,21 @@
 ﻿using AutoMapper;
-using Newtonsoft.Json;
-
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-
+using Newtonsoft.Json;
+using ReportClasses;
 using System;
-using System.IO;
-using System.Net;
-using System.Linq;
+using System.Collections.Generic;
 using System.Dynamic;
+using System.IO;
+using System.Linq;
+using System.Linq.Expressions;
 using System.Net.Mail;
 using System.Threading.Tasks;
-using System.Linq.Expressions;
-using System.Collections.Generic;
-
-using VipcoMachine.Models;
 using VipcoMachine.Helpers;
-using VipcoMachine.ViewModels;
+using VipcoMachine.Models;
 using VipcoMachine.Services.Interfaces;
-
-using ReportClasses;
+using VipcoMachine.ViewModels;
 
 namespace VipcoMachine.Controllers
 {
@@ -51,6 +45,7 @@ namespace VipcoMachine.Controllers
                 PreserveReferencesHandling = PreserveReferencesHandling.Objects,
                 ReferenceLoopHandling = ReferenceLoopHandling.Ignore
             };
+
         private List<MapType> ConverterTableToViewModel<MapType, TableType>(ICollection<TableType> tables)
         {
             var listData = new List<MapType>();
@@ -58,16 +53,17 @@ namespace VipcoMachine.Controllers
                 listData.Add(this.mapper.Map<TableType, MapType>(item));
             return listData;
         }
-        private async Task<JobCardDetail> UpdateJobCard(int JobCardDetailId,string Create, JobCardDetailStatus Status = JobCardDetailStatus.Task)
+
+        private async Task<JobCardDetail> UpdateJobCard(int JobCardDetailId, string Create, JobCardDetailStatus Status = JobCardDetailStatus.Task)
         {
-            var Includes = new List<string> { "JobCardMaster"  };
-            var jobCardDetail = await this.repositoryJobDetail.GetAsynvWithIncludes(JobCardDetailId, "JobCardDetailId",Includes);
+            var Includes = new List<string> { "JobCardMaster" };
+            var jobCardDetail = await this.repositoryJobDetail.GetAsynvWithIncludes(JobCardDetailId, "JobCardDetailId", Includes);
             if (jobCardDetail != null)
             {
                 jobCardDetail.JobCardDetailStatus = Status;
                 jobCardDetail.ModifyDate = DateTime.Now;
                 jobCardDetail.Modifyer = Create;
-                if (await this.repositoryJobDetail.UpdateAsync(jobCardDetail,jobCardDetail.JobCardDetailId) != null)
+                if (await this.repositoryJobDetail.UpdateAsync(jobCardDetail, jobCardDetail.JobCardDetailId) != null)
                 {
                     // Check JobCardMaster Status
                     if (jobCardDetail.JobCardMasterId != null)
@@ -76,10 +72,10 @@ namespace VipcoMachine.Controllers
                                                                         .Include(x => x.JobCardDetails)
                                                                         .FirstOrDefaultAsync(x => x.JobCardMasterId == jobCardDetail.JobCardMasterId);
 
-                                                                                         // x.JobCardDetails.Any(z => z.JobCardDetailStatus == JobCardDetailStatus.Wait));
+                        // x.JobCardDetails.Any(z => z.JobCardDetailStatus == JobCardDetailStatus.Wait));
                         if (jobCardMaster != null)
                         {
-                            jobCardMaster.JobCardMasterStatus = jobCardMaster.JobCardDetails.Any(z => z.JobCardDetailStatus == JobCardDetailStatus.Wait) 
+                            jobCardMaster.JobCardMasterStatus = jobCardMaster.JobCardDetails.Any(z => z.JobCardDetailStatus == JobCardDetailStatus.Wait)
                                                                 ? JobCardMasterStatus.InProcess : JobCardMasterStatus.Complete;
                             jobCardMaster.ModifyDate = DateTime.Now;
                             jobCardMaster.Modifyer = Create;
@@ -88,33 +84,37 @@ namespace VipcoMachine.Controllers
                     }
 
                     return jobCardDetail;
+
                     #region Mark
-                        // JobCardMaster status will change manual
-                        //if (jobCardDetail.JobCardMasterId != null)
-                        //{
-                        //    var jobCardMaster = await this.repositoryJobMaster.GetAsynvWithIncludes(jobCardDetail.JobCardMasterId.Value, "JobCardMasterId", Includes);
 
-                        //    if (jobCardMaster != null)
-                        //    {
-                        //        if (!jobCardMaster.JobCardDetails.Any(x => x.JobCardDetailStatus == JobCardDetailStatus.Wait))
-                        //            jobCardMaster.JobCardMasterStatus = JobCardMasterStatus.Complete;
-                        //        else
-                        //        {
-                        //            if (jobCardMaster.JobCardMasterStatus == JobCardMasterStatus.Complete)
-                        //                jobCardMaster.JobCardMasterStatus = JobCardMasterStatus.Wait;
-                        //        }
+                    // JobCardMaster status will change manual
+                    //if (jobCardDetail.JobCardMasterId != null)
+                    //{
+                    //    var jobCardMaster = await this.repositoryJobMaster.GetAsynvWithIncludes(jobCardDetail.JobCardMasterId.Value, "JobCardMasterId", Includes);
 
-                        //        jobCardMaster.ModifyDate = DateTime.Now;
-                        //        jobCardMaster.Modifyer = Create;
-                        //        await this.repositoryJobMaster.UpdateAsync(jobCardMaster, jobCardMaster.JobCardMasterId);
-                        //    }
-                        //}
-                    #endregion
+                    //    if (jobCardMaster != null)
+                    //    {
+                    //        if (!jobCardMaster.JobCardDetails.Any(x => x.JobCardDetailStatus == JobCardDetailStatus.Wait))
+                    //            jobCardMaster.JobCardMasterStatus = JobCardMasterStatus.Complete;
+                    //        else
+                    //        {
+                    //            if (jobCardMaster.JobCardMasterStatus == JobCardMasterStatus.Complete)
+                    //                jobCardMaster.JobCardMasterStatus = JobCardMasterStatus.Wait;
+                    //        }
+
+                    //        jobCardMaster.ModifyDate = DateTime.Now;
+                    //        jobCardMaster.Modifyer = Create;
+                    //        await this.repositoryJobMaster.UpdateAsync(jobCardMaster, jobCardMaster.JobCardMasterId);
+                    //    }
+                    //}
+
+                    #endregion Mark
                 }
             }
 
             return null;
         }
+
         private IEnumerable<DateTime> EachDay(DateTime from, DateTime thru)
         {
             for (var day = from.Date; day.Date <= thru.Date; day = day.AddDays(1))
@@ -126,6 +126,7 @@ namespace VipcoMachine.Controllers
             for (var date = startDate.Date; date.Date <= endDate.Date; date = date.AddDays(1)) yield
             return date;
         }
+
         private async Task<string> GeneratedCode(int JobDetailId, int MachineId)
         {
             if (MachineId > 0 && MachineId > 0)
@@ -185,13 +186,12 @@ namespace VipcoMachine.Controllers
 
                     return ManHour;
                 }
-
             }
 
             return 0;
         }
 
-        private async Task TaskMachineSendMailToEmpRequire(JobCardDetail jobCardDetail,TaskMachine taskMachine)
+        private async Task TaskMachineSendMailToEmpRequire(JobCardDetail jobCardDetail, TaskMachine taskMachine)
         {
             try
             {
@@ -222,15 +222,29 @@ namespace VipcoMachine.Controllers
                     }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 var message = $"Has error {ex.ToString()}";
             }
         }
 
-        #endregion PrivateMenbers
+        public int SunDayInMonth(DateTime thisMonth)
+        {
+            int sunday = 0;
+            int month = thisMonth.Month;
+            int year = thisMonth.Year;
+            int daysThisMonth = DateTime.DaysInMonth(year, month);
+            DateTime beginingOfThisMonth = new DateTime(year, month, 1);
+            for (int i = 0; i < daysThisMonth; i++)
+                if (beginingOfThisMonth.AddDays(i).DayOfWeek == DayOfWeek.Sunday)
+                    sunday++;
+            return sunday;
+        }
+
+        #endregion PrivateMembers
 
         #region Constructor
+
         public TaskMachineController(
                 IRepository<TaskMachine> repo,
                 IRepository<NoTaskMachine> repoNo,
@@ -257,7 +271,7 @@ namespace VipcoMachine.Controllers
             this.validEmail = new ValidEmail();
         }
 
-        #endregion
+        #endregion Constructor
 
         #region GET
 
@@ -265,13 +279,13 @@ namespace VipcoMachine.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var Includes = new List<string> { "Machine" , "JobCardDetail" , "Employee" };
+            var Includes = new List<string> { "Machine", "JobCardDetail", "Employee" };
             return new JsonResult(
                       this.ConverterTableToViewModel<TaskMachineViewModel, TaskMachine>(await this.repository.GetAllWithInclude2Async(Includes)),
                       this.DefaultJsonSettings);
             //return new JsonResult(await this.repository.GetAllAsync(), this.DefaultJsonSettings);
         }
-       
+
         // GET: api/TaskMachine/5
         [HttpGet("{key}")]
         public async Task<IActionResult> Get(int key)
@@ -289,23 +303,24 @@ namespace VipcoMachine.Controllers
         [HttpGet("NoTaskMachine")]
         public async Task<IActionResult> GetNoTaskMachine()
         {
-            var Includes = new List<string> { "Employee", "EmployeeGroup", "EmployeeGroupMIS"};
+            var Includes = new List<string> { "Employee", "EmployeeGroup", "EmployeeGroupMIS" };
             return new JsonResult(
                       this.ConverterTableToViewModel<NoTaskMachineViewModel, NoTaskMachine>(await this.repositoryNoTask.GetAllWithInclude2Async(Includes)),
                       this.DefaultJsonSettings);
         }
+
         // GET: api/TaskMachine/NoTaskMachine/5
         [HttpGet("NoTaskMachine/{key}")]
         public async Task<IActionResult> GetNoTaskMachine(int key)
         {
-            var Includes = new List<string> { "Employee", "EmployeeGroup" ,"EmployeeGroupMIS"};
+            var Includes = new List<string> { "Employee", "EmployeeGroup", "EmployeeGroupMIS" };
             return new JsonResult(
                       this.mapper.Map<NoTaskMachine, NoTaskMachineViewModel>(await this.repositoryNoTask.GetAsynvWithIncludes(key, "NoTaskMachineId", Includes)),
                       this.DefaultJsonSettings);
             // return new JsonResult(await this.repository.GetAsync(key), this.DefaultJsonSettings);
         }
 
-        #endregion
+        #endregion NoTaskMachine
 
         // GET: api/TaskMachine/GetTaskMachineHasOverTime
         [HttpGet("GetTaskMachineHasOverTime/{key}")]
@@ -333,9 +348,10 @@ namespace VipcoMachine.Controllers
             return NotFound(new { Error = "Not found workgroup." });
         }
 
-        #endregion
+        #endregion GET
 
         #region POST
+
         // POST: api/TaskMachine/CheckMachineTime
         [HttpPost("CheckMachineTime")]
         public async Task<IActionResult> CheclMachineTime([FromBody] TaskMachine taskMachine)
@@ -350,7 +366,6 @@ namespace VipcoMachine.Controllers
                         taskMachine.PlannedEndDate != null &&
                         taskMachine.MachineId != null)
                     {
-
                         taskMachine.PlannedStartDate = taskMachine.PlannedStartDate.AddHours(7);
                         taskMachine.PlannedEndDate = taskMachine.PlannedEndDate.AddHours(7);
 
@@ -366,7 +381,7 @@ namespace VipcoMachine.Controllers
                     }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Message = $"Has error {ex.ToString()}";
             }
@@ -446,7 +461,7 @@ namespace VipcoMachine.Controllers
                             QueryData = QueryData.Where(x => x.TaskMachineStatus == TaskMachineStatus.Wait ||
                                                              x.TaskMachineStatus == TaskMachineStatus.Process);
                     }
-                    // Set order planned end date 
+                    // Set order planned end date
                     QueryData = QueryData.OrderByDescending(x => x.PlannedStartDate);
 
                     TotalRow = await QueryData.CountAsync();
@@ -515,7 +530,7 @@ namespace VipcoMachine.Controllers
                         rowData.Add("MachineNo", Data?.Machine?.MachineCode ?? "-");
                         rowData.Add("JobNo", JobNo);
                         rowData.Add("CT/SD", Data?.JobCardDetail?.CuttingPlan?.CuttingPlanNo +
-                            (string.IsNullOrEmpty(Data?.JobCardDetail?.Material.Trim()) ? "" : $" | {Data?.JobCardDetail?.Material.Trim()}" ) +
+                            (string.IsNullOrEmpty(Data?.JobCardDetail?.Material.Trim()) ? "" : $" | {Data?.JobCardDetail?.Material.Trim()}") +
                             (Data?.JobCardDetail?.UnitNo == null ? "" : $" | UnitNo.{Data?.JobCardDetail?.UnitNo}"));
                         rowData.Add("Qty", Qty);
                         rowData.Add("Pro", Pro);
@@ -541,7 +556,6 @@ namespace VipcoMachine.Controllers
                             {
                                 if (ColumnGroupBtm.Any(x => x.Key == day.Date))
                                 {
-
                                     var Col = ColumnGroupBtm.FirstOrDefault(x => x.Key == day.Date);
 
                                     // if Have Plan change value to 3
@@ -573,7 +587,6 @@ namespace VipcoMachine.Controllers
                         DataTable = DataTable
                     }, this.DefaultJsonSettings);
                 }
-
             }
             catch (Exception ex)
             {
@@ -641,9 +654,9 @@ namespace VipcoMachine.Controllers
                     if (Schedule.PickDate.HasValue)
                         Schedule.PickDate = Schedule.PickDate.Value.AddHours(7);
 
-                        QueryData = QueryData.Where(x =>
-                            x.PlannedStartDate.Date >= Schedule.PickDate.Value.Date ||
-                            x.PlannedEndDate.Date >= Schedule.PickDate.Value.Date);
+                    QueryData = QueryData.Where(x =>
+                        x.PlannedStartDate.Date >= Schedule.PickDate.Value.Date ||
+                        x.PlannedEndDate.Date >= Schedule.PickDate.Value.Date);
 
                     TotalRow = await QueryData.CountAsync();
                     // Option Skip and Task
@@ -661,6 +674,7 @@ namespace VipcoMachine.Controllers
                     List<string> ColumnsAll = new List<string>();
 
                     #region Date for schedule
+
                     // PlanDate
                     List<DateTime?> ListDate = new List<DateTime?>()
                     {
@@ -706,10 +720,11 @@ namespace VipcoMachine.Controllers
                         ColumnGroupBtm.Add(day.Date, $"Col{countCol.ToString("00")}");
                         countCol++;
                     }
-                    #endregion
-                    
+
+                    #endregion Date for schedule
+
                     var DataTable = new List<IDictionary<String, Object>>();
-                    foreach(var Machine in GetData.GroupBy(x => x.MachineId))
+                    foreach (var Machine in GetData.GroupBy(x => x.MachineId))
                     {
                         // OrderBy(x => x.Machine.TypeMachineId).ThenBy(x => x.Machine.MachineCode)
                         foreach (var Data in Machine.OrderBy(x => x.PlannedStartDate).ThenBy(x => x.PlannedEndDate))
@@ -718,13 +733,13 @@ namespace VipcoMachine.Controllers
 
                             var Pro = Data.CurrentQuantity ?? 0;
                             var Qty = Data.TotalQuantity ?? 0;
-                            
+
                             // var JobNo = $"{Data?.JobCardDetail?.JobCardMaster?.ProjectCodeDetail?.ProjectCodeMaster.ProjectCode ?? "-"}";
                             var JobNo = $"{Data?.JobCardDetail?.JobCardMaster?.ProjectCodeDetail?.ProjectCodeMaster.ProjectCode ?? "-"}/{Data?.JobCardDetail?.JobCardMaster?.ProjectCodeDetail?.ProjectCodeDetailCode ?? "-"}";
                             // add column time
                             rowData.Add("MachineNo", Data.Machine.MachineCode ?? "-");
                             rowData.Add("JobNo", JobNo);
-                            rowData.Add("CT/SD", Data?.JobCardDetail?.CuttingPlan?.CuttingPlanNo); 
+                            rowData.Add("CT/SD", Data?.JobCardDetail?.CuttingPlan?.CuttingPlanNo);
                             rowData.Add("Qty", Qty);
                             rowData.Add("Pro", Pro);
                             rowData.Add("Progess", Math.Round(((double)(Pro * 100) / Qty), 1) + "%");
@@ -749,7 +764,6 @@ namespace VipcoMachine.Controllers
                                 {
                                     if (ColumnGroupBtm.Any(x => x.Key == day.Date))
                                     {
-
                                         var Col = ColumnGroupBtm.FirstOrDefault(x => x.Key == day.Date);
 
                                         // if Have Plan change value to 3
@@ -836,6 +850,7 @@ namespace VipcoMachine.Controllers
                         else
                             QueryData = QueryData.OrderBy(e => e.JobCardDetail.CuttingPlan.CuttingPlanNo);
                         break;
+
                     case "TaskMachineName":
                         if (Scroll.SortOrder == -1)
                             QueryData = QueryData.OrderByDescending(e => e.TaskMachineName);
@@ -852,7 +867,7 @@ namespace VipcoMachine.Controllers
 
                 return new JsonResult(new ScrollDataViewModel<TaskMachine>
                         (Scroll,
-                        this.ConverterTableToViewModel<TaskMachineViewModel,TaskMachine>(await QueryData.AsNoTracking().ToListAsync())),
+                        this.ConverterTableToViewModel<TaskMachineViewModel, TaskMachine>(await QueryData.AsNoTracking().ToListAsync())),
                         this.DefaultJsonSettings);
             }
             catch (Exception ex)
@@ -987,7 +1002,7 @@ namespace VipcoMachine.Controllers
 
                 // Send Mail
                 if (jobCardDetail != null)
-                    await this.TaskMachineSendMailToEmpRequire(jobCardDetail,InsertComplate);
+                    await this.TaskMachineSendMailToEmpRequire(jobCardDetail, InsertComplate);
 
                 return new JsonResult(InsertComplate, this.DefaultJsonSettings);
             }
@@ -1022,9 +1037,10 @@ namespace VipcoMachine.Controllers
             return NotFound(new { Error = Message });
         }
 
-        #endregion
+        #endregion POST
 
         #region PUT
+
         // PUT: api/TaskMachine/5
         [HttpPut("{key}")]
         public async Task<IActionResult> PutByNumber(int key, [FromBody]TaskMachine uTaskMachine)
@@ -1072,7 +1088,7 @@ namespace VipcoMachine.Controllers
                     {
                         if (beforUpdate.JobCardDetailId != uTaskMachine.JobCardDetailId)
                         {
-                            await this.UpdateJobCard(beforUpdate.JobCardDetailId, uTaskMachine.Modifyer,JobCardDetailStatus.Wait);
+                            await this.UpdateJobCard(beforUpdate.JobCardDetailId, uTaskMachine.Modifyer, JobCardDetailStatus.Wait);
                         }
                     }
                 }
@@ -1136,7 +1152,7 @@ namespace VipcoMachine.Controllers
                 uNoTaskMachine.ModifyDate = DateTime.Now;
                 uNoTaskMachine.Modifyer = uNoTaskMachine.Modifyer ?? "Someone";
 
-                var UpdateComplate = await this.repositoryNoTask.UpdateAsync(uNoTaskMachine,key);
+                var UpdateComplate = await this.repositoryNoTask.UpdateAsync(uNoTaskMachine, key);
                 if (UpdateComplate != null)
                 {
                     if (UpdateComplate.JobCardDetailId > 0)
@@ -1147,16 +1163,19 @@ namespace VipcoMachine.Controllers
             }
             return NotFound(new { Error = Message });
         }
-        #endregion
+
+        #endregion PUT
 
         #region DELETE
+
         // DELETE: api/TaskMachine/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
             return new JsonResult(await this.repository.DeleteAsync(id), this.DefaultJsonSettings);
         }
-        #endregion
+
+        #endregion DELETE
 
         #region TEST
 
@@ -1165,7 +1184,7 @@ namespace VipcoMachine.Controllers
             return NotFound(new { Error = "" });
         }
 
-        #endregion
+        #endregion TEST
 
         #region REPORT
 
@@ -1181,7 +1200,7 @@ namespace VipcoMachine.Controllers
                     var paper = await this.repository.GetAsynvWithIncludes(TaskMachineId, "TaskMachineId", Includes);
                     if (paper != null)
                     {
-                        Includes = new List<string> { "ProjectCodeDetail.ProjectCodeMaster","EmployeeRequire","EmployeeWrite","JobCardMasterHasAttachs" };
+                        Includes = new List<string> { "ProjectCodeDetail.ProjectCodeMaster", "EmployeeRequire", "EmployeeWrite", "JobCardMasterHasAttachs" };
                         var jobMaster = await this.repositoryJobMaster.GetAsynvWithIncludes(paper?.JobCardDetail?.JobCardMasterId ?? 0, "JobCardMasterId", Includes);
                         if (jobMaster != null)
                         {
@@ -1238,22 +1257,25 @@ namespace VipcoMachine.Controllers
                                         case 1:
                                             PaperModel.Employee1 = emp.Employee.NameThai;
                                             break;
+
                                         case 2:
                                             PaperModel.Employee2 = emp.Employee.NameThai;
                                             break;
+
                                         case 3:
                                             PaperModel.Employee3 = emp.Employee.NameThai;
                                             break;
+
                                         case 4:
                                             PaperModel.Employee4 = emp.Employee.NameThai;
                                             break;
+
                                         default:
                                             break;
                                     }
                                     row++;
                                 }
                             }
-
 
                             var stream = onePage.Export<PaperTaskMachine>(PaperModel, "PaperTaskMachine2");
 
@@ -1281,7 +1303,7 @@ namespace VipcoMachine.Controllers
             {
                 if (TaskMachineId > 0)
                 {
-                    var Includes = new List<string> {"TaskMachineHasOverTimes.Employee","Machine" };
+                    var Includes = new List<string> { "TaskMachineHasOverTimes.Employee", "Machine" };
                     var taskMachine = await this.repository.GetAsynvWithIncludes(TaskMachineId, "TaskMachineId", Includes);
 
                     if (taskMachine != null)
@@ -1349,11 +1371,12 @@ namespace VipcoMachine.Controllers
 
             return NotFound(new { Error = Message });
         }
-        #endregion
+
+        #endregion REPORT
 
         #region MAIL
 
-        private async Task SendMailMessage(string MailFrom,string NameFrom,List<string> MailTos,string Message,string Subject)
+        private async Task SendMailMessage(string MailFrom, string NameFrom, List<string> MailTos, string Message, string Subject)
         {
             try
             {
@@ -1375,19 +1398,20 @@ namespace VipcoMachine.Controllers
                 // Add MailAddress To
                 MailTos.ForEach(item => mailMessage.To.Add(item));
                 await client.SendMailAsync(mailMessage);
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 var message = $"Has error {ex.ToString()}";
             }
-
         }
 
-        #endregion
+        #endregion MAIL
 
         #region ChartData
+
         // POST: api/TaskMachine/TaskMachineChartData
-        [HttpPost("TaskMachineChartData")]
-        public async Task<IActionResult> TaskMachineChartData([FromBody]OptionChartViewModel ChartOption)
+        [HttpPost("TaskMachineChartDataProduct")]
+        public async Task<IActionResult> TaskMachineChartDataProduct([FromBody]OptionChartViewModel ChartOption)
         {
             var Message = "Not been found data.";
 
@@ -1401,15 +1425,23 @@ namespace VipcoMachine.Controllers
                                                    .OrderBy(x => x.Machine.MachineCode)
                                                    .AsQueryable();
 
+                    if (ChartOption.TypeMachineId.HasValue)
+                    {
+                        QueryData = QueryData.Where(x => x.Machine.TypeMachineId == ChartOption.TypeMachineId);
+                    }
+
                     var Labels = new List<string>();
                     var HasData = new List<ChartDataViewModel>();
 
                     if (ChartOption.EndDate.HasValue && ChartOption.StartDate.HasValue)
                     {
-                        var EndData = new DateTime(ChartOption.EndDate.Value.Year, ChartOption.EndDate.Value.Month, 
+                        ChartOption.StartDate = ChartOption.StartDate.Value.AddHours(7);
+                        ChartOption.EndDate = ChartOption.EndDate.Value.AddHours(7);
+
+                        var EndData = new DateTime(ChartOption.EndDate.Value.Year, ChartOption.EndDate.Value.Month,
                                           DateTime.DaysInMonth(ChartOption.EndDate.Value.Year, ChartOption.EndDate.Value.Month)); //DateTime.Today;
                         var StartData = new DateTime(ChartOption.StartDate.Value.Year, ChartOption.StartDate.Value.Month, 1);
-                        
+
                         // Filter Start and End Date
                         QueryData = QueryData.Where(x => x.PlannedStartDate.Date >= StartData &&
                                                          x.PlannedEndDate.Date <= EndData);
@@ -1419,49 +1451,53 @@ namespace VipcoMachine.Controllers
                                                   .TakeWhile(date => date <= EndData)
                                                   .ToList();
                         // Add Labels
-                        ListMonth.ForEach(x => Labels.Add(x.Value.ToString("MMMM")));
-
+                        // ListMonth.ForEach(x => Labels.Add(x.Value.ToString("MMMM")));
                         // Task Machine
-                        foreach (var Machine in await QueryData.GroupBy(x => x.Machine).ToListAsync())
+
+                        // var PlanChartData = new List<double>();
+                        var Machines = await QueryData.GroupBy(x => x.Machine).ToListAsync();
+                        // Machines.ForEach(x => Labels.Add(x.Key.MachineCode));
+
+                        foreach (var PickMonth in ListMonth)
                         {
                             var ActualChartData = new List<double>();
-                            var PlanChartData = new List<double>();
-
-                            foreach (var PickMonth in ListMonth)
+                            foreach (var Machine in Machines.OrderBy(x => x.Key.MachineCode))
                             {
-                                var ActualData = Machine.Where(x => x.ActualStartDate != null && x.ActualEndDate != null && 
+                                if (!Labels.Any(x => x == Machine.Key.MachineCode))
+                                    Labels.Add(Machine.Key.MachineCode);
+
+                                var ActualData = Machine.Where(x => x.ActualStartDate != null &&
                                                                     x.ActualStartDate.Value.Month == PickMonth.Value.Month &&
                                                                     x.ActualStartDate.Value.Year == PickMonth.Value.Year);
 
-                                var PlanData1 = Machine.Where(x => x.PlannedStartDate.Month == PickMonth.Value.Month &&
-                                                                   x.PlannedStartDate.Year == PickMonth.Value.Year);
+                                //var PlanData1 = Machine.Where(x => x.PlannedStartDate.Month == PickMonth.Value.Month &&
+                                //                                   x.PlannedStartDate.Year == PickMonth.Value.Year);
 
                                 ActualChartData.Add(ActualData.Sum(x => x.CurrentQuantity ?? 0));
-                                PlanChartData.Add(PlanData1.Sum(x => x.TotalQuantity ?? 0));
+                                // PlanChartData.Add(PlanData1.Sum(x => x.TotalQuantity ?? 0));
                             }
-
                             HasData.Add(new ChartDataViewModel
                             {
-                               Label = $"{Machine.Key.MachineCode}/Actual", 
-                               DataChart = ActualChartData,
-                            });
-
-                            HasData.Add(new ChartDataViewModel
-                            {
-                                Label = $"{Machine.Key.MachineCode}/Plan",
-                                DataChart = PlanChartData,
+                                Label = $"{PickMonth.Value.ToString("MMM yy")}",
+                                DataChart = ActualChartData,
                             });
                         }
 
+                        //HasData.Add(new ChartDataViewModel
+                        //{
+                        //    Label = $"{Machine.Key.MachineCode}/Plan",
+                        //    DataChart = PlanChartData,
+                        //});
+
                         return new JsonResult(new
                         {
-                            Labels = Labels,
-                            Datas = HasData
+                            Labels = Labels.OrderBy(x => x),
+                            Datas = HasData,
                         }, this.DefaultJsonSettings);
                     }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Message = $"Has error {ex.ToString()}";
             }
@@ -1469,6 +1505,113 @@ namespace VipcoMachine.Controllers
             return NotFound(new { Error = Message });
         }
 
-        #endregion
+        [HttpPost("TaskMachineChartDataWorkLoad")]
+        public async Task<IActionResult> TaskMachineChartDataWorkLoad([FromBody]OptionChartViewModel ChartOption)
+        {
+            var Message = "Data not been found.";
+            try
+            {
+                if (ChartOption != null)
+                {
+                    if (ChartOption.EndDate.HasValue && ChartOption.StartDate.HasValue)
+                    {
+                        ChartOption = new HelpersClass<OptionChartViewModel>().AddHourMethod(ChartOption);
+                        // Set first and last day of select range of date
+                        var EndDate = new DateTime(ChartOption.EndDate.Value.Year, ChartOption.EndDate.Value.Month,
+                                          DateTime.DaysInMonth(ChartOption.EndDate.Value.Year, ChartOption.EndDate.Value.Month)); //DateTime.Today;
+                        var StartDate = new DateTime(ChartOption.StartDate.Value.Year, ChartOption.StartDate.Value.Month, 1);
+                        // new ChartData here
+                        var ChartWorkLoadData = new List<ChartWorkloadViewModel>();
+                        // Count month of range
+                        var ListOfMonth = Enumerable.Range(0, 24)
+                                             .Select(index => new DateTime?(StartDate.AddMonths(index)))
+                                             .TakeWhile(date => date <= EndDate)
+                                             .ToList();
+
+                        var QueryData = this.repository.GetAllAsQueryable()
+                                                    .Where(x => x.ActualStartDate.Value.Date >= StartDate.Date &&
+                                                                x.ActualEndDate.Value.Date <= EndDate.Date)
+                                                    .Include(x => x.Machine)
+                                                    .AsNoTracking();
+
+                        if (ChartOption.TypeMachineId.HasValue)
+                            QueryData = QueryData.Where(x => x.Machine.TypeMachineId == ChartOption.TypeMachineId);
+
+                        // get machines
+                        var machines = await QueryData.GroupBy(x => x.Machine)
+                                                    .OrderBy(x => x.Key.MachineCode)
+                                                    .Select(x => x.Key).ToListAsync();
+
+                        foreach (var PickMonth in ListOfMonth)
+                        {
+                            var FirstDayMonth = new DateTime(PickMonth.Value.Year, PickMonth.Value.Month, 1); ;
+                            var LastDayMonth = new DateTime(PickMonth.Value.Year, PickMonth.Value.Month, DateTime.DaysInMonth(PickMonth.Value.Year, PickMonth.Value.Month));
+                            var ListOfDays = Enumerable.Range(0, (LastDayMonth - FirstDayMonth).Days)
+                                                        .Select(index => FirstDayMonth.AddDays(index))
+                                                        .TakeWhile(date => date <= EndDate).ToList();
+                            // ChartData
+                            var newChartData = new ChartWorkloadViewModel()
+                            {
+                                MonthName = PickMonth.Value.ToString("MMM yy"),
+                                WorkLoadDatas = new List<WorkLoadData>()
+                            };
+
+                            machines.ForEach(item =>
+                            {
+                                newChartData.WorkLoadDatas.Add(new WorkLoadData
+                                {
+                                    MachineNo = item.MachineCode,
+                                    WorkDay = 0,
+                                    TotalDay = LastDayMonth.Day - SunDayInMonth(PickMonth.Value)
+                                });
+                            });
+
+                            // Foreach day
+                            foreach (var DateMonth in ListOfDays)
+                            {
+                                var taskMachines = await this.repository.GetAllAsQueryable().Where(x => DateMonth.Date >= x.ActualStartDate.Value.Date &&
+                                                                                                       DateMonth.Date <= x.ActualEndDate.Value.Date)
+                                                                                          .Include(x => x.Machine).GroupBy(x => x.Machine)
+                                                                                          .AsNoTracking().ToListAsync();
+
+                                foreach (var taskMachine in taskMachines)
+                                {
+                                    var getData = newChartData.WorkLoadDatas.FirstOrDefault(x => x.MachineNo == taskMachine.Key.MachineCode);
+                                    if (getData != null)
+                                    {
+                                        if (getData.WorkDay <= DateMonth.Day)
+                                            getData.WorkDay += 1;
+                                    }
+                                }
+                            }
+
+                            ChartWorkLoadData.Add(newChartData);
+                        }
+
+                        if (ChartWorkLoadData.Any())
+                        {
+                            return new JsonResult(new
+                            {
+                                Labels = machines.Select(x => x.MachineCode),
+                                Datas = ChartWorkLoadData.Select(x => new ChartDataViewModel
+                                {
+                                    Label = x.MonthName,
+                                    DataChart = x.WorkLoadDatas.OrderBy(z => z.MachineNo)
+                                                               .Select(z => Math.Round(z.Percent, 2)).ToList()
+                                })
+                            }, this.DefaultJsonSettings);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Message = $"Has error {ex.ToString()}";
+            }
+
+            return NotFound(new { Error = Message });
+        }
+
+        #endregion ChartData
     }
 }

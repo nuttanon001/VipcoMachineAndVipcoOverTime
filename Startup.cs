@@ -30,6 +30,14 @@ namespace VipcoMachine
         {
             // Add framework services.
             services.AddMvc();
+            // Setting up CORS
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAllOrigins",
+                    builder => builder.AllowAnyOrigin()
+                                      .AllowAnyHeader()
+                                      .AllowAnyMethod());
+            });
             // this is in package Microsoft.AspNetCore.NodeServices
             services.AddNodeServices();
             // Add AutoMapper
@@ -56,6 +64,9 @@ namespace VipcoMachine
             {
                 app.UseExceptionHandler("/Home/Error");
             }
+
+            // Shows UseCors with named policy.
+            app.UseCors("AllowAllOrigins");
 
             string pathBase = Configuration.GetSection("Hosting")["PathBase"];
 

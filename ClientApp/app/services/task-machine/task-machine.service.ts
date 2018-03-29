@@ -18,8 +18,8 @@ export class TaskMachineService extends BaseRestService<TaskMachine> {
     }
     // ===================== Task Machine Chart ===========================\\
     // get task machine chart data
-    postTaskMachineChartData(option: OptionChart): Observable<any> {
-        return this.http.post(`${this.actionUrl}TaskMachineChartData/`, JSON.stringify(option), this.getRequestOption())
+    postTaskMachineChartData(option: OptionChart, subAction: string = "TaskMachineChartDataProduct/"): Observable<any> {
+        return this.http.post(`${this.actionUrl}${subAction}`, JSON.stringify(option), this.getRequestOption())
             .map(this.extractData).catch(this.handleError);
     }
 

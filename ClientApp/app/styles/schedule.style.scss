@@ -128,6 +128,55 @@ h4 {
     margin-right:auto;
 
     display: block;
-    height: 420px;
-    width: 700px;
+    height: 700px;
+    width: 850px;
+}
+
+:host /deep/ .chart2 {
+    padding-left: 0;
+    padding-right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+}
+
+
+@media print {
+
+    :host /deep/ .bottom-container {
+        width: auto;
+        height: auto;
+        overflow: visible;
+        font-size: 9.5pt;
+    }
+
+    :host /deep/ .ui-datatable .ui-datatable-header {
+        width: auto;
+        height: auto;
+        overflow: visible !important;
+        transform: scale(0.7); /* Equal to scaleX(0.7) scaleY(0.7) */
+    }
+
+    :host /deep/ .ui-datatable-scrollable-view
+    .ui-datatable-scrollable-body {
+        overflow: visible !important;
+    }
+
+    :host /deep/ .ui-datatable-scrollable-header {
+        overflow: visible !important;
+    }
+
+    :host /deep/ .ui-paginator-bottom {
+        display: none !important;
+    }
+
+    .no-print {
+        display: none !important;
+    }
+
+    @page {
+        size: 450mm 320mm; /* landscape */
+        /* you can also specify margins here: */
+        margin: 0mm;
+    }
 }
