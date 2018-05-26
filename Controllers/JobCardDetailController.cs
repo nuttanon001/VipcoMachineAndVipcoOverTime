@@ -302,7 +302,7 @@ namespace VipcoMachine.Controllers
                                 JobCardMasterId = Data.JobCardMasterId,
                                 JobCardDetailId = Data.JobCardDetailId,
                                 // RequireString = $"{EmployeeReq} | No.{Data.RequireNo}",
-                                CuttingPlanString = $"{Data.CuttingPlan.CuttingPlanNo}",
+                                CuttingPlanString = $"{(Data.CuttingPlan != null ? Data.CuttingPlan.CuttingPlanNo : "-")}",
                             };
 
                             if (rowData.Any(x => x.Key == Key))

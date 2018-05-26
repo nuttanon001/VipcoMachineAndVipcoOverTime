@@ -10,6 +10,7 @@ namespace VipcoMachine.ViewModels
         public string DateRequired { get; set; }
         public string CreateBy { get; set; }
         public string JobNo { get; set; }
+        public string Remark2 { get; set; }
         public string TypeMachine { get; set; }
         public string Level23 { get; set; }
         public string ShopDrawing { get; set; }

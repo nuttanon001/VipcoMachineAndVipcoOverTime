@@ -18,12 +18,24 @@
                     <mat-icon svgIcon="overtime" style="height:150px;width:150px;margin:auto"></mat-icon>
                 </button>
             </div>
+            <div class="mx-1">
+                <button mat-fab (click)="onClickOption('qualitycontrol')"
+                        style="height:200px;width:200px;background-color:maroon;" matTooltip="Open VIPCO QualityControl System application">
+                    <mat-icon svgIcon="qualitycontrol" style="height:150px;width:150px;margin:auto"></mat-icon>
+                </button>
+            </div>
         </div>
-        <div class="center-page">
+        <div class="center-page my-1">
             <div class="mx-1">
                 <button mat-fab color="accent" (click)="onClickOption('paint')"
                         style="height:200px;width:200px" matTooltip="Open VIPCO Paint System application">
-                    <mat-icon svgIcon="paint" style="height:150px;width:150px;margin:auto"></mat-icon>
+                    <mat-icon svgIcon="paint" style="height:150px;width:150px;margin:auto;"></mat-icon>
+                </button>
+            </div>
+            <div class="mx-1">
+                <button mat-fab (click)="onClickOption('maintenance')"
+                        style="height:200px;width:200px;background-color:mediumslateblue;" matTooltip="Open VIPCO Maintenance System application">
+                    <mat-icon svgIcon="maintenance" style="height:150px;width:150px;margin:auto;"></mat-icon>
                 </button>
             </div>
         </div>

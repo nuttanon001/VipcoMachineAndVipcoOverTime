@@ -1,0 +1,84 @@
+﻿<div class="control-item">
+    <button type="button" mat-icon-button color="primary" (click)="onPrintOverTimeMaster()"
+            style="margin:5px;">
+        <i class="fa fa-3x fa-print" aria-hidden="true" style="margin:0px;"></i>
+    </button>
+    <div>
+        <p-multiSelect [options]="projectMasters"
+                       [(ngModel)]="selectProjectmaster" appendTo="body"
+                       [panelStyle]="{minWidth:'150px'}" [style]="{'minWidth':'250px'}"></p-multiSelect>
+    </div>
+    <div>
+        <button type="button" mat-mini-fab color="warn" (click)="onSubmitChange()"
+                matTooltip="Load data" style="margin:4px;" [disabled]="!selectProjectmaster">
+            <i class="fa fa-2x fa-hand-grab-o" aria-hidden="true" style="margin:0px;"></i>
+        </button>
+    </div>
+</div>
+
+<div *ngIf="overTimeSummary;Else noDataBlock" class="report-box" id="printdiv">
+    <table border="0" cellpadding="0" cellspacing="0"
+           style="border-collapse:collapse;table-layout:fixed;">
+        <colgroup>
+            <col width="65" span="11">
+        </colgroup>
+        <thead>
+            <tr height="32">
+                <td colspan="11" height="32" class="title">
+                    <b>บริษัท วิศวกิจพัฒนา จำกัด</b>
+                </td>
+            </tr>
+            <tr height="24">
+                <td colspan="11" height="24" class="sub-title">
+                    <b>&nbsp;ใบสรุปการทำงานล่วงเวลาตามเลขที่งาน&nbsp;</b>
+                </td>
+            </tr>
+            <tr height="18">
+                <td height="18" colspan="11"></td>
+                <!--<td class="label text-right">วันที่ : </td>
+                <td colspan="2" class="value line-btm">&nbsp;{{SummaryDate |  date:'dd/MM/yyyy'}}</td>-->
+            </tr>
+            <tr height="18">
+                <td height="18" colspan="11"></td>
+            </tr>
+            <tr height="18" class="bg-info">
+                <td rowspan="2" height="36" class="column line-all">
+                    <b>ลำดับ</b>
+                </td>
+                <td colspan="5" rowspan="2" class="column line-all">
+                    <b>ชื่อเลขที่งาน</b>
+                </td>
+                <td colspan="2" rowspan="2" class="column line-all"><b>จำนวนชั่วโมง</b></td>
+                <td colspan="3" rowspan="2" class="column line-all">
+                    <b>หมายเหตุ</b>
+                </td>
+            </tr>
+        </thead>
+        <tfoot>
+            <tr height="4">
+                <td height="4" class="label line-all bg-dark" colspan="11"></td>
+            </tr>
+        </tfoot>
+        <tbody>
+            <tr height="18" *ngFor="let item of overTimeSummary; index as Runing;">
+                <td height="18" class="item-row item-line line-left">
+                    {{Runing + 1}}
+                </td>
+                <td colspan="5" class="item-row text-left item-line">
+                    &nbsp;{{item.JobNumber}}&nbsp;&nbsp;{{item.JobName}}
+                </td>
+                <td colspan="2" class="item-row item-line">
+                    {{item.TotalHr | number}}
+                </td>
+                <td colspan="3" class="item-row item-line line-right">
+                    &ndash;
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<ng-template #noDataBlock>
+    <div class="mx-auto">
+        <b class="text-danger"> Data been not found. change date for reload data.</b>
+    </div>
+</ng-template>

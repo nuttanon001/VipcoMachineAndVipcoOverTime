@@ -22,6 +22,7 @@ export class OvertimeViewComponent extends BaseViewComponent<OverTimeMaster> {
     columns: Array<TableColumn> = [
         { prop: "EmpCode", name: "Employee Code", flexGrow: 1 },
         { prop: "EmployeeString", name: "Employee Name", flexGrow: 1 },
+        { prop: "StartOverTime", name: "StartOT", flexGrow: 1 },
         { prop: "TotalHour", name: "Hour", flexGrow: 1 },
         { prop: "Remark", name: "Remark", flexGrow: 1 },
         { prop: "StatusString", name: "Status", flexGrow: 1, cellClass: this.getCellClass }

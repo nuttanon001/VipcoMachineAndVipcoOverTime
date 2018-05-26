@@ -8,6 +8,7 @@ import { OvertimeReportSummaryComponent } from "../../components/overtime/overti
 import { OverTimeChartComponent } from "../../components/overtime/overtime-chart.component";
 // service
 import { AuthGuard } from "../../services/auth/auth-guard.service";
+import { OverTimeReportSummaryByProComponent } from "../../components/overtime/overtime-report-summary-bypro.component";
 
 const overTimeRoutes: Routes = [
     {
@@ -17,6 +18,10 @@ const overTimeRoutes: Routes = [
             {
                 path: "summary-overtime",
                 component: OvertimeReportSummaryComponent,
+            },
+            {
+                path: "summary-overtime-pro",
+                component: OverTimeReportSummaryByProComponent,
             },
             {
                 path: "chart-overtime",

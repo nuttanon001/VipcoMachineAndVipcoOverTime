@@ -121,6 +121,7 @@
     <None Remove="ClientApp\app\components\overtime\overtime-chart.component.ts" />
     <None Remove="ClientApp\app\components\overtime\overtime-edit.component.ts" />
     <None Remove="ClientApp\app\components\overtime\overtime-master.component.ts" />
+    <None Remove="ClientApp\app\components\overtime\overtime-report-summary-bypro.component.ts" />
     <None Remove="ClientApp\app\components\overtime\overtime-report-summary.component.ts" />
     <None Remove="ClientApp\app\components\overtime\overtime-report.component.ts" />
     <None Remove="ClientApp\app\components\overtime\overtime-schedule.component.ts" />
@@ -350,6 +351,7 @@
     <TypeScriptCompile Include="ClientApp\app\components\overtime\overtime-chart.component.ts" />
     <TypeScriptCompile Include="ClientApp\app\components\overtime\overtime-edit.component.ts" />
     <TypeScriptCompile Include="ClientApp\app\components\overtime\overtime-master.component.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\overtime\overtime-report-summary-bypro.component.ts" />
     <TypeScriptCompile Include="ClientApp\app\components\overtime\overtime-report-summary.component.ts" />
     <TypeScriptCompile Include="ClientApp\app\components\overtime\overtime-report.component.ts" />
     <TypeScriptCompile Include="ClientApp\app\components\overtime\overtime-schedule.component.ts" />

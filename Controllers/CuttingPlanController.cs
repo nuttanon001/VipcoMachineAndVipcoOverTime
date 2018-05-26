@@ -270,7 +270,8 @@ namespace VipcoMachine.Controllers
                                     {
                                         var Cutting = PDetail.CuttingPlans
                                                         .FirstOrDefault(x =>
-                                                        (x.CuttingPlanNo.ToLower() + x.MaterialSize.ToLower())
+                                                        ((x.CuttingPlanNo != null ? x.CuttingPlanNo.ToLower() : "") + 
+                                                         (x.MaterialSize != null ? x.MaterialSize.ToLower() : ""))
                                                         .Equals(Import.Key.ToLower()));
 
                                         if (Cutting == null)

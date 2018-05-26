@@ -529,9 +529,20 @@ namespace VipcoMachine.Controllers
                         // add column time
                         rowData.Add("MachineNo", Data?.Machine?.MachineCode ?? "-");
                         rowData.Add("JobNo", JobNo);
-                        rowData.Add("CT/SD", Data?.JobCardDetail?.CuttingPlan?.CuttingPlanNo +
+                        // CuttingPlan ,Material and UnitNo
+                        var Infor = Data?.JobCardDetail?.CuttingPlan?.CuttingPlanNo +
                             (string.IsNullOrEmpty(Data?.JobCardDetail?.Material.Trim()) ? "" : $" | {Data?.JobCardDetail?.Material.Trim()}") +
-                            (Data?.JobCardDetail?.UnitNo == null ? "" : $" | UnitNo.{Data?.JobCardDetail?.UnitNo}"));
+                            (Data?.JobCardDetail?.UnitNo == null ? "" : $" | UnitNo.{Data?.JobCardDetail?.UnitNo}");
+
+                        if (Data?.JobCardDetail?.JobCardMaster != null)
+                        {
+                            if (!string.IsNullOrEmpty(Data?.JobCardDetail?.JobCardMaster.Description))
+                            {
+                                Infor += $"| Desc. {Data?.JobCardDetail?.JobCardMaster.Description}";
+                            }
+                        }
+
+                        rowData.Add("CT/SD", Infor);
                         rowData.Add("Qty", Qty);
                         rowData.Add("Pro", Pro);
                         rowData.Add("Progess", Math.Round(((double)(Pro * 100) / Qty), 1) + "%");
@@ -1217,7 +1228,7 @@ namespace VipcoMachine.Controllers
 
                             var onePage = new OnePage()
                             {
-                                TemplateFolder = this.hostingEnvironment.WebRootPath + "\\reports\\"
+                                TemplateFolder = this.hostingEnvironment.WebRootPath + "/reports/"
                             };//general class for work
 
                             var PaperModel = new PaperTaskMachine()
@@ -1233,6 +1244,7 @@ namespace VipcoMachine.Controllers
                                 Employee4 = "-",
                                 Level23 = Level23,
                                 JobNo = JobNo,
+                                Remark2 = jobMaster?.Description ?? "",
                                 Mate1 = paper?.JobCardDetail?.Material ?? "-",
                                 Plan = paper.PlannedStartDate.ToString("dd/MM/yy") + "  ถึง  " + paper.PlannedEndDate.ToString("dd/MM/yy"),
                                 Recevied = jobMaster?.EmployeeRequire?.NameThai ?? "-",
@@ -1343,7 +1355,7 @@ namespace VipcoMachine.Controllers
                         {
                             var worker = new Worker()
                             {
-                                TemplateFolder = this.hostingEnvironment.WebRootPath + "\\reports\\",
+                                TemplateFolder = this.hostingEnvironment.WebRootPath + "/reports/",
                             };
 
                             var creDataTable = new MyDataTable();

@@ -115,6 +115,10 @@ export class OvertimeEditComponent
                 OverTimeStatus: 1,
                 OverTimeDate: new Date(),
             };
+			
+			if (this.editValue.OverTimeDate.getDay() === 7){
+				this.defaultHour = 8;
+			}
 
             if (this.serviceAuth.getAuth) {
                 this.editValue.EmpRequire = this.serviceAuth.getAuth.EmpCode || "";

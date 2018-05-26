@@ -87,6 +87,9 @@ export class RequireJobCardDetailScheduleComponent implements OnInit, OnDestroy 
     // build form
     buildForm(): void {
         this.schedule = {};
+        if (!this.schedule.TypeMachineId && this.typeMachine) {
+            this.schedule.TypeMachineId = this.typeMachine[0].value;
+        }
 
         this.reportForm = this.fb.group({
             Filter: [this.schedule.Filter],
@@ -111,6 +114,7 @@ export class RequireJobCardDetailScheduleComponent implements OnInit, OnDestroy 
 
     // get request data
     onGetData(schedule: OptionSchedule): void {
+		
         this.service.postRequireJobCardRequireSchedule(schedule)
             .subscribe(dbDataSchedule => {
                 // console.log("Api Send is", dbDataSchedule);
@@ -138,6 +142,7 @@ export class RequireJobCardDetailScheduleComponent implements OnInit, OnDestroy 
                 // console.log("OverTime is:", this.overtimeMasters);
                 this.reloadData();
             }, error => {
+                this.totalRecords = 0;
                 this.columns = new Array;
                 this.requireJobCardDetail = new Array;
                 this.reloadData();

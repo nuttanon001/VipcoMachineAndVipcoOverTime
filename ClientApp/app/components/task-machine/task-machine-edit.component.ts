@@ -209,12 +209,12 @@ export class TaskMachineEditComponent
             TaskMachineId: [this.editValue.TaskMachineId],
             TaskMachineName: [this.editValue.TaskMachineName,
                 [
-                    Validators.maxLength(200),
+                    Validators.maxLength(50),
                 ]
             ],
             Description: [this.editValue.Description,
                 [
-                    Validators.maxLength(50),
+                    Validators.maxLength(200),
                 ]
             ],
             Priority: [this.editValue.Priority],

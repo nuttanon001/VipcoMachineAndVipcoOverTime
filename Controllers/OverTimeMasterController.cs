@@ -658,6 +658,7 @@ namespace VipcoMachine.Controllers
                         Expression<Func<OverTimeDetail, bool>> condition = d =>
                              d.OverTimeMaster.OverTimeStatus != OverTimeStatus.Cancel &&
                              d.OverTimeMaster.OverTimeDate.Date == nOverTimeMaster.OverTimeDate.Date &&
+                             d.StartOverTime == nDetail.StartOverTime &&
                              d.EmpCode == nDetail.EmpCode && d.OverTimeDetailStatus == OverTimeDetailStatus.Use;
                         // check if employee on auther overtime continue him
                         if (await this.repositoryOverTimeDetail.AnyDataAsync(condition))
@@ -808,6 +809,7 @@ namespace VipcoMachine.Controllers
                             Expression<Func<OverTimeDetail, bool>> conditionD = d =>
                                 d.OverTimeMaster.OverTimeStatus != OverTimeStatus.Cancel &&
                                 d.OverTimeMaster.OverTimeDate.Date == uOverTimeMaster.OverTimeDate.Date &&
+                                d.StartOverTime == uOvertime.StartOverTime &&
                                 d.EmpCode == uOvertime.EmpCode && d.OverTimeDetailStatus == OverTimeDetailStatus.Use;
                             // check if employee on auther overtime continue him
                             if (await this.repositoryOverTimeDetail.AnyDataAsync(conditionD))
@@ -1214,6 +1216,69 @@ namespace VipcoMachine.Controllers
                 }
             }
             return NotFound(new { NotFound = "Not Found Data." });
+        }
+
+        [HttpPost("GetReportSummaryByProject")]
+        public async Task<IActionResult> GetReportSummaryByProject([FromBody]List<int?> JobNumber)
+        {
+            var Message = "";
+            try
+            {
+                if (JobNumber != null)
+                {
+                    var QueryData = this.repository.GetAllAsQueryable()
+                                               .Where(x =>
+                                                   x.OverTimeStatus == OverTimeStatus.WaitActual ||
+                                                   x.OverTimeStatus == OverTimeStatus.Complate)
+                                               .Include(x => x.OverTimeDetails)
+                                                   .ThenInclude(x => x.Employee)
+                                               .Include(x => x.ProjectCodeMaster)
+                                               .Include(x => x.EmployeeGroupMIS)
+                                               .AsQueryable();
+
+                    QueryData = QueryData.Where(x => JobNumber.Contains(x.ProjectCodeMasterId));
+
+                    var Data = await QueryData.ToListAsync();
+                    var ListData = new List<OverTimeSummaryByProViewModel>();
+                    // GroupBy GroupCode
+                    foreach (var item in Data.GroupBy(x => x.ProjectCodeMaster)
+                        .OrderBy(x => x.Key.ProjectCode))
+                    {
+                        var TotalOvertime = 0;
+                        var TotalHour = 0.0;
+
+                        foreach (var item2 in item.Select(x => x.OverTimeDetails))
+                        {
+                            TotalOvertime += item2.Where(x => x.OverTimeDetailStatus == OverTimeDetailStatus.Use).Count();
+                            TotalHour += item2.Where(x => x.OverTimeDetailStatus == OverTimeDetailStatus.Use).Sum(x => x.TotalHour);
+                        }
+                        ListData.Add(new OverTimeSummaryByProViewModel
+                        {
+                            JobNumber = item.Key.ProjectCode,
+                            JobName = item.Key.ProjectName,
+                            TotalHr = TotalHour,
+                            TotalMan = TotalOvertime
+                        });
+                    }
+
+                    //var ListData = await QueryData.GroupBy(x => x.ProjectCodeMaster)
+                    //                                .Select(x => new
+                    //                                {
+                    //                                    JobNumber = x.Key.ProjectCode,
+                    //                                    JobName = x.Key.ProjectName,
+                    //                                    TotalHr = x.Sum(z => z.OverTimeDetails
+                    //                                                        .Where(c => c.OverTimeDetailStatus == OverTimeDetailStatus.Use)
+                    //                                                        .Sum(c => c.TotalHour))
+                    //                                }).ToListAsync();
+
+                    return new JsonResult(ListData, this.DefaultJsonSettings);
+                }
+            }
+            catch(Exception ex)
+            {
+                Message = $"Has error {ex.ToString()}";
+            }
+            return BadRequest(new { Error = Message });
         }
         #endregion
 
