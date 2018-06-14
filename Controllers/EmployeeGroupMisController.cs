@@ -64,7 +64,8 @@ namespace VipcoMachine.Controllers
         [HttpGet()]
         public async Task<IActionResult> GetMis()
         {
-            return new JsonResult(await this.repository.GetAllAsync(), this.DefaultJsonSettings);
+            Expression<Func<EmployeeGroupMIS, bool>> expression = e => !e.GroupMIS.StartsWith("00");
+            return new JsonResult(await this.repository.FindAllAsync(expression), this.DefaultJsonSettings);
         }
 
         // GET: api/EmployeeGroupMis/5
@@ -72,7 +73,6 @@ namespace VipcoMachine.Controllers
         public async Task<IActionResult> GetMis(string key)
         {
             return new JsonResult(await this.repository.GetAsync(key), this.DefaultJsonSettings);
-
         }
         #endregion GET
 
@@ -84,7 +84,8 @@ namespace VipcoMachine.Controllers
         {
 
             var QueryData = this.repository.GetAllAsQueryable()
-                                           .AsQueryable();
+                                           .AsQueryable()
+                                           .Where(x => !x.GroupMIS.StartsWith("00"));
 
             // Filter
             var filters = string.IsNullOrEmpty(Scroll.Filter) ? new string[] { "" }

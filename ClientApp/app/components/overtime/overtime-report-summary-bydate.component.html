@@ -1,0 +1,87 @@
+﻿<div class="report-box">
+    <table border="0" cellpadding="0" cellspacing="0"
+           style="border-collapse:collapse;table-layout:fixed;">
+        <colgroup>
+            <col width="65" span="11">
+        </colgroup>
+        <thead>
+            <tr height="32">
+                <td colspan="11" height="32" class="title">
+                    <b>บริษัท วิศวกิจพัฒนา จำกัด</b>
+                </td>
+            </tr>
+            <tr height="24">
+                <td colspan="11" height="24" class="sub-title">
+                    <b>ใบสรุปการทำงานล่วงเวลาประจำวัน&nbsp; ( <i>{{SummaryDate |  date:'dd/MM/yyyy'}}</i> )</b>
+                </td>
+            </tr>
+            <tr height="18">
+                <td height="18" colspan="8"></td>
+                <td class="label text-right">วันที่ : </td>
+                <td colspan="2" class="value line-btm">&nbsp;{{SummaryDate |  date:'dd/MM/yyyy'}}</td>
+            </tr>
+            <tr height="18">
+                <td height="18" colspan="11"></td>
+            </tr>
+            <tr height="18" class="bg-info">
+                <td rowspan="2" height="36" class="column line-all">
+                    <b>ลำดับ</b>
+                </td>
+                <td colspan="3" rowspan="2" class="column line-all">
+                    <b>ชื่อกลุ่มงาน</b>
+                </td>
+                <td class="column line-all"><b>จำนวนคน</b></td>
+                <td class="column line-all"><b>จำนวนคน</b></td>
+                <td colspan="4" rowspan="2" class="column line-all">
+                    <b>เลขที่งาน JobNo.(จำนวน พนง.)</b>
+                </td>
+                <td colspan="1" rowspan="2" class="column line-all">
+                    <b>หมายเหตุ</b>
+                </td>
+            </tr>
+            <tr height="18" class="bg-info">
+                <td height="18" class="column line-all">
+                    <b>ทั้งหมด</b>
+                </td>
+                <td class="column line-all">
+                    <b>ทำโอที</b>
+                </td>
+            </tr>
+        </thead>
+        <tfoot>
+            <tr height="4">
+                <td height="4" class="label line-all bg-dark" colspan="11"></td>
+            </tr>
+            <tr height="18">
+                <td height="18" class="label line-all text-center" colspan="4">
+                    <b>รวมจำนวนพนักงาน</b>
+                </td>
+                <td class="value line-all text-center">{{overTimeSummary.TotalGroup}}</td>
+                <td class="value line-all text-center">{{overTimeSummary.TotalOverTime}}</td>
+                <td class="label line-all" colspan="5"></td>
+            </tr>
+        </tfoot>
+        <tbody>
+            <tr height="18" *ngFor="let item of overTimeSummary.Details">
+                <td height="18" class="item-row item-line line-left">
+                    {{item.Runing > 0 ? item.Runing : ''}}
+                </td>
+                <td colspan="3" class="item-row text-left item-line">
+                    &nbsp;{{item.GroupName}}
+                </td>
+                <td class="item-row item-line">
+                    {{item.TotalOfGroup}}
+                </td>
+                <td class="item-row item-line">
+                    {{item.TotalOfOverTime}}
+                </td>
+                <td colspan="4" class="item-row text-left item-line">
+                    {{item.ProjectNumber}}
+                </td>
+                <td colspan="1" class="item-row item-line line-right">
+                    {{item.Remark}}
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

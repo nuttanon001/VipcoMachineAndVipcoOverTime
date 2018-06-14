@@ -26,14 +26,16 @@ namespace VipcoMachine.Controllers
     public class OverTimeMasterController : Controller
     {
         #region PrivateMembers
-        private IRepository<OverTimeMaster> repository;
-        private IRepository<OverTimeDetail> repositoryOverTimeDetail;
-        private IRepository<ProjectCodeMaster> repositoryProjectMaster;
-        private IRepository<EmployeeGroup> repositoryEmpGroup;
-        private IRepository<Employee> repositoryEmployee;
-        private IRepository<HolidayOverTime> repositoryHoliday;
-        private IMapper mapper;
-        private IHostingEnvironment hostingEnvironment;
+        private readonly IRepository<OverTimeMaster> repository;
+        private readonly IRepository<OverTimeDetail> repositoryOverTimeDetail;
+        private readonly IRepository<ProjectCodeMaster> repositoryProjectMaster;
+        private readonly IRepository<EmployeeGroup> repositoryEmpGroup;
+        private readonly IRepository<Employee> repositoryEmployee;
+        private readonly IRepository<HolidayOverTime> repositoryHoliday;
+        private readonly IRepository<WorkShop> repositoryWorkShop;
+        private readonly IRepository<WorkGroupHasWorkShop> repositoryWorkGroupHasShop;
+        private readonly IMapper mapper;
+        private readonly IHostingEnvironment hostingEnvironment;
         private HelpersClass<OverTimeMaster> helpers;
 
         private JsonSerializerSettings DefaultJsonSettings =>
@@ -66,15 +68,21 @@ namespace VipcoMachine.Controllers
                 IRepository<EmployeeGroup> repoEmpGroup,
                 IRepository<Employee> repoEmp,
                 IRepository<HolidayOverTime> repoHoli,
+                IRepository<WorkShop> repoWorkShop,
+                IRepository<WorkGroupHasWorkShop> repoWorkGroupHasShop,
                 IHostingEnvironment hosting,
                 IMapper map)
         {
+            //Repository
             this.repository = repo;
             this.repositoryHoliday = repoHoli;
             this.repositoryOverTimeDetail = repoOverTimeDetail;
             this.repositoryProjectMaster = repoProjectMaster;
             this.repositoryEmpGroup = repoEmpGroup;
             this.repositoryEmployee = repoEmp;
+            this.repositoryWorkShop = repoWorkShop;
+            this.repositoryWorkGroupHasShop = repoWorkGroupHasShop;
+            // Other
             this.hostingEnvironment = hosting;
             this.mapper = map;
             this.helpers = new HelpersClass<OverTimeMaster>();
@@ -127,7 +135,12 @@ namespace VipcoMachine.Controllers
                 var LastOverTime = await QueryData.FirstOrDefaultAsync(x => x.ProjectCodeMasterId == ProjectCodeId && x.GroupCode == GroupCode);
 
                 if (LastOverTime != null)
-                    return new JsonResult(this.mapper.Map<OverTimeMaster, OverTimeMasterViewModel>(LastOverTime), this.DefaultJsonSettings);
+                {
+                    if (LastOverTime.OverTimeStatus != OverTimeStatus.Cancel)
+                        return new JsonResult(this.mapper.Map<OverTimeMaster, OverTimeMasterViewModel>(LastOverTime), this.DefaultJsonSettings);
+                    else
+                        return Ok();
+                }
             }
 
             return NotFound(new { Error = "Not found ProjectCodeMasterId ,GroupCode or LastOverTime." });
@@ -1005,7 +1018,6 @@ namespace VipcoMachine.Controllers
         }
 
         // GET: api/GetReportOverTimePdf2/5
-
         [HttpGet("GetReportOverTimePdf2/{OverTimeMasterId}")]
         public async Task<IActionResult> GetReportOverTimePdf2(int OverTimeMasterId)
         {
@@ -1156,8 +1168,7 @@ namespace VipcoMachine.Controllers
             //return new ContentResult();
         }
 
-        // POST: api/GetReportSummary/5
-
+        // POST: api/GetReportSummary/
         [HttpPost("GetReportSummary")]
         public async Task<IActionResult> GetReportSummary([FromBody]OptionOverTimeSchedule option)
         {
@@ -1186,16 +1197,21 @@ namespace VipcoMachine.Controllers
 
                 foreach(var item in Datas.OrderBy(x => x.EmployeeGroupMIS.GroupDesc).GroupBy(x => x.EmployeeGroupMIS))
                 {
+                    if (item == null)
+                        continue;
+
                     Expression<Func<Employee, bool>> condition = e => e.GroupMIS == item.Key.GroupMIS;
                     var ToltalGroup = await this.repositoryEmployee.CountWithMatchAsync(condition);
                     var TotalOvertime = 0;
+
                     foreach(var item2 in item.Select(x => x.OverTimeDetails))
                         TotalOvertime += item2.Where(x => x.OverTimeDetailStatus == OverTimeDetailStatus.Use).Count();
 
                     var newReport = new ReportOverTimeSummary()
                     {
                         GroupName = item?.Key?.GroupDesc ?? "-",
-                        ProjectNumber = string.Join(",", item?.Select(x => x.ProjectCodeMaster.ProjectCode ?? "-")),
+                        ProjectNumber = string.Join(", ", item?.Select(x => x.ProjectCodeMaster.ProjectCode + 
+                                       (item.Count() > 1 ? $"[{x.OverTimeDetails.Count(z => z.OverTimeDetailStatus == OverTimeDetailStatus.Use)}]" : "") ?? "-")),
                         Remark = "",
                         Runing = Runing,
                         TotalOfGroup = ToltalGroup,
@@ -1218,6 +1234,131 @@ namespace VipcoMachine.Controllers
             return NotFound(new { NotFound = "Not Found Data." });
         }
 
+        // POST: api/GetReportSummaryOnlyWorkShop/
+        [HttpPost("GetReportSummaryOnlyWorkShop")]
+        public async Task<IActionResult> GetReportSummaryOnlyWorkShop([FromBody] OptionOverTimeSchedule option)
+        {
+            if (option != null)
+            {
+                var OnlyWorkGroup = await this.repositoryWorkGroupHasShop.GetAllAsQueryable()
+                                              .Include(x => x.WorkShop)
+                                              .ToListAsync();
+                if (!OnlyWorkGroup.Any())
+                    return BadRequest(new { Error = "Data not been found." });
+
+                var QueryData = this.repository.GetAllAsQueryable()
+                                                .Where(x => OnlyWorkGroup.Select(z => z.GroupMIS).Contains(x.GroupMIS) && 
+                                                           (x.OverTimeStatus == OverTimeStatus.WaitActual ||
+                                                            x.OverTimeStatus == OverTimeStatus.Complate))
+                                                .Include(x => x.OverTimeDetails)
+                                                    .ThenInclude(x => x.Employee)
+                                                .Include(x => x.ProjectCodeMaster)
+                                                .Include(x => x.EmployeeGroupMIS)
+                                                .AsQueryable();
+
+                if (option.SDate.HasValue)
+                {
+                    option.SDate = option.SDate.Value.AddHours(7);
+                    QueryData = QueryData.Where(x => x.OverTimeDate.Date == option.SDate.Value.Date);
+                }
+
+                var Datas = await QueryData.ToListAsync();
+                var ReportSummary = new List<ReportOverTimeSummaryByWorkShop>();
+                //Group of work shop
+                var GroupOfShop1 = OnlyWorkGroup.Where(z =>z.WorkShop.WorkShopName.ToLower().Contains("shop1"))
+                                                .Select(z => z.GroupMIS);
+                var GroupOfShop2 = OnlyWorkGroup.Where(z => z.WorkShop.WorkShopName.ToLower().Contains("shop2"))
+                                                .Select(z => z.GroupMIS);
+
+                // Gen work shop header name
+                foreach (var TeamName in OnlyWorkGroup.GroupBy(x => x.TeamName))
+                    ReportSummary.Add(new ReportOverTimeSummaryByWorkShop()
+                    {
+                        WorkShopName = TeamName.Key,
+                        ReportOverTimeSummaries = new List<ReportOverTimeSummaryWithShop>()
+                    });
+                // Foreach by ProjectMaster
+                foreach (var GroupProject in Datas.OrderBy(x => x.ProjectCodeMaster.ProjectCode)
+                    .GroupBy(x => x.ProjectCodeMaster))
+                {
+                    if (GroupProject == null)
+                        continue;
+
+                    var FabTeams = GroupProject.Where(x => OnlyWorkGroup.Where(z => z.TeamName.ToLower().Contains("fab"))
+                                                                       .Select(z => z.GroupMIS).Contains(x.GroupMIS));
+                    if (FabTeams.Any())
+                    {
+                        var NewReportData = new ReportOverTimeSummaryWithShop()
+                        {
+                            ProjectNumber = GroupProject.Key.ProjectCode,
+                            GroupNameShop1 = string.Join
+                                (", ", FabTeams.Where
+                                    (x => GroupOfShop1.Contains(x.GroupMIS))
+                                        .Select(x => $"{x.EmployeeGroupMIS.GroupDesc}" +
+                                                    $"[{x.OverTimeDetails.Count(z => z.OverTimeDetailStatus == OverTimeDetailStatus.Use)}]"
+                                    )
+                                ),
+                            GroupNameShop2 = string.Join
+                                (", ", FabTeams.Where
+                                    (x => GroupOfShop2.Contains(x.GroupMIS))
+                                        .Select(x => $"{x.EmployeeGroupMIS.GroupDesc}" +
+                                                    $"[{x.OverTimeDetails.Count(z => z.OverTimeDetailStatus == OverTimeDetailStatus.Use)}]"
+                                    )
+                                ),
+                            TotalShop1 = FabTeams.Where(x => GroupOfShop1.Contains(x.GroupMIS))
+                                                 .Select(x => x.OverTimeDetails.Count(z => z.OverTimeDetailStatus == OverTimeDetailStatus.Use)).Sum(),
+                            TotalShop2 = FabTeams.Where(x => GroupOfShop2.Contains(x.GroupMIS))
+                                                 .Select(x => x.OverTimeDetails.Count(z => z.OverTimeDetailStatus == OverTimeDetailStatus.Use)).Sum(),
+                        };
+                        ReportSummary.FirstOrDefault(x => x.WorkShopName.ToLower().Contains("fab"))
+                            .ReportOverTimeSummaries.Add(NewReportData);
+                    }
+
+                    var WeldTeams = GroupProject.Where(x => OnlyWorkGroup.Where(z => z.TeamName.ToLower().Contains("welder"))
+                                                                       .Select(z => z.GroupMIS).Contains(x.GroupMIS));
+                    if (WeldTeams.Any())
+                    {
+                        var NewReportData2 = new ReportOverTimeSummaryWithShop()
+                        {
+                            ProjectNumber = GroupProject.Key.ProjectCode,
+                            GroupNameShop1 = string.Join
+                                (", ", WeldTeams.Where
+                                    (x => GroupOfShop1.Contains(x.GroupMIS))
+                                        .Select(x => $"{x.EmployeeGroupMIS.GroupDesc}" +
+                                                    $"[{x.OverTimeDetails.Count(z => z.OverTimeDetailStatus == OverTimeDetailStatus.Use)}]"
+                                    )
+                                ),
+                            GroupNameShop2 = string.Join
+                                (", ", WeldTeams.Where
+                                    (x => GroupOfShop2.Contains(x.GroupMIS))
+                                        .Select(x => $"{x.EmployeeGroupMIS.GroupDesc}" +
+                                                    $"[{x.OverTimeDetails.Count(z => z.OverTimeDetailStatus == OverTimeDetailStatus.Use)}]"
+                                    )
+                                ),
+                            TotalShop1 = WeldTeams.Where(x => GroupOfShop1.Contains(x.GroupMIS))
+                                                 .Select(x => x.OverTimeDetails.Count(z => z.OverTimeDetailStatus == OverTimeDetailStatus.Use)).Sum(),
+                            TotalShop2 = WeldTeams.Where(x => GroupOfShop2.Contains(x.GroupMIS))
+                                                 .Select(x => x.OverTimeDetails.Count(z => z.OverTimeDetailStatus == OverTimeDetailStatus.Use)).Sum(),
+                        };
+                        ReportSummary.FirstOrDefault(x => x.WorkShopName.ToLower().Contains("welder"))
+                            .ReportOverTimeSummaries.Add(NewReportData2);
+                    }
+                }
+
+                if (ReportSummary.Any())
+                {
+                    return new JsonResult(new
+                    {
+                        ReportSummary,
+                        GrandTotalShop1 = ReportSummary.Sum(x => x.ReportOverTimeSummaries.Sum(z => z.TotalShop1)),
+                        GrandTotalShop2 = ReportSummary.Sum(x => x.ReportOverTimeSummaries.Sum(z => z.TotalShop2))
+                    }, this.DefaultJsonSettings);
+                }
+            }
+            return NotFound(new { NotFound = "Not Found Data." });
+        }
+
+        // POST: api/GetReportSummaryByProject/
         [HttpPost("GetReportSummaryByProject")]
         public async Task<IActionResult> GetReportSummaryByProject([FromBody]List<int?> JobNumber)
         {

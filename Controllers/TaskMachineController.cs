@@ -1624,6 +1624,159 @@ namespace VipcoMachine.Controllers
             return NotFound(new { Error = Message });
         }
 
+        [HttpPost("TaskMachineChartDataPlanAndActual")]
+        public async Task<IActionResult> TaskMachineChartDataPlanAndActual([FromBody]OptionChartViewModel ChartOption)
+        {
+            var Message = "Data not been found.";
+            try
+            {
+                if (ChartOption != null)
+                {
+                    if (ChartOption.EndDate.HasValue && ChartOption.StartDate.HasValue)
+                    {
+                        ChartOption = new HelpersClass<OptionChartViewModel>().AddHourMethod(ChartOption);
+                        // Set first and last day of select range of date
+                        var EndDate = new DateTime(ChartOption.EndDate.Value.Year, ChartOption.EndDate.Value.Month,
+                                          DateTime.DaysInMonth(ChartOption.EndDate.Value.Year, ChartOption.EndDate.Value.Month)); //DateTime.Today;
+                        var StartDate = new DateTime(ChartOption.StartDate.Value.Year, ChartOption.StartDate.Value.Month, 1);
+                        // new ChartData here
+                        var ChartWorkLoadData = new List<ChartWorkloadViewModel>();
+                        // Count month of range
+                        var ListOfMonth = Enumerable.Range(0, 24)
+                                             .Select(index => new DateTime?(StartDate.AddMonths(index)))
+                                             .TakeWhile(date => date <= EndDate)
+                                             .ToList();
+
+                        var QueryData = this.repository.GetAllAsQueryable()
+                                                    .Where(x => x.PlannedStartDate.Date >= StartDate.Date &&
+                                                                x.PlannedEndDate.Date <= EndDate.Date)
+                                                    .Include(x => x.Machine)
+                                                    .AsNoTracking();
+
+                        if (ChartOption.TypeMachineId.HasValue)
+                            QueryData = QueryData.Where(x => x.Machine.TypeMachineId == ChartOption.TypeMachineId);
+
+                        // get machines
+                        var machines = await QueryData.GroupBy(x => x.Machine)
+                                                    .OrderBy(x => x.Key.MachineCode)
+                                                    .Select(x => x.Key).ToListAsync();
+                        // Plan
+                        foreach (var PickMonth in ListOfMonth)
+                        {
+                            var FirstDayMonth = new DateTime(PickMonth.Value.Year, PickMonth.Value.Month, 1); ;
+                            var LastDayMonth = new DateTime(PickMonth.Value.Year, PickMonth.Value.Month, DateTime.DaysInMonth(PickMonth.Value.Year, PickMonth.Value.Month));
+                            var ListOfDays = Enumerable.Range(0, (LastDayMonth - FirstDayMonth).Days)
+                                                        .Select(index => FirstDayMonth.AddDays(index))
+                                                        .TakeWhile(date => date <= EndDate).ToList();
+                            //Plan
+                            #region Plan
+                            // ChartData
+                            var newChartDataPlan = new ChartWorkloadViewModel()
+                            {
+                                MonthName = PickMonth.Value.ToString("MMM yy")+"(Plan)",
+                                WorkLoadDatas = new List<WorkLoadData>()
+                            };
+
+                            machines.ForEach(item =>
+                            {
+                                newChartDataPlan.WorkLoadDatas.Add(new WorkLoadData
+                                {
+                                    MachineNo = item.MachineCode,
+                                    WorkDay = 0,
+                                    TotalDay = LastDayMonth.Day - SunDayInMonth(PickMonth.Value)
+                                });
+                            });
+
+                            // Foreach day
+                            foreach (var DateMonth in ListOfDays)
+                            {
+                                var taskMachines = await this.repository.GetAllAsQueryable().Where(x => DateMonth.Date >= x.PlannedStartDate.Date &&
+                                                                                                       DateMonth.Date <= x.PlannedEndDate.Date)
+                                                                                          .Include(x => x.Machine).GroupBy(x => x.Machine)
+                                                                                          .AsNoTracking().ToListAsync();
+
+                                foreach (var taskMachine in taskMachines)
+                                {
+                                    var getData = newChartDataPlan.WorkLoadDatas.FirstOrDefault(x => x.MachineNo == taskMachine.Key.MachineCode);
+                                    if (getData != null)
+                                    {
+                                        if (getData.WorkDay <= DateMonth.Day)
+                                            getData.WorkDay += 1;
+                                    }
+                                }
+                            }
+
+                            ChartWorkLoadData.Add(newChartDataPlan);
+                            #endregion
+
+                            //Actual
+                            #region Actual
+                            // ChartData
+                            var newChartDataActual = new ChartWorkloadViewModel()
+                            {
+                                MonthName = PickMonth.Value.ToString("MMM yy")+"(Actual)",
+                                WorkLoadDatas = new List<WorkLoadData>()
+                            };
+
+                            machines.ForEach(item =>
+                            {
+                                newChartDataActual.WorkLoadDatas.Add(new WorkLoadData
+                                {
+                                    MachineNo = item.MachineCode,
+                                    WorkDay = 0,
+                                    TotalDay = LastDayMonth.Day - SunDayInMonth(PickMonth.Value)
+                                });
+                            });
+
+                            // Foreach day
+                            foreach (var DateMonth in ListOfDays)
+                            {
+                                var taskMachines = await this.repository.GetAllAsQueryable().Where(x => (x.ActualEndDate != null && x.ActualStartDate != null) ?
+                                                                                                        (DateMonth.Date >= x.ActualStartDate.Value.Date &&
+                                                                                                         DateMonth.Date <= x.ActualEndDate.Value.Date) : false)
+                                                                                          .Include(x => x.Machine).GroupBy(x => x.Machine)
+                                                                                          .AsNoTracking().ToListAsync();
+
+                                foreach (var taskMachine in taskMachines)
+                                {
+                                    var getData = newChartDataActual.WorkLoadDatas.FirstOrDefault(x => x.MachineNo == taskMachine.Key.MachineCode);
+                                    if (getData != null)
+                                    {
+                                        if (getData.WorkDay <= DateMonth.Day)
+                                            getData.WorkDay += 1;
+                                    }
+                                }
+                            }
+
+                            ChartWorkLoadData.Add(newChartDataActual);
+                            #endregion
+                        }
+
+                        if (ChartWorkLoadData.Any())
+                        {
+                            return new JsonResult(new
+                            {
+                                Labels = machines.Select(x => x.MachineCode),
+                                Datas = ChartWorkLoadData.Select(x => new ChartDataViewModel
+                                {
+                                    Label = x.MonthName,
+                                    DataChart = x.WorkLoadDatas.OrderBy(z => z.MachineNo)
+                                                               .Select(z => Math.Round(z.Percent, 2)).ToList()
+                                })
+                            }, this.DefaultJsonSettings);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Message = $"Has error {ex.ToString()}";
+            }
+
+            return NotFound(new { Error = Message });
+        }
+
+
         #endregion ChartData
     }
 }

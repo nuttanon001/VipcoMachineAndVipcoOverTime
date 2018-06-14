@@ -16,6 +16,13 @@ import * as moment from "moment-timezone";
 })
 // task-machine-chart component*/
 export class TaskMachineChartComponent implements OnInit {
+    // task-machine-chart ctor */
+    constructor(
+        private service: TaskMachineService,
+        private serviceTypeMachine: TypeMachineService,
+        private fb: FormBuilder,
+    ) { }
+    //Parameter
     // model
     chart: OptionChart;
     // form
@@ -23,19 +30,14 @@ export class TaskMachineChartComponent implements OnInit {
     // chart
     chartLabel: Array<string>;
     chartData: Array<{ data: Array<number>, label: string }>;
-    chartType: string;
+    chartType: string = "";
     chartOption: any;
     xLabel: string = "xLabel";
     yLabel: string = "yLabel";
+    isLoading: boolean = false;
     // array
     typeMachines: Array<SelectItem>;
     chartMode: Array<SelectItem>;
-    // task-machine-chart ctor */
-    constructor(
-        private service: TaskMachineService,
-        private serviceTypeMachine: TypeMachineService,
-        private fb: FormBuilder,
-    ) { }
     // On Init
     ngOnInit(): void {
         if (!this.chartLabel) {
@@ -50,6 +52,7 @@ export class TaskMachineChartComponent implements OnInit {
             this.chartMode = new Array;
             this.chartMode.push({ label: "ข้อมูลการผลิตต่อเดือน", value: 1 });
             this.chartMode.push({ label: "ข้อมูลเวลาเครื่องจักรต่อเดือน", value: 2 });
+            this.chartMode.push({ label: "ข้อมูล Plan/Actual ต่อเดือน", value: 3 });
         }
 
         this.buildForm();
@@ -75,7 +78,7 @@ export class TaskMachineChartComponent implements OnInit {
             ChartMode:[this.chart.ChartMode],
         });
 
-        this.reportForm.valueChanges.subscribe((data: any) => this.onValueChanged(data));
+        this.reportForm.valueChanges.debounceTime(500).subscribe((data: any) => this.onValueChanged(data));
         this.onValueChanged();
     }
 
@@ -89,17 +92,18 @@ export class TaskMachineChartComponent implements OnInit {
     // get chart data
     onGetChartData(): void {
         if (!this.reportForm) { return; }
+        this.isLoading = true;
         let option: OptionChart = this.reportForm.value;
 
         if (option.ChartMode === 1) {
             this.xLabel = "Quantity material";
             this.yLabel = "Machine name";
-        } else if (option.ChartMode === 2) {
+        } else if (option.ChartMode === 2 || option.ChartMode === 3) {
             this.xLabel = "Percent work";
             this.yLabel = "Machine name";
         }
         // debug here
-        console.log("Label",this.xLabel, this.yLabel);
+        // console.log("Label",this.xLabel, this.yLabel);
 
         let zone: string = "Asia/Bangkok";
         if (option.StartDate !== null) {
@@ -109,14 +113,11 @@ export class TaskMachineChartComponent implements OnInit {
             option.EndDate = moment.tz(option.EndDate, zone).toDate();
         }
 
-        let SubAction: string = option.ChartMode === 1 ? "TaskMachineChartDataProduct/" : "TaskMachineChartDataWorkLoad/"
+        let SubAction: string = option.ChartMode === 1 ? "TaskMachineChartDataProduct/" :
+            (option.ChartMode === 2 ? "TaskMachineChartDataWorkLoad/" : "TaskMachineChartDataPlanAndActual/")
 
         this.service.postTaskMachineChartData(option, SubAction)
             .subscribe(ChartData => {
-                // debug here
-                // console.log("ChartData:", JSON.stringify(ChartData));
-
-                // this.chartLabel = ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"];
                 this.chartLabel = [...ChartData.Labels];
                 this.chartData = new Array;
                 ChartData.Datas.forEach((item: any) => {
@@ -129,20 +130,7 @@ export class TaskMachineChartComponent implements OnInit {
                         this.chartData.push(chartData);
                     }
                 });
-                // let data: any[] = [
-                //    {
-                //        label: '# of Votes_1',
-                //        data: [12, 19, 3, 5, 2, 3],
-                //    },
-                //    {
-                //        label: '# of Votes_2',
-                //        data: [5, 8, 13, 2, 7, 9],
-                //    }
-                //];
-                // this.chartData = data;
-
-                // debug here
-                // console.log("ChartData:", JSON.stringify(this.chartData));
+                this.isLoading = false;
             }, error => {
                 this.setChartData();
             });

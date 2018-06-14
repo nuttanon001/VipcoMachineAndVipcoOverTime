@@ -11,9 +11,10 @@ using VipcoMachine.Models;
 namespace VipcoMachine.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20180611082900_ChangeGroup")]
+    partial class ChangeGroup
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -952,59 +953,6 @@ namespace VipcoMachine.Migrations
                     b.ToTable("User");
                 });
 
-            modelBuilder.Entity("VipcoMachine.Models.WorkGroupHasWorkShop", b =>
-                {
-                    b.Property<int>("WorkGroupHasWorkShopId")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<DateTime?>("CreateDate");
-
-                    b.Property<string>("Creator");
-
-                    b.Property<string>("GroupMIS");
-
-                    b.Property<DateTime?>("ModifyDate");
-
-                    b.Property<string>("Modifyer");
-
-                    b.Property<string>("TeamName")
-                        .HasMaxLength(50);
-
-                    b.Property<int>("WorkShopId");
-
-                    b.HasKey("WorkGroupHasWorkShopId");
-
-                    b.HasIndex("GroupMIS");
-
-                    b.HasIndex("WorkShopId");
-
-                    b.ToTable("WorkGroupHasWorkShop");
-                });
-
-            modelBuilder.Entity("VipcoMachine.Models.WorkShop", b =>
-                {
-                    b.Property<int>("WorkShopId")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<DateTime?>("CreateDate");
-
-                    b.Property<string>("Creator");
-
-                    b.Property<DateTime?>("ModifyDate");
-
-                    b.Property<string>("Modifyer");
-
-                    b.Property<string>("Remark")
-                        .HasMaxLength(200);
-
-                    b.Property<string>("WorkShopName")
-                        .HasMaxLength(200);
-
-                    b.HasKey("WorkShopId");
-
-                    b.ToTable("WorkShop");
-                });
-
             modelBuilder.Entity("VipcoMachine.Models.CuttingPlan", b =>
                 {
                     b.HasOne("VipcoMachine.Models.ProjectCodeDetail", "ProjectCodeDetail")
@@ -1220,18 +1168,6 @@ namespace VipcoMachine.Migrations
                     b.HasOne("VipcoMachine.Models.Employee", "Employee")
                         .WithMany("Users")
                         .HasForeignKey("EmpCode");
-                });
-
-            modelBuilder.Entity("VipcoMachine.Models.WorkGroupHasWorkShop", b =>
-                {
-                    b.HasOne("VipcoMachine.Models.EmployeeGroupMIS", "EmployeeGroupMIS")
-                        .WithMany()
-                        .HasForeignKey("GroupMIS");
-
-                    b.HasOne("VipcoMachine.Models.WorkShop", "WorkShop")
-                        .WithMany("WorkGroupHasWorkShop")
-                        .HasForeignKey("WorkShopId")
-                        .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
         }

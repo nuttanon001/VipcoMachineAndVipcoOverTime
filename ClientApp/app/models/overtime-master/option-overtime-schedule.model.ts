@@ -14,4 +14,5 @@
     /// Cancel = 4
     /// </summary>
     Status?: number;
+    ModeReport?: number;
 }

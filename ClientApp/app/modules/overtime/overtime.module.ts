@@ -28,6 +28,8 @@ import { OverTimeDetailService } from "../../services/overtime-detail/overtime-d
 import { DataTableServiceCommunicate } from "../../services/data-table/data-table.service";
 import { EmployeeGroupService } from "../../services/employee-group/employee-group.service";
 import { ProjectCodeMasterService } from "../../services/projectcode-master/projectcode-master.service";
+import { OvertimeReportSummanyByworkshopComponent } from "../../components/overtime/overtime-report-summany-byworkshop.component";
+import { OvertimeReportSummaryBydateComponent } from "../../components/overtime/overtime-report-summary-bydate.component";
 
 @NgModule({
     declarations: [
@@ -39,7 +41,9 @@ import { ProjectCodeMasterService } from "../../services/projectcode-master/proj
         OverTimeReportComponent,
         OvertimeReportSummaryComponent,
         OverTimeChartComponent,
-        OverTimeReportSummaryByProComponent
+        OverTimeReportSummaryByProComponent,
+        OvertimeReportSummanyByworkshopComponent,
+        OvertimeReportSummaryBydateComponent
     ],
     imports: [
         // angular

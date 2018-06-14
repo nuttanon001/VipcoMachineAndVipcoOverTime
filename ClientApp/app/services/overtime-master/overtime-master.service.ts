@@ -87,12 +87,12 @@ export class OverTimeMasterService extends BaseRestService<OverTimeMaster> {
     }
 
     // get report over-time summary
-    getReportOverTimeSummary(option: OptionOverTimeSchedule): Observable<any> {
-        let url: string = `${this.actionUrl}GetReportSummary/`;
+    getReportOverTimeSummary(option: OptionOverTimeSchedule, SubAction: string = "GetReportSummary/"): Observable<any> {
+        // Option = "GetReportSummaryOnlyWorkShop/"
+        let url: string = `${this.actionUrl}${SubAction}`;
         return this.http.post(url, JSON.stringify(option), this.getRequestOption())
                 .map(this.extractData).catch(this.handleError);
     }
-
     // get report over-time summary by project
     getReportOverTimeSummaryByPro(listProject: Array<number | null>): Observable<any> {
         let url: string = `${this.actionUrl}GetReportSummaryByProject/`;

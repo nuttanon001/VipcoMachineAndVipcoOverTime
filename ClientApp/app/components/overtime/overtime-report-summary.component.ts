@@ -1,11 +1,14 @@
 ﻿// angular
 import { Component, OnInit, Input, EventEmitter, Output } from "@angular/core";
+import { FormBuilder,FormGroup } from "@angular/forms";
 // model
 import { OptionOverTimeSchedule,ReportOverTimeSummary } from "../../models/model.index";
 // service
 import { OverTimeMasterService } from "../../services/overtime-master/overtime-master.service";
 // timezone
 import * as moment from "moment-timezone";
+import { SelectItem } from "primeng/primeng";
+
 @Component({
     selector: "overtime-report-summary",
     templateUrl: "./overtime-report-summary.component.html",
@@ -13,20 +16,39 @@ import * as moment from "moment-timezone";
 })
 // overtime-report-summary component*/
 export class OvertimeReportSummaryComponent implements OnInit {
-    @Output("Back") Back = new EventEmitter<boolean>();
-    overTimeSummary: any;
-    optionSchedule: OptionOverTimeSchedule;
-    SummaryDate: Date = new Date();
     // overtime-report-summary ctor */
     constructor(
-        private service: OverTimeMasterService
+        private service: OverTimeMasterService,
+        private fb:FormBuilder
     ) { }
-
+    // Output
+    @Output("Back") Back = new EventEmitter<boolean>();
+    // Parameter
+    onLoad: boolean = false;
+    overTimeSummary: any;
+    optionSchedule: OptionOverTimeSchedule;
+    optionScheduleForm: FormGroup;
+    reportOption: Array<SelectItem>;
     // called by Angular after overtime-report component initialized */
     ngOnInit(): void {
         this.optionSchedule = {
-            SDate : this.SummaryDate
+            SDate: new Date(),
+            ModeReport: 1
         };
+
+        if (!this.reportOption) {
+            this.reportOption = new Array;
+        }
+
+        this.reportOption.push({ label: "SummanyReportByDate", value: 1 });
+        this.reportOption.push({ label: "SummanyReportByWorkShop", value: 2 });
+        // Bulid Form
+        this.optionScheduleForm = this.fb.group({
+            SDate: [this.optionSchedule.SDate],
+            EDate: [this.optionSchedule.EDate],
+            ModeReport: [this.optionSchedule.ModeReport]
+        });
+        this.optionScheduleForm.valueChanges.subscribe((data: any) => this.onValueChanged(data));
         this.onGetReportSummaryData();
     }
 
@@ -41,8 +63,11 @@ export class OvertimeReportSummaryComponent implements OnInit {
     }
 
     // on DateChange
-    onDateChange(data?: any): void {
-        this.optionSchedule.SDate = this.SummaryDate;
+    onValueChanged(data?: any): void {
+        if (!this.optionScheduleForm) { return; }
+
+        const form: FormGroup = this.optionScheduleForm;
+        this.optionSchedule = form.value;
         this.onGetReportSummaryData();
     }
 
@@ -59,11 +84,15 @@ export class OvertimeReportSummaryComponent implements OnInit {
                 value.EDate = moment.tz(value.EDate, zone).toDate();
             }
         }
-
-
-        this.service.getReportOverTimeSummary(value)
+        this.overTimeSummary = undefined;
+        this.onLoad = true;
+        this.service.getReportOverTimeSummary(value, value.ModeReport === 1 ? "GetReportSummary/" : "GetReportSummaryOnlyWorkShop/")
             .subscribe(dbSummary => {
                 this.overTimeSummary = dbSummary;
-            }, error => this.overTimeSummary = undefined);
+                // console.log(JSON.stringify(this.overTimeSummary));
+            }, error => {
+                this.overTimeSummary = undefined;
+                this.onLoad = false;
+            }, () => this.onLoad = false);
     }
 }

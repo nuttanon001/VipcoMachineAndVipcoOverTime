@@ -26,6 +26,7 @@ namespace VipcoMachine.Models
             modelBuilder.Entity<JobCardMasterHasAttach>().ToTable("JobCardMasterHasAttach");
             modelBuilder.Entity<Machine>().ToTable("Machines");
             modelBuilder.Entity<MachineHasOperator>().ToTable("MachineHasOperator");
+            modelBuilder.Entity<MatchGroupMisToGroupSage>().ToTable("MatchGroupMisToGroupSage");
             // material
             modelBuilder.Entity<Material>().ToTable("Material");
             //set key
@@ -47,6 +48,8 @@ namespace VipcoMachine.Models
             modelBuilder.Entity<TypeStandardTime>().ToTable("TypeStandardTime");
             modelBuilder.Entity<UnitsMeasure>().ToTable("UnitsMeasure");
             modelBuilder.Entity<User>().ToTable("User");
+            modelBuilder.Entity<WorkGroupHasWorkShop>().ToTable("WorkGroupHasWorkShop");
+            modelBuilder.Entity<WorkShop>().ToTable("WorkShop");
         }
 
         //public DbSet<AttachFile> AttachFiles { get; set; }
@@ -62,6 +65,7 @@ namespace VipcoMachine.Models
         public DbSet<JobCardMasterHasAttach> JobCardMasterHasAttachs { get; set; }
         public DbSet<Machine> Machines { get; set; }
         public DbSet<MachineHasOperator> MachineHasOperators { get; set; }
+        public DbSet<MatchGroupMisToGroupSage> MatchGroupMisToGroupSages { get; set; }
         public DbSet<Material> Materials { get; set; }
         public DbSet<HolidayOverTime> HolidayOverTimes { get; set; }
         public DbSet<OverTimeDetail> OverTimeDetails { get; set; }
@@ -78,5 +82,7 @@ namespace VipcoMachine.Models
         public DbSet<TypeStandardTime> TypeStandardTimes { get; set; }
         public DbSet<UnitsMeasure> UnitsMeasures { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<WorkGroupHasWorkShop> WorkGroupHasWorkShops { get; set; }
+        public DbSet<WorkShop> WorkShops { get; set; }
     }
 }

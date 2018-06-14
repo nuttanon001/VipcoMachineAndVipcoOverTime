@@ -42,7 +42,7 @@ export class BaseChartComponent2 implements OnChanges {
         ];
 
     @Input() newChartLabel: Array<string>;
-    @Input() newChartData: Array<{ data: Array<number>, label: string }>;
+    @Input() newChartData: Array<{ data: Array<any>, label: string }>;
     //
     @Input() xAxesLabel: string = "LabelX";
     @Input() yAxesLabel: string = "LabelY";
@@ -56,6 +56,9 @@ export class BaseChartComponent2 implements OnChanges {
                 scaleLabel: {
                     display: true,
                     labelString: this.xAxesLabel
+                },
+                ticks: {
+                    beginAtZero: true
                 }
             }],
             yAxes: [{

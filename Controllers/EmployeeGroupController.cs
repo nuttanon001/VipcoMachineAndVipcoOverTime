@@ -86,7 +86,8 @@ namespace VipcoMachine.Controllers
         [HttpGet("Mis")]
         public async Task<IActionResult> GetMis()
         {
-            return new JsonResult(await this.repositoryMis.GetAllAsync(), this.DefaultJsonSettings);
+            Expression<Func<EmployeeGroupMIS, bool>> expression = e => !e.GroupMIS.StartsWith("00");
+            return new JsonResult(await this.repositoryMis.FindAllAsync(expression), this.DefaultJsonSettings);
         }
 
         [HttpGet("Mis/{key}")]
@@ -110,8 +111,10 @@ namespace VipcoMachine.Controllers
 
             var QueryData = this.repository.GetAllAsQueryable()
                                            // .Where(x => GroupEmployee.Contains(x.GroupCode))
-                                           .AsQueryable();
-
+                                           .AsQueryable()
+                                           .Where(x => !x.GroupCode.StartsWith('1') &&
+                                                       !x.GroupCode.StartsWith("2") &&
+                                                       !x.GroupCode.StartsWith("3"));
             // Filter
             var filters = string.IsNullOrEmpty(Scroll.Filter) ? new string[] { "" }
                                 : Scroll.Filter.ToLower().Split(null);

@@ -1,14 +1,13 @@
 ﻿<div class="master-container">
-    <div class="child-col-container">
+    <div class="child-col-container" *ngIf="!isLoading">
         <h4>Machine Chart </h4>
-        <form [formGroup]="reportForm" class="form-content">
+        <form [formGroup]="reportForm" class="form-content no-print">
             <div style="margin-left:25px;">
                 <i class="fa fa-chain" aria-hidden="true"></i>
                 <p-dropdown [options]="chartMode" formControlName="ChartMode" [filter]="true" matTooltip="Selected chart mode"
                             [style]="{'width':'250px'}" placeholder="Selected chart mode">
                 </p-dropdown>
             </div>
-
             <div>
                 <i class="fa fa-calendar" aria-hidden="true"></i>
                 <p-calendar formControlName="StartDate" [showIcon]="true"
@@ -31,14 +30,6 @@
                             [style]="{'width':'250px'}" placeholder="Filter by machine type">
                 </p-dropdown>
             </div>
-
-            <!--<div>
-        <i class="fa fa-chain" aria-hidden="true"></i>
-        <p-dropdown [options]="machines" formControlName="MachineId" [filter]="true" matTooltip="Selected machine"
-                    [style]="{'width':'250px'}" placeholder="Filter by machine">
-        </p-dropdown>
-    </div>-->
-
             <div>
                 <button type="button" mat-mini-fab color="warn" (click)="resetFilter()"
                         matTooltip="Reset all filter" style="margin:4px;">
@@ -47,9 +38,12 @@
             </div>
         </form>
     </div>
+    <div class="loading-shade" *ngIf="isLoading">
+        <mat-spinner *ngIf="isLoading"></mat-spinner>
+    </div>
     <div class="bottom-container my-2" *ngIf="chartData">
         <!--<base-chart2 ></base-chart2>-->
-        <base-chart2 [newChartLabel]="chartLabel" [newChartData]="chartData" 
+        <base-chart2 [newChartLabel]="chartLabel" [newChartData]="chartData"
                      [xAxesLabel]="xLabel" [yAxesLabel]="yLabel"></base-chart2>
     </div>
 </div>

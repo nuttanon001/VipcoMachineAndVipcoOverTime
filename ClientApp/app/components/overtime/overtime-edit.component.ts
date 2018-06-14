@@ -28,11 +28,11 @@ export class OvertimeEditComponent
     lastOverTimeMaster?: OverTimeMaster;
     overtimeDetail?: OverTimeDetail;
     optionLastOver?: OptionOverTimeLast;
-    indexOverTimeDetail: number;
+    indexOverTimeDetail: number = 0;
     lockSave: boolean = false;
     showWorkGroupMis: boolean = false;
     showStartOT: boolean = false;
-    defaultHour: number;
+    defaultHour: number = 4;
     canNotSave: string = "";
     // propertity
     get CanEditInRequiredOnly(): boolean {
@@ -116,7 +116,7 @@ export class OvertimeEditComponent
                 OverTimeDate: new Date(),
             };
 			
-			if (this.editValue.OverTimeDate.getDay() === 7){
+			if (this.editValue.OverTimeDate.getDay() === 0){
 				this.defaultHour = 8;
 			}
 
@@ -189,6 +189,23 @@ export class OvertimeEditComponent
         });
         this.editValueForm.valueChanges.subscribe((data: any) => this.onValueChanged(data));
 
+        const form2: FormGroup = this.editValueForm;
+        const controlDate2: AbstractControl | null = form2.get("OverTimeDate");
+        if (controlDate2) {
+            controlDate2.valueChanges.subscribe(date => {
+                //debug here
+                //console.log(JSON.stringify(date));
+                //console.log(JSON.stringify(date.getDay()));
+                if (date) {
+                    if (date.getDay() === 0) {
+                        this.defaultHour = 8;
+                    } else {
+                        this.defaultHour = 4;
+                    }
+                }
+            });
+        }
+
         if (this.CanEditInRequiredOnly) {
             const form: FormGroup = this.editValueForm;
             const controlDate: AbstractControl | null = form.get("OverTimeDate");
@@ -197,6 +214,8 @@ export class OvertimeEditComponent
                 controlDate.disable();
             }
         }
+
+        
     }
 
     // onValueChanged Override
@@ -217,6 +236,8 @@ export class OvertimeEditComponent
         // }
 
         if (this.editValue.OverTimeStatus === 1) {
+            //debug here
+            // console.log("OverTimeStatus = 1");
             if (controlMaster && controlMis) {
                 if (controlMaster.value && controlMis.value) {
                     // check if alrady have last overtime master check if don't same get new last over time master
@@ -277,7 +298,7 @@ export class OvertimeEditComponent
 
                             this.service.getlastOverTimeMasterV3(this.optionLastOver)
                                 .subscribe(lastMaster => {
-                                    // console.log("LastMaster", lastMaster);
+                                    //console.log("LastMaster", lastMaster);
                                     if (lastMaster) {
                                         this.lastOverTimeMaster = lastMaster;
                                         this.editValueForm.patchValue({
@@ -325,7 +346,7 @@ export class OvertimeEditComponent
                 }
             }
         }
-
+        // console.log("OverTimeStatus = ?", this.editValue);
         super.onValueChanged();
     }
 
@@ -579,7 +600,9 @@ export class OvertimeEditComponent
         if (isValid) {
             if (this.lastOverTimeMaster) {
                 if (this.lastOverTimeMaster.OverTimeStatus) {
-                    isValid = this.lastOverTimeMaster.OverTimeStatus === 3;
+                    isValid = this.lastOverTimeMaster.OverTimeStatus === 3 || this.lastOverTimeMaster.OverTimeStatus === 4;
+                    //Debug here
+                    // console.log("if Status is 3 isValid", isValid);
                 }
             } 
         }
