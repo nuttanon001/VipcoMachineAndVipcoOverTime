@@ -38,6 +38,28 @@
 
                 <div class="row my-1">
                     <div class="my-label">
+                        BomCode
+                    </div>
+                    <div class="my-value">
+                        {{displayValue?.BomCode || "-"}}
+                    </div>
+                    <div class="my-label">
+                        TypeCode
+                    </div>
+                    <div class="my-value">
+                        {{typeCode || "-"}}
+                    </div>
+                </div>
+            
+                <div class="row my-1">
+                    <div class="my-label">
+                        Location
+                    </div>
+                    <div class="my-value">
+                        {{displayValue?.LocationCode || "-"}}
+                    </div>
+
+                    <div class="my-label">
                         Last OT/Date
                     </div>
                     <div class="my-value" *ngIf="lastOverTimeMaster?.OverTimeMasterId">

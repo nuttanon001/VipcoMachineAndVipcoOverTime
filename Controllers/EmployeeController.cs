@@ -23,9 +23,11 @@ namespace VipcoMachine.Controllers
     public class EmployeeController : Controller
     {
         #region PrivateMenbers
-        private IRepository<Employee> repository;
-        private IRepository<EmployeeGroupMIS> repositoryMis;
-        private IMapper mapper;
+        private readonly IRepository<Employee> repository;
+        private readonly IRepository<EmployeeGroupMIS> repositoryMis;
+        private readonly IRepository<EmployeeLocation> repositoryEmpLocation;
+        private readonly IMapper mapper;
+        private readonly ApplicationContext context;
 
         private JsonSerializerSettings DefaultJsonSettings =>
             new JsonSerializerSettings()
@@ -45,11 +47,16 @@ namespace VipcoMachine.Controllers
 
         #region Constructor
 
-        public EmployeeController(IRepository<Employee> repo, IRepository<EmployeeGroupMIS> repoMis, IMapper map)
+        public EmployeeController(IRepository<Employee> repo, 
+            IRepository<EmployeeGroupMIS> repoMis,
+            IRepository<EmployeeLocation> repoEmpLocation,
+            ApplicationContext context, IMapper map)
         {
             this.repository = repo;
             this.repositoryMis = repoMis;
+            this.repositoryEmpLocation = repoEmpLocation;
             this.mapper = map;
+            this.context = context;
         }
 
         #endregion
@@ -76,10 +83,30 @@ namespace VipcoMachine.Controllers
         public async Task<IActionResult> GetSubContractor()
         {
             var QueryData = this.repository.GetAllAsQueryable()
-                                           .Where(x => x.TypeEmployee == TypeEmployee.พนักงานพม่า);
+                                           .Where(x => x.TypeEmployee == TypeEmployee.พนักงานพม่า)
+                                           .AsNoTracking();
 
             return new JsonResult(this.ConverterTableToViewModel<EmployeeViewModel, Employee>
                 (await QueryData.ToListAsync()), this.DefaultJsonSettings);
+        }
+
+        // GET: api/Employee/GetLocation/5
+        [HttpGet("GetLocation/{EmpCode}")]
+        public async Task<IActionResult> GetLocationByEmp(string EmpCode)
+        {
+            var Message = "Data not been found.";
+
+            try
+            {
+                var HasData = await this.repositoryEmpLocation.FindAsync(x => x.EmpCode == EmpCode);
+                if (HasData != null)
+                    return new JsonResult(HasData, this.DefaultJsonSettings);
+            }
+            catch(Exception ex)
+            {
+                Message = $"Has error {ex.ToString()}";
+            }
+            return BadRequest(new { Message });
         }
 
         // GET: api/Employee/GetByMaster/5
@@ -100,25 +127,41 @@ namespace VipcoMachine.Controllers
         [HttpPost("GetScroll")]
         public async Task<IActionResult> GetScroll([FromBody] ScrollViewModel Scroll)
         {
-            var QueryData = this.repository.GetAllAsQueryable();
+            var QueryData2 = this.context.Employees.Join(
+                this.context.EmployeeLocations,
+                x => x.EmpCode,
+                z => z.EmpCode, (emp, loc) => new { emp, loc }).AsQueryable();
+
+            if (!string.IsNullOrEmpty(Scroll.Location))
+            {
+                if (Scroll.Location.IndexOf("V00") == -1)
+                {
+                    if (Scroll.Location.IndexOf("V02") != -1)
+                        QueryData2 = QueryData2.Where(x => x.loc.LocationCode == Scroll.Location || x.loc == null);
+                    else
+                        QueryData2 = QueryData2.Where(x => x.loc.LocationCode == Scroll.Location);
+                }
+            }
+
+            // var QueryData = this.repository.GetAllAsQueryable();
             // Where
             if (!string.IsNullOrEmpty(Scroll.Where))
             {
                 if (Scroll.Where.IndexOf("SubContractor") != -1)
-                    QueryData = QueryData.Where(x => x.TypeEmployee == TypeEmployee.พนักงานพม่า);
+                    QueryData2 = QueryData2.Where(x => x.emp.TypeEmployee == TypeEmployee.พนักงานพม่า);
                 else
-                    QueryData = QueryData.Where(x => x.GroupCode == Scroll.Where);
+                    QueryData2 = QueryData2.Where(x => x.emp.GroupCode == Scroll.Where);
             }
             // Filter
             var filters = string.IsNullOrEmpty(Scroll.Filter) ? new string[] { "" }
                                 : Scroll.Filter.ToLower().Split(null);
             foreach (var keyword in filters)
             {
-                QueryData = QueryData.Where(x => x.NameEng.ToLower().Contains(keyword) ||
-                                                 x.NameThai.ToLower().Contains(keyword) ||
-                                                 x.EmpCode.ToLower().Contains(keyword) ||
-                                                 x.GroupCode.ToLower().Contains(keyword) ||
-                                                 x.GroupName.ToLower().Contains(keyword));
+                QueryData2 = QueryData2.Where(x => x.emp.NameEng.ToLower().Contains(keyword) ||
+                                                 x.emp.NameThai.ToLower().Contains(keyword) ||
+                                                 x.emp.EmpCode.ToLower().Contains(keyword) ||
+                                                 x.emp.GroupCode.ToLower().Contains(keyword) ||
+                                                 x.emp.GroupName.ToLower().Contains(keyword));
             }
 
             // Order
@@ -126,52 +169,76 @@ namespace VipcoMachine.Controllers
             {
                 case "EmpCode":
                     if (Scroll.SortOrder == -1)
-                        QueryData = QueryData.OrderByDescending(e => e.EmpCode);
+                        QueryData2 = QueryData2.OrderByDescending(e => e.emp.EmpCode);
                     else
-                        QueryData = QueryData.OrderBy(e => e.EmpCode);
+                        QueryData2 = QueryData2.OrderBy(e => e.emp.EmpCode);
                     break;
 
                 case "NameThai":
                     if (Scroll.SortOrder == -1)
-                        QueryData = QueryData.OrderByDescending(e => e.NameThai);
+                        QueryData2 = QueryData2.OrderByDescending(e => e.emp.NameThai);
                     else
-                        QueryData = QueryData.OrderBy(e => e.NameThai);
+                        QueryData2 = QueryData2.OrderBy(e => e.emp.NameThai);
                     break;
 
                 case "NameEng":
                     if (Scroll.SortOrder == -1)
-                        QueryData = QueryData.OrderByDescending(e => e.NameEng);
+                        QueryData2 = QueryData2.OrderByDescending(e => e.emp.NameEng);
                     else
-                        QueryData = QueryData.OrderBy(e => e.NameEng);
+                        QueryData2 = QueryData2.OrderBy(e => e.emp.NameEng);
                     break;
 
                 default:
-                    QueryData = QueryData.OrderByDescending(e => e.EmpCode.Length)
-                                         .ThenBy(e => e.EmpCode);
+                    QueryData2 = QueryData2.OrderByDescending(e => e.emp.EmpCode.Length)
+                                         .ThenBy(e => e.emp.EmpCode);
                     break;
             }
 
             // Skip and Take
-            QueryData = QueryData.Skip(Scroll.Skip ?? 0).Take(Scroll.Take ?? 50);
+            QueryData2 = QueryData2.Skip(Scroll.Skip ?? 0).Take(Scroll.Take ?? 50);
+            var MapDatas = new List<EmployeeViewModel>();
+
+            foreach (var item in await QueryData2.AsNoTracking().ToListAsync())
+                MapDatas.Add(this.mapper.Map<Employee, EmployeeViewModel>(item.emp));
 
             return new JsonResult(new ScrollDataViewModel<Employee>
-                (Scroll,
-                 this.ConverterTableToViewModel<EmployeeViewModel,Employee>(await QueryData.AsNoTracking().ToListAsync())),
-                 this.DefaultJsonSettings);
+                (Scroll,MapDatas),this.DefaultJsonSettings);
         }
 
         [HttpPost("GetScrollMis")]
         public async Task<IActionResult> GetScrollMis([FromBody] ScrollViewModel Scroll)
         {
-            var QueryData = this.repository.GetAllAsQueryable();
+            var QueryData2 = (from emp in this.context.Employees
+                             join loc in this.context.EmployeeLocations on emp.EmpCode equals loc.EmpCode into emp_loc
+                             from all1 in emp_loc.DefaultIfEmpty()
+                             select new
+                             {
+                                 emp,
+                                 loc = all1,
+                             }).AsQueryable();
+
+            if (!string.IsNullOrEmpty(Scroll.Location))
+            {
+                if (Scroll.Location.IndexOf("V00") == -1)
+                {
+                    if (Scroll.Location.IndexOf("V02") != -1)
+                        QueryData2 = QueryData2.Where(x => x.loc.LocationCode == Scroll.Location ||
+                                                           x.loc == null ||
+                                                           x.loc.LocationCode == null);
+                    else
+                        QueryData2 = QueryData2.Where(x => x.loc.LocationCode == Scroll.Location);
+                }
+            }
+
+            // var QueryData = this.repository.GetAllAsQueryable();
 
             // Where
             if (!string.IsNullOrEmpty(Scroll.Where))
             {
                 if (Scroll.Where.IndexOf("SubContractor") != -1)
-                    QueryData = QueryData.Where(x => x.TypeEmployee == TypeEmployee.พนักงานพม่า);
+                    QueryData2 = QueryData2.Where(x => x.emp.TypeEmployee == TypeEmployee.พนักงานพม่า);
                 else
-                    QueryData = QueryData.Where(x => x.GroupMIS == Scroll.Where);
+                    QueryData2 = QueryData2.Where(x => x.emp.GroupMIS == Scroll.Where);
             }
 
             // Filter
@@ -179,11 +246,11 @@ namespace VipcoMachine.Controllers
                                 : Scroll.Filter.ToLower().Split(null);
             foreach (var keyword in filters)
             {
-                QueryData = QueryData.Where(x => x.NameEng.ToLower().Contains(keyword) ||
-                                                 x.NameThai.ToLower().Contains(keyword) ||
-                                                 x.EmpCode.ToLower().Contains(keyword) ||
-                                                 x.GroupCode.ToLower().Contains(keyword) ||
-                                                 x.GroupName.ToLower().Contains(keyword));
+                QueryData2 = QueryData2.Where(x => x.emp.NameEng.ToLower().Contains(keyword) ||
+                                                 x.emp.NameThai.ToLower().Contains(keyword) ||
+                                                 x.emp.EmpCode.ToLower().Contains(keyword) ||
+                                                 x.emp.GroupCode.ToLower().Contains(keyword) ||
+                                                 x.emp.GroupName.ToLower().Contains(keyword));
             }
 
             // Order
@@ -191,38 +258,41 @@ namespace VipcoMachine.Controllers
             {
                 case "EmpCode":
                     if (Scroll.SortOrder == -1)
-                        QueryData = QueryData.OrderByDescending(e => e.EmpCode);
+                        QueryData2 = QueryData2.OrderByDescending(e => e.emp.EmpCode);
                     else
-                        QueryData = QueryData.OrderBy(e => e.EmpCode);
+                        QueryData2 = QueryData2.OrderBy(e => e.emp.EmpCode);
                     break;
 
                 case "NameThai":
                     if (Scroll.SortOrder == -1)
-                        QueryData = QueryData.OrderByDescending(e => e.NameThai);
+                        QueryData2 = QueryData2.OrderByDescending(e => e.emp.NameThai);
                     else
-                        QueryData = QueryData.OrderBy(e => e.NameThai);
+                        QueryData2 = QueryData2.OrderBy(e => e.emp.NameThai);
                     break;
 
                 case "NameEng":
                     if (Scroll.SortOrder == -1)
-                        QueryData = QueryData.OrderByDescending(e => e.NameEng);
+                        QueryData2 = QueryData2.OrderByDescending(e => e.emp.NameEng);
                     else
-                        QueryData = QueryData.OrderBy(e => e.NameEng);
+                        QueryData2 = QueryData2.OrderBy(e => e.emp.NameEng);
                     break;
 
                 default:
-                    QueryData = QueryData.OrderByDescending(e => e.EmpCode.Length)
-                                         .ThenBy(e => e.EmpCode);
+                    QueryData2 = QueryData2.OrderByDescending(e => e.emp.EmpCode.Length)
+                                         .ThenBy(e => e.emp.EmpCode);
                     break;
             }
 
             // Skip and Take
-            QueryData = QueryData.Skip(Scroll.Skip ?? 0).Take(Scroll.Take ?? 50);
+            QueryData2 = QueryData2.Skip(Scroll.Skip ?? 0).Take(Scroll.Take ?? 50);
+            var HasData = await QueryData2.ToListAsync();
+
+            var MapDatas = new List<EmployeeViewModel>();
+            foreach (var item in HasData)
+                MapDatas.Add(this.mapper.Map<Employee, EmployeeViewModel>(item.emp));
 
             return new JsonResult(new ScrollDataViewModel<Employee>
-                (Scroll,
-                 this.ConverterTableToViewModel<EmployeeViewModel, Employee>(await QueryData.AsNoTracking().ToListAsync())),
-                 this.DefaultJsonSettings);
+                (Scroll,MapDatas),this.DefaultJsonSettings);
         }
         // POST: api/Employee
         [HttpPost]

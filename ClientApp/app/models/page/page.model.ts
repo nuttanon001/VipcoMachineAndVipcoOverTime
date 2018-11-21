@@ -17,4 +17,5 @@ export interface Scroll {
     Reload?: boolean;
     Where?: string;
     HasCondition?: boolean;
+    Location?: string;
 }

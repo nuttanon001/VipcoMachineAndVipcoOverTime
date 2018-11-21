@@ -51,6 +51,7 @@ export class EmpoyeeGroupmisDialogComponent
         }
         this.service.getAllWithScroll(scroll)
             .subscribe(scrollData => {
+                // console.log(JSON.stringify(scrollData.Scroll));
                 if (scrollData) {
                     this.serviceDataTable.toChild(scrollData);
                 }

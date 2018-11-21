@@ -29,6 +29,7 @@ import { CustomMaterialModule } from "../customer-material/customer-material.mod
 import { ValidationModule } from "../validation/validation.module";
 import { CuttingPlanModule } from "../cutting-plan/cutting-plan.module";
 import { JobCardModule } from "../jobcard/jobcard.module";
+import { BomDialogComponent } from "../../components/dialog/bom/bom-dialog.component";
 
 @NgModule({
     imports: [
@@ -63,7 +64,8 @@ import { JobCardModule } from "../jobcard/jobcard.module";
         EmployeeByGroupMisDialogComponent,
         EmpoyeeGroupmisDialogComponent,
         JobCardDetailAssignDialogComponent,
-        MachineScheduleDialogComponent
+        MachineScheduleDialogComponent,
+        BomDialogComponent,
     ],
     declarations: [
         ErrorDialog,
@@ -90,7 +92,8 @@ import { JobCardModule } from "../jobcard/jobcard.module";
         JobCardViewWaitingComponent,
         OvertimeViewWaitingComponent,
         JobCardDetailAssignDialogComponent,
-        MachineScheduleDialogComponent
+        MachineScheduleDialogComponent,
+        BomDialogComponent
     ],
     providers: [
         DialogsService,
@@ -123,7 +126,8 @@ import { JobCardModule } from "../jobcard/jobcard.module";
         EmployeeByGroupMisDialogComponent,
         EmpoyeeGroupmisDialogComponent,
         JobCardDetailAssignDialogComponent,
-        MachineScheduleDialogComponent
+        MachineScheduleDialogComponent,
+        BomDialogComponent
     ],
 })
 export class DialogsModule { }

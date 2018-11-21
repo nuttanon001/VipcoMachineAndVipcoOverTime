@@ -38,6 +38,26 @@
                     <mat-icon svgIcon="maintenance" style="height:150px;width:150px;margin:auto;"></mat-icon>
                 </button>
             </div>
+            <div class="mx-1">
+                <button mat-fab (click)="onClickOption('sage')"
+                        style="height:200px;width:200px;background-color:whitesmoke;" matTooltip="Open VIPCO Extends SageX3 System application">
+                    <mat-icon viewBox="0 0 60 55" svgIcon="sage" style="height:200px;width:200px;margin:auto;"></mat-icon>
+                </button>
+            </div>
+        </div>
+        <div class="center-page my-1">
+            <div class="mx-1">
+                <button mat-fab (click)="onClickOption('planning')"
+                        style="height:200px;width:200px;background-color:lightcoral;" matTooltip="Open VIPCO Planning System application">
+                    <mat-icon svgIcon="planning" style="height:150px;width:150px;margin:auto;"></mat-icon>
+                </button>
+            </div>
+            <div class="mx-1">
+                <button mat-fab (click)="onClickOption('safety')"
+                        style="height:200px;width:200px;background-color:forestgreen;" matTooltip="Open VIPCO Safety System application">
+                    <mat-icon svgIcon="safety" style="height:180px;width:200px;margin:auto;"></mat-icon>
+                </button>
+            </div>
         </div>
     </div>
 </div>

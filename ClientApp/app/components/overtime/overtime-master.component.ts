@@ -37,7 +37,13 @@ export class OvertimeMasterComponent
 
     get DisableChange(): boolean {
         if (this.serverAuth.getAuth) {
-            if (this.serverAuth.getAuth.LevelUser) {
+            if (this.serverAuth.userName.indexOf("krongkaew") !== -1) {
+                if (this.displayValue) {
+                    if (this.displayValue.Creator === "krongkaew") {
+                        return false;
+                    }
+                }
+            } else if (this.serverAuth.getAuth.LevelUser) {
                 return this.serverAuth.getAuth.LevelUser < 3;
             }
         }
@@ -263,7 +269,7 @@ export class OvertimeMasterComponent
         if (value) {
             if (this.serverAuth.getAuth) {
                 // console.log(this.serverAuth.getAuth);
-                if (this.serverAuth.getAuth.LevelUser > 2) {
+                if (this.serverAuth.getAuth.LevelUser > 2 || this.serverAuth.userName.indexOf("krongkaew") !== -1) {
                     // console.log(value);
                     this.service.getChangeStatus(value.OverTimeMasterId).subscribe(
                         (complete: any) => {

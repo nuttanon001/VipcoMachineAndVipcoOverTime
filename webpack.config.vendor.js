@@ -16,8 +16,8 @@ const treeShakableModules = [
     '@angular/cdk',
     'zone.js',
     'hammerjs',
-    'popper.js',
-    'chart.js/dist/Chart.min.js',
+    'popper.js'
+    // 'chart.js/dist/Chart.min.js',
 ];
 const nonTreeShakableModules = [
     'bootstrap',
@@ -33,7 +33,7 @@ const nonTreeShakableModules = [
     'es6-shim',
     'event-source-polyfill',
     'jquery',
-    'moment-timezone',
+    'moment-timezone'
 ];
 const allModules = treeShakableModules.concat(nonTreeShakableModules);
 
@@ -58,7 +58,7 @@ module.exports = (env) => {
                 $: 'jquery',
                 jQuery: 'jquery',
                 'window.jQuery': 'jquery',
-                Popper: ['popper.js', 'default'],
+                Popper: ['popper.js', 'default']
             }), // Maps these identifiers to the jQuery package (because Bootstrap expects it to be a global variable)
             new webpack.ContextReplacementPlugin(/\@angular\b.*\b(bundles|linker)/, path.join(__dirname, './ClientApp')), // Workaround for https://github.com/angular/angular/issues/11580
             new webpack.ContextReplacementPlugin(/angular(\\|\/)core(\\|\/)@angular/, path.join(__dirname, './ClientApp')), // Workaround for https://github.com/angular/angular/issues/14898

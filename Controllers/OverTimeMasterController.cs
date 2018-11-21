@@ -214,84 +214,101 @@ namespace VipcoMachine.Controllers
         [HttpPost("GetLastOverTimeV3/")]
         public async Task<IActionResult> GetLastOverTimeV3([FromBody]OptionLastOverTimeViewModel OptionLastOver)
         {
-            if (OptionLastOver.ProjectCodeId.HasValue && !string.IsNullOrEmpty(OptionLastOver.GroupMis))
+            var Message = "Data not been found.";
+
+            try
             {
-                var QueryData = this.repository.GetAllAsQueryable()
-                                                .Where(x => x.OverTimeStatus != OverTimeStatus.Cancel)
-                                                .OrderByDescending(x => x.OverTimeDate)
-                                                .Include(x => x.ApproveBy)
-                                                .Include(x => x.RequireBy)
-                                                .Include(x => x.ProjectCodeMaster)
-                                                .Include(x => x.EmployeeGroupMIS).AsQueryable();
-                if (OptionLastOver.CurrentOverTimeId.HasValue)
+                if (OptionLastOver.ProjectCodeId.HasValue && !string.IsNullOrEmpty(OptionLastOver.GroupMis))
                 {
-                    if (OptionLastOver.CurrentOverTimeId.Value > 0)
-                        QueryData = QueryData.Where(x => x.OverTimeMasterId != OptionLastOver.CurrentOverTimeId);
-                }
-                if (OptionLastOver.BeForDate.HasValue)
-                {
-                    OptionLastOver.BeForDate = OptionLastOver.BeForDate.Value.AddHours(7);
-                    QueryData = QueryData.Where(x => x.OverTimeDate.Date <= OptionLastOver.BeForDate.Value.Date);
-                }
-
-                var LastOverTime = await QueryData.FirstOrDefaultAsync(x => x.ProjectCodeMasterId == OptionLastOver.ProjectCodeId &&
-                                                                            x.GroupMIS == OptionLastOver.GroupMis);
-
-                if (LastOverTime != null)
-                {
-                    // if has date overtime
+                    var QueryData = this.repository.GetAllAsQueryable()
+                                                    .Where(x => x.OverTimeStatus != OverTimeStatus.Cancel)
+                                                    .OrderByDescending(x => x.OverTimeDate)
+                                                    .Include(x => x.ApproveBy)
+                                                    .Include(x => x.RequireBy)
+                                                    .Include(x => x.ProjectCodeMaster)
+                                                    .Include(x => x.OverTimeDetails)
+                                                    .Include(x => x.EmployeeGroupMIS).AsQueryable();
+                    if (OptionLastOver.CurrentOverTimeId.HasValue)
+                    {
+                        if (OptionLastOver.CurrentOverTimeId.Value > 0)
+                            QueryData = QueryData.Where(x => x.OverTimeMasterId != OptionLastOver.CurrentOverTimeId);
+                    }
                     if (OptionLastOver.BeForDate.HasValue)
                     {
-                        Expression<Func<HolidayOverTime, bool>> condition = h => h.HolidayStatus != HolidayStatus.Cancel &&
-                                                                             h.HolidayDate != null;
-                        var Holiday = await this.repositoryHoliday.GetAllWithConditionAndIncludeAsync(condition);
+                        OptionLastOver.BeForDate = OptionLastOver.BeForDate.Value.AddHours(7);
+                        QueryData = QueryData.Where(x => x.OverTimeDate.Date <= OptionLastOver.BeForDate.Value.Date);
+                    }
 
-                        if (Holiday.Any(x => x.HolidayDate.Value.Date == OptionLastOver.BeForDate.Value.Date))
+                    var LastOverTime = await QueryData.FirstOrDefaultAsync(x => x.ProjectCodeMasterId == OptionLastOver.ProjectCodeId &&
+                                                                                x.GroupMIS == OptionLastOver.GroupMis &&
+                                                                                x.LocationCode == OptionLastOver.LocationCode);
+
+                    if (LastOverTime != null)
+                    {
+                        if (LastOverTime.OverTimeDetails.Any(z => z.StartOverTime.HasValue && z.StartOverTime.Value != 17))
                         {
-                            var Date1 = OptionLastOver.BeForDate.Value.AddDays(-1).Date;
-                            if (Date1 == LastOverTime.OverTimeDate.Date)
-                            {
-                                LastOverTime.OverTimeStatus = OverTimeStatus.Complate;
-                                return new JsonResult
-                                    (this.mapper.Map<OverTimeMaster, OverTimeMasterViewModel>(LastOverTime), 
-                                     this.DefaultJsonSettings);
-                            }
+                            LastOverTime.OverTimeStatus = OverTimeStatus.Complate;
+                            return new JsonResult(this.mapper.Map<OverTimeMaster, OverTimeMasterViewModel>(LastOverTime), this.DefaultJsonSettings);
                         }
-                        else
+                        // if has date overtime
+                        if (OptionLastOver.BeForDate.HasValue)
                         {
-                            if (OptionLastOver.BeForDate.Value.DayOfWeek == DayOfWeek.Sunday)
+                            var Holiday = await this.repositoryHoliday
+                                .GetAllWithConditionAndIncludeAsync(h => h.HolidayStatus != HolidayStatus.Cancel &&
+                                                                         h.HolidayDate != null);
+
+                            if (Holiday.Any(x => x.HolidayDate.Value.Date == OptionLastOver.BeForDate.Value.Date))
                             {
                                 var Date1 = OptionLastOver.BeForDate.Value.AddDays(-1).Date;
                                 if (Date1 == LastOverTime.OverTimeDate.Date)
                                 {
-                                    if (LastOverTime.OverTimeDate.DayOfWeek == DayOfWeek.Saturday)
+                                    LastOverTime.OverTimeStatus = OverTimeStatus.Complate;
+                                    return new JsonResult
+                                        (this.mapper.Map<OverTimeMaster, OverTimeMasterViewModel>(LastOverTime),
+                                         this.DefaultJsonSettings);
+                                }
+                            }
+                            else
+                            {
+                                if (OptionLastOver.BeForDate.Value.DayOfWeek == DayOfWeek.Sunday)
+                                {
+                                    var Date1 = OptionLastOver.BeForDate.Value.AddDays(-1).Date;
+                                    if (Date1 == LastOverTime.OverTimeDate.Date)
                                     {
-                                        LastOverTime.OverTimeStatus = OverTimeStatus.Complate;
-                                        return new JsonResult(this.mapper.Map<OverTimeMaster, OverTimeMasterViewModel>(LastOverTime), this.DefaultJsonSettings);
+                                        if (LastOverTime.OverTimeDate.DayOfWeek == DayOfWeek.Saturday)
+                                        {
+                                            LastOverTime.OverTimeStatus = OverTimeStatus.Complate;
+                                            return new JsonResult(this.mapper.Map<OverTimeMaster, OverTimeMasterViewModel>(LastOverTime), this.DefaultJsonSettings);
+                                        }
                                     }
                                 }
                             }
+                            #region Don't user
+                            // if has date overtime sunday
+                            // if (OptionLastOver.BeForDate.Value.DayOfWeek == DayOfWeek.Sunday)
+                            // {
+                            //    var Date1 = OptionLastOver.BeForDate.Value.AddDays(-1).Date;
+                            //    if (Date1 == LastOverTime.OverTimeDate.Date)
+                            //    {
+                            //        if (LastOverTime.OverTimeDate.DayOfWeek == DayOfWeek.Saturday)
+                            //        {
+                            //            LastOverTime.OverTimeStatus = OverTimeStatus.Complate;
+                            //            return new JsonResult(this.mapper.Map<OverTimeMaster, OverTimeMasterViewModel>(LastOverTime), this.DefaultJsonSettings);
+                            //        }
+                            //    }
+                            // }
+                            #endregion
                         }
-                        #region Don't user
-                        // if has date overtime sunday
-                        // if (OptionLastOver.BeForDate.Value.DayOfWeek == DayOfWeek.Sunday)
-                        // {
-                        //    var Date1 = OptionLastOver.BeForDate.Value.AddDays(-1).Date;
-                        //    if (Date1 == LastOverTime.OverTimeDate.Date)
-                        //    {
-                        //        if (LastOverTime.OverTimeDate.DayOfWeek == DayOfWeek.Saturday)
-                        //        {
-                        //            LastOverTime.OverTimeStatus = OverTimeStatus.Complate;
-                        //            return new JsonResult(this.mapper.Map<OverTimeMaster, OverTimeMasterViewModel>(LastOverTime), this.DefaultJsonSettings);
-                        //        }
-                        //    }
-                        // }
-                        #endregion
+                        return new JsonResult(this.mapper.Map<OverTimeMaster, OverTimeMasterViewModel>(LastOverTime), this.DefaultJsonSettings);
                     }
-                    return new JsonResult(this.mapper.Map<OverTimeMaster, OverTimeMasterViewModel>(LastOverTime), this.DefaultJsonSettings);
                 }
             }
-            return NotFound(new { Error = "Not found ProjectCodeMasterId ,GroupCode or LastOverTime." });
+            catch(Exception ex)
+            {
+                Message = $"Has error {ex.ToString()}";
+            }
+           
+            return BadRequest(new { Message });
         }
 
         // POST: api/OverTimeMaster/OverTimeSchedule
@@ -491,6 +508,8 @@ namespace VipcoMachine.Controllers
                                     .Include(x => x.ProjectCodeMaster)
                                     .Include(x => x.EmployeeGroup)
                                     .Include(x => x.EmployeeGroupMIS)
+                                    .Where(x => x.OverTimeStatus != OverTimeStatus.Cancel)
+                                    .AsNoTracking()
                                     .AsQueryable();
                 // Where
                 if (!string.IsNullOrEmpty(Scroll.Where))
@@ -1057,7 +1076,20 @@ namespace VipcoMachine.Controllers
                         // Check type of DayOfWeek
                         var isWeekDay = QueryData.OverTimeDate.DayOfWeek != DayOfWeek.Sunday && !Holiday.Any(x => x.HolidayDate.Value.Date == QueryData.OverTimeDate.Date);
                         // isWeekDay = !Holiday.Any(x => x.HolidayDate.Value.Date == QueryData.OverTimeDate.Date);
-
+                        var Yesitday1 = QueryData.OverTimeDate.AddDays(-1);
+                        if (!isWeekDay)
+                        {
+                            
+                            var TypeDay1 = Yesitday1.DayOfWeek != DayOfWeek.Sunday && !Holiday.Any(x => x.HolidayDate.Value.Date == Yesitday1.Date);
+                            if (QueryData.OverTimeDetails.Any(z => z.StartOverTime.HasValue) && TypeDay1)
+                                isWeekDay = QueryData.OverTimeDetails.Any(z => z.StartOverTime != null && z.StartOverTime < 8);
+                        }
+                        else
+                        {
+                            var TypeDay2 = Yesitday1.DayOfWeek == DayOfWeek.Sunday || Holiday.Any(x => x.HolidayDate.Value.Date == Yesitday1.Date);
+                            if (QueryData.OverTimeDetails.Any(z => z.StartOverTime.HasValue) && TypeDay2)
+                                isWeekDay = !(QueryData.OverTimeDetails.Any(z => z.StartOverTime != null && z.StartOverTime < 8));
+                        }
                         var ThreeTime = false;
 
                         // Get ReportOverTimeMaster
@@ -1325,14 +1357,16 @@ namespace VipcoMachine.Controllers
                                 (", ", WeldTeams.Where
                                     (x => GroupOfShop1.Contains(x.GroupMIS))
                                         .Select(x => $"{x.EmployeeGroupMIS.GroupDesc}" +
-                                                    $"[{x.OverTimeDetails.Count(z => z.OverTimeDetailStatus == OverTimeDetailStatus.Use)}]"
+                                                    $"[{x.OverTimeDetails.Count(z => z.OverTimeDetailStatus == OverTimeDetailStatus.Use)}]" +
+                                                    (string.IsNullOrEmpty(x.HiddenText) ? "" :  $"[{x.HiddenText}]")
                                     )
                                 ),
                             GroupNameShop2 = string.Join
                                 (", ", WeldTeams.Where
                                     (x => GroupOfShop2.Contains(x.GroupMIS))
                                         .Select(x => $"{x.EmployeeGroupMIS.GroupDesc}" +
-                                                    $"[{x.OverTimeDetails.Count(z => z.OverTimeDetailStatus == OverTimeDetailStatus.Use)}]"
+                                                    $"[{x.OverTimeDetails.Count(z => z.OverTimeDetailStatus == OverTimeDetailStatus.Use)}]" +
+                                                    (string.IsNullOrEmpty(x.HiddenText) ? "" : $"[{x.HiddenText}]")
                                     )
                                 ),
                             TotalShop1 = WeldTeams.Where(x => GroupOfShop1.Contains(x.GroupMIS))

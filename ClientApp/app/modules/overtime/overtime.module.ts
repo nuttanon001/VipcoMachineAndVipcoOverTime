@@ -30,6 +30,8 @@ import { EmployeeGroupService } from "../../services/employee-group/employee-gro
 import { ProjectCodeMasterService } from "../../services/projectcode-master/projectcode-master.service";
 import { OvertimeReportSummanyByworkshopComponent } from "../../components/overtime/overtime-report-summany-byworkshop.component";
 import { OvertimeReportSummaryBydateComponent } from "../../components/overtime/overtime-report-summary-bydate.component";
+import { EmployeeGroupMisService } from "../../services/employee-group/employee-group-mis.service";
+import { EmployeeService } from "../../services/employee/employee.service";
 
 @NgModule({
     declarations: [
@@ -63,6 +65,7 @@ import { OvertimeReportSummaryBydateComponent } from "../../components/overtime/
         OverTimeDetailService,
         ProjectCodeMasterService,
         ProjectCodeMasterService,
+        EmployeeService,
         EmployeeGroupService,
         // dataTableServiceCommunicate,
     ],

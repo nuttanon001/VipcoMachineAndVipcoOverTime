@@ -10,7 +10,7 @@
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="6.1.1" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="3.0.1" />
-    <PackageReference Include="DocumentFormat.OpenXml" Version="2.7.2" />
+    <PackageReference Include="DocumentFormat.OpenXml" Version="2.8.1" />
     <PackageReference Include="EntityFrameworkCore.PrimaryKey" Version="1.2.0" />
     <PackageReference Include="MailKit" Version="1.18.0" />
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.0" />
@@ -167,6 +167,7 @@
     <None Remove="ClientApp\app\models\model.index.ts" />
     <None Remove="ClientApp\app\models\over-time\over-time.model.ts" />
     <None Remove="ClientApp\app\models\overtime-detail\overtime-detail.model.ts" />
+    <None Remove="ClientApp\app\models\overtime-master\bom-master.model.ts" />
     <None Remove="ClientApp\app\models\overtime-master\holiday-overtime.model.ts" />
     <None Remove="ClientApp\app\models\overtime-master\option-overtime-chart.model.ts" />
     <None Remove="ClientApp\app\models\overtime-master\option-overtime-last.model.ts" />
@@ -396,6 +397,7 @@
     <TypeScriptCompile Include="ClientApp\app\models\model.index.ts" />
     <TypeScriptCompile Include="ClientApp\app\models\over-time\over-time.model.ts" />
     <TypeScriptCompile Include="ClientApp\app\models\overtime-detail\overtime-detail.model.ts" />
+    <TypeScriptCompile Include="ClientApp\app\models\overtime-master\bom-master.model.ts" />
     <TypeScriptCompile Include="ClientApp\app\models\overtime-master\holiday-overtime.model.ts" />
     <TypeScriptCompile Include="ClientApp\app\models\overtime-master\option-overtime-chart.model.ts" />
     <TypeScriptCompile Include="ClientApp\app\models\overtime-master\option-overtime-last.model.ts" />
@@ -491,7 +493,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ReportClasses_2\ClassLibrary1\ReportClasses.csproj" />
+    <ProjectReference Include="..\ReportClasses_3\ClassLibrary1\ReportClasses.csproj" />
   </ItemGroup>
 
   <ItemGroup>

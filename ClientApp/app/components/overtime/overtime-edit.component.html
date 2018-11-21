@@ -10,10 +10,10 @@
                         <label for="OverTimeDate" class="my-label">Date-OverTime:</label>
                         <div class="col-sm-4">
                             <!--<p-calendar formControlName="OverTimeDate" [showIcon]="true" required
-                                        appendTo="body"
-                                        id="OverTimeDate" dateFormat="dd/mm/yy" placeholder="  Choose a date"
-                                        [disabled]="CanEditInRequiredOnly">
-                            </p-calendar>-->
+                        appendTo="body"
+                        id="OverTimeDate" dateFormat="dd/mm/yy" placeholder="  Choose a date"
+                        [disabled]="CanEditInRequiredOnly">
+            </p-calendar>-->
                             <p-calendar formControlName="OverTimeDate" [showIcon]="true" required
                                         appendTo="body"
                                         id="OverTimeDate" dateFormat="dd/mm/yy" placeholder="  Choose a date">
@@ -24,7 +24,7 @@
 
                         <label for="RequireString" class="my-label">Require By:</label>
                         <div class="col-sm-4">
-                            <input type="text"  class="my-input" placeholder="Choose employee who require overtime"
+                            <input type="text" class="my-input" placeholder="Choose employee who require overtime"
                                    (click)="onEmployeeRequireClick()" style="cursor:pointer;"
                                    id="RequireString" formControlName="RequireString" required readonly>
                             <validation-messages [control]="editValueForm.controls.RequireString"></validation-messages>
@@ -39,13 +39,13 @@
                                    style="cursor:pointer;"
                                    id="GroupMisString" formControlName="GroupMisString" readonly required>
                         </div>
-                   <!-- <label for="GroupString" class="my-label">GroupName:</label>
-                        <div class="col-sm-4">
-                            <input type="text" class="my-input" placeholder="Choose group "
-                                    (click)="onEmployeeGroupClick()" style="cursor:pointer;"
-                                    id="GroupString" formControlName="GroupString" required readonly>
-                            <validation-messages [control]="editValueForm.controls.GroupString"></validation-messages>
-                        </div> -->
+                        <!-- <label for="GroupString" class="my-label">GroupName:</label>
+        <div class="col-sm-4">
+            <input type="text" class="my-input" placeholder="Choose group "
+                    (click)="onEmployeeGroupClick()" style="cursor:pointer;"
+                    id="GroupString" formControlName="GroupString" required readonly>
+            <validation-messages [control]="editValueForm.controls.GroupString"></validation-messages>
+        </div> -->
 
                         <label for="ProjectMasterString" class="my-label">JobNumber:</label>
                         <div class="col-sm-4">
@@ -65,16 +65,54 @@
                         </div>
                     </div>
 
-                    <!-- 
                     <div class="my-form">
-                        <label class="my-label"></label>
+                        <label for="TypeCode" class="my-label">Activity Code:</label>
                         <div class="col-sm-4">
-                            <i class="text-danger" style="font-size:smaller;">
-                                ระบบไม่จำเป็นต้องเลือกกลุ่ม MIS ระบบจัดการข้อมูลจำนวนชั่วโมงงานตามกลุ่ม MIS อยู่แล้ว เฉพาะบางกลุ่มที่ต้องการแยกเท่านั้น
-                            </i>
+                            <p-dropdown class="my-input-combobox" [options]="typeCode" filter="filter" [style]="{'width':'100%'}"
+                                        [appendTo]="body"
+                                        id="TypeCode" formControlName="TypeCode" required>
+                            </p-dropdown>
+                            <validation-messages [control]="editValueForm.controls.TypeCode"></validation-messages>
                         </div>
-                    </div> 
-                    -->
+
+                        <label for="BomCode" class="my-label">Bom Code:</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="my-input" placeholder="Choose Bom Code Level2"
+                                   (click)="onBomClick()" style="cursor:pointer;"
+                                   id="BomCode" formControlName="BomCode" required readonly>
+                            <validation-messages [control]="editValueForm.controls.BomCode"></validation-messages>
+                        </div>
+                    </div>
+<!--
+<div class="my-form">
+    <label class="my-label"></label>
+    <div class="col-sm-4">
+        <i class="text-danger" style="font-size:smaller;">
+            ระบบไม่จำเป็นต้องเลือกกลุ่ม MIS ระบบจัดการข้อมูลจำนวนชั่วโมงงานตามกลุ่ม MIS อยู่แล้ว เฉพาะบางกลุ่มที่ต้องการแยกเท่านั้น
+        </i>
+    </div>
+</div>
+-->
+                    <div class="my-form">
+                        <label for="HiddenText" class="my-label">Only welded:</label>
+                        <div class="col-sm-4">
+                            <textarea class="my-input" placeholder="Insert welded to group"
+                                      id="HiddenText" formControlName="HiddenText"
+                                      rows="2" [readonly]="CanEditInRequiredOnly">
+                            </textarea>
+                            <validation-messages [control]="editValueForm.controls.HiddenText"></validation-messages>
+                        </div>
+
+                        <label for="LocationCode" class="my-label">Location:</label>
+                        <div class="col-sm-4">
+                            <p-dropdown class="my-input-combobox" [options]="location" filter="filter" [style]="{'width':'100%'}"
+                                        [appendTo]="body"
+                                        id="LocationCode" formControlName="LocationCode" required>
+                            </p-dropdown>
+                            <validation-messages [control]="editValueForm.controls.LocationCode"></validation-messages>
+                        </div>
+                    </div>
+
                     <hr />
                     <div class="my-form">
                         <label class="my-label">Last OverTime-Date:</label>
@@ -118,8 +156,8 @@
                         </label>
                         <div class="col-sm-4" *ngIf="editValueForm.controls.OverTimeStatus.value !== 1">
                             <textarea class="my-input" placeholder="Insert actual for overtime here"
-                                        id="InfoActual" formControlName="InfoActual"
-                                        rows="4">
+                                      id="InfoActual" formControlName="InfoActual"
+                                      rows="4">
                             </textarea>
                             <validation-messages [control]="editValueForm.controls.InfoActual"></validation-messages>
                         </div>
@@ -133,33 +171,37 @@
             </ng-template>
             <div class="edit-container">
                 <div class="edit-form-content" style="margin-bottom:5px;">
-                    <!--
-                        <div class="col-sm-1">
-                            <button type="button" mat-icon-button color="primary" (click)="onChooseEmployeeToOverTime(1)"
-                                    matTooltip="New Employee by group" style="float:left">
-                                <i class="fa fa-2x fa-group" aria-hidden="true"></i>
-                            </button>
-                        </div>
-                    -->
-                    <div class="col-sm-1" style="border-right:solid;" *ngIf="editValueForm?.controls?.GroupMIS?.value">
+<!--
+    <div class="col-sm-1">
+        <button type="button" mat-icon-button color="primary" (click)="onChooseEmployeeToOverTime(1)"
+                matTooltip="New Employee by group" style="float:left">
+            <i class="fa fa-2x fa-group" aria-hidden="true"></i>
+        </button>
+    </div>
+-->
+                    <div class="col-sm-1" style="border-right:solid;" 
+                         *ngIf="editValueForm?.controls?.GroupMIS?.value && editValueForm?.controls?.LocationCode?.value">
                         <button type="button" mat-icon-button color="warn" (click)="onChooseEmployeeToOverTime(2)"
                                 matTooltip="New Employee by group mis" style="float:left">
                             <i class="fa fa-2x fa-group" aria-hidden="true"></i>
                         </button>
                     </div>
                     <label class="ml-2 col-form-label col-form-label-sm">Default Hour:</label>
-                    <div class="col-3">
+                    <div class="col-2">
                         <input type="number" class="my-input" placeholder="Default Hour" [(ngModel)]="defaultHour">
                     </div>
-                    <!--
-                        <button (click)="onChooseEmployeeToOverTime()" mat-raised-button style="float:left">
-                            <i class="fa fa-get-pocket" aria-hidden="true"></i>
-                            <span>New Employee OverTime</span>
-                        </button>
-                    -->
-                    <div class="form-check col-3">
+<!--
+    <button (click)="onChooseEmployeeToOverTime()" mat-raised-button style="float:left">
+        <i class="fa fa-get-pocket" aria-hidden="true"></i>
+        <span>New Employee OverTime</span>
+    </button>
+-->
+                    <div class="form-check col-2">
                         <input class="form-check-input mx-0 p-0" type="checkbox" id="inlineCheckbox1" [(ngModel)]="showStartOT">
-                        <label class="form-check-label ml-3 p-0" for="inlineCheckbox1">เข้างานแบบ กะ</label>
+                        <label class="form-check-label ml-3 p-0" for="inlineCheckbox1">โอทีเข้างานแบบ กะ</label>
+                    </div>
+                    <div class="col-6 text-danger">
+                        ** Weekday(mon-sat) OT start 17:00 ,Weekend(sun) & Holiday OT start 08:00
                     </div>
                 </div>
                 <ngx-datatable class="material"

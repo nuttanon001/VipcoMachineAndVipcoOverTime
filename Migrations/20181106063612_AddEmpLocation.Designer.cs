@@ -3,18 +3,20 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using VipcoMachine.Models;
 
 namespace VipcoMachine.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20181106063612_AddEmpLocation")]
+    partial class AddEmpLocation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.1.4-rtm-31024")
+                .HasAnnotation("ProductVersion", "2.0.0-rtm-26452")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -185,6 +187,8 @@ namespace VipcoMachine.Migrations
                     b.Property<string>("LocationCode");
 
                     b.HasKey("RowId");
+
+                    b.HasIndex("EmpCode");
 
                     b.ToTable("EmployeeLocations");
                 });
@@ -609,9 +613,6 @@ namespace VipcoMachine.Migrations
                         .HasMaxLength(500);
 
                     b.Property<int?>("LastOverTimeId");
-
-                    b.Property<string>("LocationCode")
-                        .HasMaxLength(10);
 
                     b.Property<DateTime?>("ModifyDate");
 
@@ -1148,6 +1149,13 @@ namespace VipcoMachine.Migrations
                     b.HasOne("VipcoMachine.Models.EmployeeGroupMIS", "EmployeeGroupMIS")
                         .WithMany("Employees")
                         .HasForeignKey("GroupMIS");
+                });
+
+            modelBuilder.Entity("VipcoMachine.Models.EmployeeLocation", b =>
+                {
+                    b.HasOne("VipcoMachine.Models.Employee", "Employee")
+                        .WithMany()
+                        .HasForeignKey("EmpCode");
                 });
 
             modelBuilder.Entity("VipcoMachine.Models.JobCardDetail", b =>

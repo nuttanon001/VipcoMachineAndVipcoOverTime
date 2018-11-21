@@ -27,6 +27,34 @@ export class OvertimeViewComponent extends BaseViewComponent<OverTimeMaster> {
         { prop: "Remark", name: "Remark", flexGrow: 1 },
         { prop: "StatusString", name: "Status", flexGrow: 1, cellClass: this.getCellClass }
     ];
+
+    typeCodes =
+    [
+        { label: "-", value: undefined },
+        { label: "Pre-Fabricate", value: "01" },
+        { label: "Trial-Assembly", value: "02" },
+        { label: "Finishing", value: "03" },
+        { label: "Paint/Galvanize", value: "04" },
+        { label: "Insulation/Refractory", value: "05" },
+        { label: "Packing", value: "06" },
+        { label: "Delivery", value: "07" },
+        { label: "Weld", value: "08" },
+        { label: "Machine", value: "09" },
+        { label: "Draft", value: "10" },
+        { label: "Draft Rework", value: "11" },
+        { label: "Paint/Galvanize Rework", value: "12" },
+        { label: "Test Coupon", value: "13" },
+        { label: "Stub Weld", value: "14" },
+        { label: "Header Fabrication", value: "15" },
+        { label: "Harp Fabrication", value: "16" },
+        { label: "Hydro test & Dry out", value: "17" },
+        { label: "Pre Fab MA Pipe", value: "18" },
+        { label: "Piping Module Assembly", value: "19" },
+        { label: "Structure Module Assembly", value: "20" },
+        { label: "Punch List", value: "21" },
+        { label: "Don't have activity", value: "99" },
+        ];
+    typeCode: string = "";
     /** overtime-view ctor */
     constructor(
         private service: OverTimeDetailService,
@@ -51,6 +79,11 @@ export class OvertimeViewComponent extends BaseViewComponent<OverTimeMaster> {
         }
 
         if (value) {
+            const temp = this.typeCodes.find(item => item.value == value.TypeCode);
+            if (temp) {
+                this.typeCode = temp.label;
+            }
+
             this.service.getByMasterId(value.OverTimeMasterId)
                 .subscribe(dbDetail => {
                     this.details = dbDetail.filter((item, index) => {

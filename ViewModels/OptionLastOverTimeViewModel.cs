@@ -11,6 +11,7 @@ namespace VipcoMachine.ViewModels
         public string GroupCode { get; set; }
         public int? CurrentOverTimeId { get; set; }
         public string GroupMis { get; set; }
+        public string LocationCode { get; set; }
 
         public DateTime? BeForDate { get; set; }
     }

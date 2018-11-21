@@ -26,6 +26,8 @@ import {
     EmployeeByGroupMisDialogComponent, EmpoyeeGroupmisDialogComponent,
     JobCardDetailAssignDialogComponent,MachineScheduleDialogComponent
  } from "../../components/dialog/dialog.index";
+import { BomDialogComponent } from "../../components/dialog/bom/bom-dialog.component";
+import { BomLevel } from "../../models/overtime-master/bom-master.model";
 
 @Injectable()
 export class DialogsService {
@@ -159,14 +161,14 @@ export class DialogsService {
         return dialogRef.afterClosed();
     }
 
-    public dialogSelectEmployeeWithGroupMis(viewContainerRef: ViewContainerRef, groupMisCode: string = ""): Observable<Array<Employee>> {
+    public dialogSelectEmployeeWithGroupMis(viewContainerRef: ViewContainerRef, data: { groupMisCode: string, locaCode: string }): Observable<Array<Employee>> {
 
         let dialogRef: MatDialogRef<EmployeeByGroupMisDialogComponent>;
         let config: MatDialogConfig = new MatDialogConfig();
 
         // config
         config.viewContainerRef = viewContainerRef;
-        config.data = groupMisCode;
+        config.data = data;
         // config.height = this.height;
         // config.width= this.width;
         config.hasBackdrop = true;
@@ -388,6 +390,22 @@ export class DialogsService {
 
         // open dialog
         dialogRef = this.dialog.open(MachineScheduleDialogComponent, config);
+        return dialogRef.afterClosed();
+    }
+
+    public dialogSelectBomLevel2(viewContainerRef: ViewContainerRef, bomCode: string = ""): Observable<BomLevel> {
+        let dialogRef: MatDialogRef<BomDialogComponent>;
+        let config: MatDialogConfig = new MatDialogConfig();
+
+        // config
+        config.viewContainerRef = viewContainerRef;
+        config.data = bomCode;
+        // config.height = this.height;
+        // config.width= this.width;
+        config.hasBackdrop = true;
+
+        // open dialog
+        dialogRef = this.dialog.open(BomDialogComponent, config);
         return dialogRef.afterClosed();
     }
 }

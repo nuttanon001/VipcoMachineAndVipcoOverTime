@@ -17,6 +17,8 @@ import { Subscription } from "rxjs/Subscription";
 import { TableColumn } from "@swimlane/ngx-datatable";
 import { SelectItem } from "primeng/primeng";
 
+import { FormBuilder, FormGroup } from "@angular/forms";
+
 @Component({
     selector: "employee-by-groupmis-dialog",
     templateUrl: "./employee-by-groupmis-dialog.component.html",
@@ -33,9 +35,11 @@ import { SelectItem } from "primeng/primeng";
 // employee-by-group-mis-dialog component*/
 export class EmployeeByGroupMisDialogComponent
     extends BaseDialogComponent<Employee, EmployeeService> implements OnDestroy {
-    employees: Array<Employee>;
-    groups: Array<SelectItem>;
-    template: Scroll;
+    employees: Array<Employee> = [];
+    groups: Array<SelectItem> = [];
+    location: Array<SelectItem> = [];
+    template: Scroll = {};
+    infoValueForm: FormGroup;
     get CanSelected(): boolean {
         if (this.employees) {
             if (this.employees.length > 0) {
@@ -50,7 +54,8 @@ export class EmployeeByGroupMisDialogComponent
         private serviceGroupMis: EmployeeGroupMisService,
         public serviceDataTable: DataTableServiceCommunicate<Employee>,
         public dialogRef: MatDialogRef<EmployeeByGroupMisDialogComponent>,
-        @Inject(MAT_DIALOG_DATA) public groupMisCode: string
+        private fb:FormBuilder,
+        @Inject(MAT_DIALOG_DATA) public data: { groupMisCode: string, locaCode: string }
     ) {
         super(
             service,
@@ -65,13 +70,26 @@ export class EmployeeByGroupMisDialogComponent
         ];
     }
 
-    // on init
-    onInit(): void {
+    ngOnInit(): void {
         this.fastSelectd = false;
 
         if (!this.employees) {
             this.employees = new Array;
         }
+
+        if (!this.location) {
+            this.location = new Array;
+        }
+
+        this.location = [
+            { label: "All Vipco", value: "V00" },
+            { label: "Vipco 2", value: "V02" },
+            { label: "Vipco 4", value: "V04" },
+            { label: "Vipco 5", value: "V05" },
+            { label: "Vipco 6", value: "V06" },
+            { label: "Head Office", value: "HO" }
+        ];
+
 
         this.serviceGroupMis.getAll()
             .subscribe(dbGroupMis => {
@@ -81,24 +99,83 @@ export class EmployeeByGroupMisDialogComponent
                     this.groups.push({ label: `${(item.GroupDesc || "")}`, value: item.GroupMIS });
                 }
             }, error => console.error(error));
+
+        this.template = {
+            Where: this.data.groupMisCode,
+            Location: this.data.locaCode,
+        };;
+
+        this.buildForm();
+
+        this.subscription = this.serviceDataTable.ToParent$
+            .subscribe((scroll: Scroll) => {
+                if (this.template) {
+                    scroll.Reload = this.template.Reload;
+                }
+                //debug here
+                // console.log("subscription", JSON.stringify(scroll));
+                this.loadDataScroll(scroll)
+            });
+    }
+
+    // on init
+    onInit(): void {
+     
+    }
+
+    // build form
+    buildForm(): void {
+        this.infoValueForm = this.fb.group({
+            Filter: [this.template.Filter],
+            HasCondition: [this.template.HasCondition],
+            Location: [this.template.Location],
+            Reload: [this.template.Reload],
+            Skip: [this.template.Skip],
+            SortField: [this.template.SortField],
+            Take: [this.template.Take],
+            Where: [this.template.Where],
+        });
+        this.infoValueForm.valueChanges.subscribe((data: any) => this.onValueChanged(data));
+        // this.onValueChanged();
+    }
+
+    // onValueChanged Override
+    onValueChanged(data?: any): void {
+        if (!this.infoValueForm) {
+            return;
+        }
+        this.template = this.infoValueForm.getRawValue();
+
+        // console.log("template Data:", JSON.stringify(this.template));
+
+        this.template.Reload = true;
+        this.template.Skip = 0;
+        this.template.Take = 8;
+        this.loadDataScroll(this.template);
     }
 
     // on get data with lazy load
     loadDataScroll(scroll: Scroll): void {
-        scroll.Where = this.groupMisCode.toString();
-        // console.log("Scroll Data:", JSON.stringify(scroll));
+        if (scroll.Location !== this.template.Location) {
+            scroll.Location = this.template.Location;
+            scroll.Reload = true;
+        }
+
+        if (scroll.Where !== this.template.Where) {
+            scroll.Where = this.template.Where;
+            scroll.Reload = true;
+        }
         this.service.getAllWithScroll(scroll,"GetScrollMis")
             .subscribe(scrollData => {
                 if (scrollData) {
+                    // console.log("Scroll", JSON.stringify(scrollData.Scroll));
+
                     if (scrollData.Scroll) {
-                        this.template = scrollData.Scroll;
-                        // after
-                        // console.log("After:",JSON.stringify(scrollData));
+                        this.template = Object.assign({}, scrollData.Scroll);
+                        this.template.Reload = false;
                     }
-
-                    // after
-                    // console.log("After:",JSON.stringify(scrollData));
-
+                    //debug here
+                    // console.log("template", JSON.stringify(this.template));
                     this.serviceDataTable.toChild(scrollData);
                 }
             }, error => console.error(error));
@@ -113,8 +190,8 @@ export class EmployeeByGroupMisDialogComponent
 
     // on select employee by group
     onSelectByGroup(): void {
-        if (this.groupMisCode) {
-            this.service.getByMasterCode(this.groupMisCode)
+        if (this.data && this.data.groupMisCode) {
+            this.service.getByMasterCode(this.data.groupMisCode)
                 .subscribe(dbEmployee => {
                     if (dbEmployee) {
                         this.employees.push(...dbEmployee);
@@ -134,16 +211,15 @@ export class EmployeeByGroupMisDialogComponent
     // on dropdown selected change
     onDropDownSelectedChange(event?: any): void {
         if (event) {
-
             this.template.Reload = true;
             this.template.Skip = 0;
             this.template.Take = 8;
             this.template.Where = event.value;
-            this.groupMisCode = event.value;
+            this.data.groupMisCode = event.value;
 
             // debug here
             // console.log("event :", JSON.stringify(this.template));
-            this.loadDataScroll(this.template);
+            // this.loadDataScroll(this.template);
 
             // this.typeMachine = selected.selected[0];
             // this.serviceMachine.getByMasterId(this.typeMachine.TypeMachineId)

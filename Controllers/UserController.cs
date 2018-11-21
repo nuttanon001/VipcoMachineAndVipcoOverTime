@@ -23,8 +23,9 @@ namespace VipcoMachine.Controllers
     public class UserController : Controller
     {
         #region PrivateMenbers
-        private IRepository<User> repository;
-        private IMapper mapper;
+        private readonly IRepository<User> repository;
+        private readonly IRepository<Permission> repositoryPermission;
+        private readonly IMapper mapper;
 
         private JsonSerializerSettings DefaultJsonSettings =>
             new JsonSerializerSettings()
@@ -44,9 +45,10 @@ namespace VipcoMachine.Controllers
 
         #region Constructor
 
-        public UserController(IRepository<User> repo, IMapper map)
+        public UserController(IRepository<User> repo,IRepository<Permission> repoPermission, IMapper map)
         {
             this.repository = repo;
+            this.repositoryPermission = repoPermission;
             this.mapper = map;
         }
 
@@ -95,7 +97,7 @@ namespace VipcoMachine.Controllers
                                                .FirstOrDefaultAsync(m => m.UserName.ToLower() == login.UserName.ToLower() &&
                                                                          m.PassWord.ToLower() == login.PassWord.ToLower());
             if (HasData != null)
-                return new JsonResult(this.mapper.Map<User,UserViewModel>(HasData), this.DefaultJsonSettings);
+                return new JsonResult(this.mapper.Map<User, UserViewModel>(HasData), this.DefaultJsonSettings);
             else
                 return NotFound(new { Error = "user or password not match" });
         }

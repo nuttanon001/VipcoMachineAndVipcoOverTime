@@ -2,15 +2,30 @@
     <H5 style="color:cadetblue">Selected Employee</H5>
     <div class="child-container">
         <div class="center-content">
-            <div class="master-form-content">
-                <p-dropdown class="my-input-combobox"
-                            [options]="groups"
-                            [style]="{'width':'300px'}"
-                            filter="filter"
-                            [(ngModel)]="groupMisCode"
-                            (onChange)="onDropDownSelectedChange($event)">
-                </p-dropdown>
-            </div>
+            <form [formGroup]="infoValueForm">
+                <div style="display:flex;flex-direction: row;">
+                    <div>
+                        <p-dropdown class="my-input-combobox"
+                                    [options]="groups"
+                                    [style]="{'width':'300px'}"
+                                    [appendTo]="body"
+                                    filter="filter"
+                                    formControlName="Where">
+                        </p-dropdown>
+                    </div>
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    <div>
+                        <p-dropdown class="my-input-combobox"
+                                    [options]="location"
+                                    [style]="{'width':'300px'}"
+                                    [appendTo]="body"
+                                    filter="filter"
+                                    formControlName="Location">
+                        </p-dropdown>
+                    </div>
+
+                </div>
+            </form>
             <split direction="horizontal" [gutterSize]="4" [visibleTransition]="true">
                 <split-area [size]="50" [order]="1">
                     <div class="child-left-container">

@@ -1,5 +1,5 @@
 ﻿export interface Employee {
-    EmpCode : string;
+    EmpCode: string;
     Title?: string;
     NameThai?: string;
     NameEng?: string;
@@ -11,4 +11,10 @@
     // ViewModel
     TypeEmployeeString?: string;
     InsertOrUpdate?: string;
+}
+
+export interface EmployeeLocation {
+    RowId: number;
+    EmpCode?: string;
+    LocationCode?: string;
 }

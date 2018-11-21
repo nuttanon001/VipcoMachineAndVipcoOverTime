@@ -18,12 +18,28 @@ namespace VipcoMachine.Models
         [StringLength(500)]
         public string InfoActual { get; set; }
         public OverTimeStatus? OverTimeStatus { get; set; }
+        [StringLength(250)]
+        public string HiddenText { get; set; }
 
         public string Creator { get; set; }
         public DateTime? CreateDate { get; set; }
         public string Modifyer { get; set; }
         public DateTime? ModifyDate { get; set; }
-
+        /// <summary>
+        /// Update 26/10/18
+        /// </summary>
+        [StringLength(50)]
+        public string BomCode { get; set; }
+        /// <summary>
+        /// Update 26/10/18
+        /// </summary>
+        [StringLength(20)]
+        public string TypeCode { get; set; }
+        /// <summary>
+        /// Update 20/11/18
+        /// </summary>
+        [StringLength(10)]
+        public string LocationCode { get; set; }
         // FK
         // Employee Approve
         public string EmpApprove { get; set; }

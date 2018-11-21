@@ -87,7 +87,7 @@ export class DataTableComponent implements OnInit,OnDestroy {
 
     readonly headerHeight = 50;
     readonly rowHeight = 50;
-    readonly pageLimit = 10;
+    readonly pageLimit = 20;
 
     scroll: Scroll = {
         Skip: 0,
@@ -118,7 +118,12 @@ export class DataTableComponent implements OnInit,OnDestroy {
                 if (scrollData && scrollData.Data && scrollData.Data.length > 0) {
                     if (scrollData.Scroll) {
                         if (scrollData.Scroll.Reload) {
+
                             this.rows = scrollData.Data.slice();
+                            // debug here
+                            // console.log("Row", this.rows);
+
+                            this.isLoading = false;
                             return;
                         }
 
@@ -126,6 +131,7 @@ export class DataTableComponent implements OnInit,OnDestroy {
                             this.rows = scrollData.Data.slice();
                             this.isSort = false;
                             this.isFilter = false;
+                            this.isLoading = false;
                             return;
                         }
                     }
@@ -144,6 +150,16 @@ export class DataTableComponent implements OnInit,OnDestroy {
                     // debug here
                     // console.log("Row:", JSON.stringify(this.rows));
                 } else {
+                    if (scrollData && scrollData.Scroll) {
+                        if (scrollData.Scroll) {
+                            if (scrollData.Scroll.Reload) {
+                                this.rows = new Array;
+                                this.isLoading = false;
+                                return;
+                            }
+                        }
+                    }
+
                     if (this.isFilter) {
                         this.rows = new Array;
                         this.isFilter = false;
@@ -243,7 +259,6 @@ export class DataTableComponent implements OnInit,OnDestroy {
         this.isForce = true;
         this.scroll.Skip = skip;
         this.scroll.Take = limit < 10 ? 10 : limit;
-
         this.dataTableService.toParent(this.scroll);
 
         // this.serverResultsService.getResults(this.rows.length, limit).subscribe(results => {

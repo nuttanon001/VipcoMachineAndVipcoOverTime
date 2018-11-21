@@ -7,6 +7,7 @@ import { Observable } from "rxjs/Rx";
 import { Employee } from "../../models/model.index";
 // base-service
 import { BaseRestService, BaseCommunicateService } from "../service.index";
+import { EmployeeLocation } from "../../models/employee/employee.model";
 
 @Injectable()
 export class EmployeeService extends BaseRestService<Employee> {
@@ -19,6 +20,12 @@ export class EmployeeService extends BaseRestService<Employee> {
     // get employee sub contractor
     getEmployeeSubContractor(): Observable<Array<Employee>> {
         let url: string = `${this.actionUrl}SubContractor/`;
+        return this.http.get(url).map(this.extractData).catch(this.handleError);
+    }
+
+    // get employee sub contractor
+    getLocationByEmp(empCode:string): Observable<EmployeeLocation> {
+        let url: string = `${this.actionUrl}GetLocation/${empCode}/`;
         return this.http.get(url).map(this.extractData).catch(this.handleError);
     }
 }

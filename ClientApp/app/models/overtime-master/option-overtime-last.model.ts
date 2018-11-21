@@ -3,5 +3,6 @@
     GroupCode?: string;
     CurrentOverTimeId?: number;
     GroupMis?: string;
+    LocationCode?: string;
     BeForDate?: Date;
 }

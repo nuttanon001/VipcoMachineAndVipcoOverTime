@@ -3,14 +3,16 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using VipcoMachine.Models;
 
 namespace VipcoMachine.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20181106070835_AddEmpLocation2")]
+    partial class AddEmpLocation2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -609,9 +611,6 @@ namespace VipcoMachine.Migrations
                         .HasMaxLength(500);
 
                     b.Property<int?>("LastOverTimeId");
-
-                    b.Property<string>("LocationCode")
-                        .HasMaxLength(10);
 
                     b.Property<DateTime?>("ModifyDate");
 

@@ -16,5 +16,6 @@ namespace VipcoMachine.ViewModels
         public string Filter { get; set; }
         public bool? Reload { get; set; }
         public string Where { get; set; }
+        public string Location { get; set; }
     }
 }

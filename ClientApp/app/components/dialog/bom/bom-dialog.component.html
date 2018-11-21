@@ -1,0 +1,21 @@
+﻿<div class="master-dialog-vh">
+    <H5 style="color:cadetblue">Selected BomLevel2 code</H5>
+    <div class="child-container">
+        <div class="center-content ">
+            <data-table (selected)="onSelectedValue($event)"
+                        [columns]="columns"
+                        [height]="'55vh'">
+            </data-table>
+        </div>
+        <div class="right-content">
+            <button type="button" mat-icon-button color="primary" (click)="onSelectedClick()"
+                    [disabled]="!CanSelected" matTooltip="Selected" matTooltipPosition="left">
+                <i class="fa fa-2x fa-hand-pointer-o" aria-hidden="true"></i>
+            </button>
+            <button type="button" mat-icon-button color="warn" (click)="onCancelClick()"
+                    matTooltip="Cancel" matTooltipPosition="left">
+                <i class="fa fa-2x fa-minus" aria-hidden="true"></i>
+            </button>
+        </div>
+    </div>
+</div>

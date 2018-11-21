@@ -6,10 +6,20 @@ export interface OverTimeMaster {
     InfoPlan?: string;
     InfoActual?: string;
     OverTimeStatus?: number;
+    HiddenText?: string;
     Creator?: string;
     CreateDate?: Date;
     Modifyer?: string;
     ModifyDate?: Date;
+    /// <summary>
+    /// Update 26/10/18
+    /// </summary>
+    BomCode?: string;
+    TypeCode?: string;
+    /// <summary>
+    /// Update 20/11/18
+    /// </summary>
+    LocationCode?: string;
     // FK
     // Employee Approve
     EmpApprove?: string;

@@ -100,6 +100,8 @@ namespace VipcoMachine.Controllers
                                                            z.Description.ToLower().Contains(keyword)));
             }
 
+            QueryData = QueryData.Where(x => !x.ProjectCode.StartsWith("123") && x.ProjectCode.Trim() != "");
+
             // Order
             switch (Scroll.SortField)
             {

@@ -36,7 +36,9 @@ export abstract class BaseDialogComponent
         this.onInit();
 
         this.subscription = this.serviceDataTable.ToParent$
-            .subscribe((scroll: Scroll) => this.loadDataScroll(scroll));
+            .subscribe((scroll: Scroll) => {
+                this.loadDataScroll(scroll)
+            });
     }
 
     // on Init data

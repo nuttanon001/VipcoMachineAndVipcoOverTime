@@ -36,6 +36,7 @@ namespace VipcoMachine.Models
             modelBuilder.Entity<OverTimeDetail>().ToTable("OverTimeDetail");
             modelBuilder.Entity<OverTimeMaster>().ToTable("OverTimeMaster");
             modelBuilder.Entity<HolidayOverTime>().ToTable("HolidayOverTime");
+            modelBuilder.Entity<Permission>().ToTable("Permission");
             modelBuilder.Entity<ProjectCodeDetail>().ToTable("ProjectCodeDetail");
             modelBuilder.Entity<ProjectCodeMaster>().ToTable("ProjectCodeMaster");
             modelBuilder.Entity<PropertyMachine>().ToTable("PropertyMachine");
@@ -50,6 +51,8 @@ namespace VipcoMachine.Models
             modelBuilder.Entity<User>().ToTable("User");
             modelBuilder.Entity<WorkGroupHasWorkShop>().ToTable("WorkGroupHasWorkShop");
             modelBuilder.Entity<WorkShop>().ToTable("WorkShop");
+            modelBuilder.Entity<EmployeeLocation>().ToTable("EmployeeLocations");
+
         }
 
         //public DbSet<AttachFile> AttachFiles { get; set; }
@@ -60,6 +63,7 @@ namespace VipcoMachine.Models
         public DbSet<GradeMaterial> GradeMaterials { get; set; }
         public DbSet<EmployeeGroup> EmpoyeeGroups { get; set; }
         public DbSet<EmployeeGroupMIS> EmployeeGroupMISs { get; set; }
+        public DbSet<EmployeeLocation> EmployeeLocations { get; set; }
         public DbSet<JobCardDetail> JobCardDetails { get; set; }
         public DbSet<JobCardMaster> JobCardMasters { get; set; }
         public DbSet<JobCardMasterHasAttach> JobCardMasterHasAttachs { get; set; }
@@ -70,6 +74,7 @@ namespace VipcoMachine.Models
         public DbSet<HolidayOverTime> HolidayOverTimes { get; set; }
         public DbSet<OverTimeDetail> OverTimeDetails { get; set; }
         public DbSet<OverTimeMaster> OverTimeMasters { get; set; }
+        public DbSet<Permission> Permissions { get; set; }
         public DbSet<ProjectCodeDetail> ProjectCodeDetails { get; set; }
         public DbSet<ProjectCodeMaster> ProjectCodeMasters { get; set; }
         public DbSet<PropertyMachine> PropertyMachines { get; set; }
